@@ -1,0 +1,7 @@
+-------------------------------------------------------------------------------
+Test set: test.java.com.sotwareextractor.cecs547.Cecs547ApplicationTests
+-------------------------------------------------------------------------------
+Tests run: 1, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 0.256 s <<< FAILURE! - in test.java.com.sotwareextractor.cecs547.Cecs547ApplicationTests
+test.java.com.sotwareextractor.cecs547.Cecs547ApplicationTests  Time elapsed: 0.254 s  <<< ERROR!
+java.lang.IllegalStateException: Unable to find a @SpringBootConfiguration, you need to use @ContextConfiguration or @SpringBootTest(classes=...) with your test
+
