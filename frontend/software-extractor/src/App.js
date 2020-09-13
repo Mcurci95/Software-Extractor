@@ -6,7 +6,10 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import FileUploader from '../src/components/FileUploader';
 function App() {
   return (
-    <FileUploader />
+    <div className="App">
+        <FileUploader />
+    </div>
+    
   );
 }
 
