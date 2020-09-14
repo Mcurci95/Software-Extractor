@@ -21,7 +21,6 @@ public class FileController {
     @PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity uploadFile(@RequestParam MultipartFile file) {
         logger.info("Logging file from FileController. File name %s", file.getOriginalFilename());
-
         return ResponseEntity.ok().build();
     }
 }
