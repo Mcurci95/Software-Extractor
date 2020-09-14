@@ -26,6 +26,7 @@ public class SourceFileController {
     @PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity uploadFile(@RequestParam("files") MultipartFile[] files) throws IOException {
         for (MultipartFile file : files) {
+            logger.info("Saving file: {}",  file.getOriginalFilename());
             sourceFileStorageService.saveFile(file);
         }
         return ResponseEntity.ok().build();
