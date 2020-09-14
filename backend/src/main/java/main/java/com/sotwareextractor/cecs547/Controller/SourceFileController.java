@@ -12,18 +12,22 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+
 @CrossOrigin("*")
 @RestController
 public class SourceFileController {
 
     @Autowired
     private SourceFileStorageService sourceFileStorageService;
-    
+
     Logger logger = LoggerFactory.getLogger(SourceFileController.class);
 
     @PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity uploadFile(@RequestParam MultipartFile file) {
-        logger.info("Logging file from FileController. File name %s", file.getOriginalFilename());
+    public ResponseEntity uploadFile(@RequestParam("files") MultipartFile[] files) throws IOException {
+        for (MultipartFile file : files) {
+            sourceFileStorageService.saveFile(file);
+        }
         return ResponseEntity.ok().build();
     }
 }
