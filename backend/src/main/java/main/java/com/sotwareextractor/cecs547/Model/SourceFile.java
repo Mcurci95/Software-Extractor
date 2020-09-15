@@ -22,6 +22,16 @@ public class SourceFile {
         this.data = data;
     }
 
+    public SourceFile() {
+    }
+
+    public SourceFile(Integer id, String fileName, String fileType, byte[] data) {
+        this.id = id;
+        this.fileName = fileName;
+        this.fileType = fileType;
+        this.data = data;
+    }
+
     public Integer getId() {
         return id;
     }
