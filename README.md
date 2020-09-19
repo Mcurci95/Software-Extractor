@@ -8,8 +8,7 @@ Information includes:
 - Classes
 - Methods
 - Parameters
-- Class Heirachies
-
+- Class Hierarchies
 
 Your project is to design and implement a computer program that can
  read source files containing C++, Java, C# (all pre-approved) or some other object-oriented programming language (must be pre-approved but probably won’t be)
