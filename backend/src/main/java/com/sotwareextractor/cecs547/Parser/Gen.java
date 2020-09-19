@@ -9,7 +9,7 @@ import java.io.InputStream;
 
 public class Gen {
     public static void main(String[] args) throws IOException {
-        InputStream is = Gen.class.getClassLoader().getResourceAsStream("OO_PIES1/Program.java");
+        InputStream is = Gen.class.getClassLoader().getResourceAsStream(args[0]);
         ANTLRInputStream in = new ANTLRInputStream(is);
         JavaLexer lexer = new JavaLexer(in);
         CommonTokenStream tokens = new CommonTokenStream(lexer);
