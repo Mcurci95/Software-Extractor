@@ -8,16 +8,16 @@ import FormGroup from 'react-bootstrap/esm/FormGroup';
 
 const styles = {
     display: 'flex',
+    flexDirection: 'column',
     alignItems: 'center',
-    justifyContent: 'center',
-    flexDirection: 'column'
+    justifyContent: 'center'
 };
 
 const FileUploader = () => {
     return (
         <div style={styles}>
         <Form>
-        <Row>
+        <Row style={styles}>
                 <Col>
                     <Form.Group>
                         <Form.File 
