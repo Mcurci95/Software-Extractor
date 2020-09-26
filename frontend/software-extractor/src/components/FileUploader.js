@@ -55,7 +55,7 @@ const FileUploader = () => {
                     <Form.Group>
                         <Form.File 
                             id="fileUpload"
-                            label="Upload Source Files"
+                            label={fileName ? fileName: "Upload Source Files"}
                             custom
                         />
                     </Form.Group>
