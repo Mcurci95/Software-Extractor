@@ -20,21 +20,24 @@ const styles = {
 
 const FileUploader = () => {
     // Starting with one file for testing then using multiple
-    const [file, setFile] = useState('');
+    const [files, setFiles] = useState('');
     const [fileName, setFileName] = useState('');
 
     const onChange = e => {
-        setFile(e.target.files[0]);
-        setFileName(e.target.files[0].name);
+        setFiles(e.target.files);
+        // setFileName(e.target.files.name);
     }
 
 
     const onSubmit = async e => {
         e.preventDefault();
         console.log("Submitting data");
-        console.log("File: ", file);
+        console.log("File: ", files);
         const formData = new FormData();
-        formData.append('files', file);
+        for (let file of files) {
+            formData.append('files', file);
+        }
+        // formData.append('files', file);
 
         try {
             const res = await axios.post(UPLOAD_ENDPOINT, formData, {
@@ -56,7 +59,7 @@ const FileUploader = () => {
                         <Form.File 
                             id="fileUpload"
                             label={fileName ? fileName: "Upload Source Files"}
-                            custom
+                            multiple
                         />
                     </Form.Group>
                 </Col>
