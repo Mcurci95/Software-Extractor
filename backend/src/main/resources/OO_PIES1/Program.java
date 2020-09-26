@@ -1,3 +1,5 @@
+package com.sotwareextractor.cecs547.OO_PIES1;
+
 public class Program {
     public static void main(String[] args) {
         System.out.println("OO-PIES validation code");
@@ -7,7 +9,7 @@ public class Program {
         if (c1.getmyBool())
             System.out.println(c1.getmyInt());
         Class3 c3 = new Class3();
-        c3.myFunc();
+        c3.myFunc1();
         c3.gather();
     }
 }
