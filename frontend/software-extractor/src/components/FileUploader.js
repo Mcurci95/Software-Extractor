@@ -31,7 +31,8 @@ const FileUploader = () => {
 
     const onSubmit = async e => {
         e.preventDefault();
-
+        console.log("Submitting data");
+        console.log("File: ", file);
         const formData = new FormData();
         formData.append('files', file);
 
@@ -48,7 +49,7 @@ const FileUploader = () => {
 
     return (
         <div style={styles}>
-        <Form onSubmit={ onSubmit }>
+        <Form onSubmit={ onSubmit } onChange={ onChange }>
         <Row style={styles}>
                 <Col>
                     <Form.Group>
@@ -61,7 +62,7 @@ const FileUploader = () => {
                 </Col>
                 <Col>
                     <Form.Group>
-                        <Button>Submit Files</Button>
+                        <Button type="submit">Submit Files</Button>
                     </Form.Group>
                 </Col>
         </Row>
