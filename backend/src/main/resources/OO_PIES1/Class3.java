@@ -1,3 +1,5 @@
+package com.sotwareextractor.cecs547.OO_PIES1;
+
 public class Class3 {
     Class1 myClass1Obj;
     private int mynum1, mynum2;

@@ -1,3 +1,5 @@
+package com.sotwareextractor.cecs547.OO_PIES1;
+
 public class Class1 {
     private boolean myBool;
     public int myInt;

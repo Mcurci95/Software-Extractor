@@ -72,9 +72,9 @@ modifier
 
 classOrInterfaceModifier
     :   annotation       // class or interface
-    |   (   'public'     {System.out.println("found public. Haha");} // class or interface
-        |   'protected'  {System.out.println("found protected");}// class or interface
-        |   'private'    {System.out.println("found private");}// class or interface
+    |   (   'public'     // class or interface
+        |   'protected'  // class or interface
+        |   'private'    // class or interface
         |   'static'     // class or interface
         |   'abstract'   // class or interface
         |   'final'      // class only -- does not apply to interfaces
@@ -252,9 +252,7 @@ typeSpec
     ;
 
 classOrInterfaceType
-    :   Identifier {
-        System.out.println("Hello There");
-    } typeArguments? ('.' Identifier typeArguments? )*
+    :   Identifier typeArguments? ('.' Identifier typeArguments? )*
     ;
 
 primitiveType
