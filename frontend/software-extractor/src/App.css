@@ -36,3 +36,39 @@
     transform: rotate(360deg);
   }
 }
+
+.background-red {
+  background-color: red;
+}
+
+.background-blue {
+  background-color: blue;
+}
+
+#nav {
+    width: 100%;
+    height: 5%;
+    float: left;
+   margin: 0 0 3em 0;
+   padding: 0;
+   list-style: none;
+   background-color: #2b2d42;
+   border-bottom: 1px solid #ccc;
+   border-top: 1px solid #ccc;
+    }
+#nav li {
+	float: left; }
+
+#nav li a {
+		display: block;
+		padding: 8px 15px;
+		text-decoration: none;
+		font-weight: bold;
+		color: #8d99ae;
+		border-right: 1px solid #ccc; }
+
+.range{
+    width: 30%;
+    margin-left: auto;
+    margin-right: auto;
+}
