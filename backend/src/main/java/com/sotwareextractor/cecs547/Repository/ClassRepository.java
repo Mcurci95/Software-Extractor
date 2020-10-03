@@ -1,4 +1,6 @@
 package com.sotwareextractor.cecs547.Repository;
 
-public interface ClassRepository {
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface ClassRepository extends JpaRepository<ClassRepository, Long> {
 }

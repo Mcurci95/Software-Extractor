@@ -1,4 +1,6 @@
 package com.sotwareextractor.cecs547.Repository;
 
-public interface AccessRepository {
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface AccessRepository extends JpaRepository<AccessRepository, Long> {
 }

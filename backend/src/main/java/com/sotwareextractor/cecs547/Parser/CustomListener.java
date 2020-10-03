@@ -9,6 +9,22 @@ import java.util.List;
 
 public class CustomListener extends JavaBaseListener {
     @Override
+    public void enterPackageDeclaration(JavaParser.PackageDeclarationContext ctx) {
+        System.out.println("Enter package");
+        super.enterPackageDeclaration(ctx);
+        System.out.println(ctx.annotation());
+        System.out.println(ctx.qualifiedName().Identifier());
+    }
+
+    @Override
+    public void exitPackageDeclaration(JavaParser.PackageDeclarationContext ctx) {
+        System.out.println("Exit package");
+        super.exitPackageDeclaration(ctx);
+        System.out.println(ctx.annotation());
+        System.out.println(ctx.qualifiedName().Identifier());
+    }
+
+    @Override
     public void enterClassDeclaration(JavaParser.ClassDeclarationContext ctx) {
         super.enterClassDeclaration(ctx);
         System.out.println(ctx.Identifier().getText());

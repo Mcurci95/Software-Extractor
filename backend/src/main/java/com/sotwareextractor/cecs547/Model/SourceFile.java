@@ -3,7 +3,7 @@ package com.sotwareextractor.cecs547.Model;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "SourceFiles")
+@Table(name = "source_file")
 public class SourceFile {
 
     @Id
