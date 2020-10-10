@@ -1,7 +1,7 @@
 package com.sotwareextractor.cecs547.Service;
 
-import com.sotwareextractor.cecs547.Model.SourceFile;
-import com.sotwareextractor.cecs547.Repository.SourceFileRepository;
+import com.sotwareextractor.cecs547.Model.MSourceFile;
+import com.sotwareextractor.cecs547.Repository.MSourceFileRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -14,19 +14,19 @@ import java.util.Optional;
 public class SourceFileStorageService {
 
     @Autowired
-    private SourceFileRepository sourceFileRepository;
+    private MSourceFileRepository sourceFileRepository;
 
-    public SourceFile saveFile(MultipartFile file) throws IOException {
+    public MSourceFile saveFile(MultipartFile file) throws IOException {
         String fileName = file.getOriginalFilename();
-        SourceFile sourceFile = new SourceFile(fileName, file.getContentType(), file.getBytes());
+        MSourceFile sourceFile = new MSourceFile(fileName, file.getContentType(), file.getBytes());
         return sourceFileRepository.save(sourceFile);
     }
 
-    public Optional<SourceFile> getFile(Integer sourceFileId) {
+    public Optional<MSourceFile> getFile(Long sourceFileId) {
         return sourceFileRepository.findById(sourceFileId);
     }
 
-    public List<SourceFile> getFiles() {
+    public List<MSourceFile> getFiles() {
         return sourceFileRepository.findAll();
     }
 }

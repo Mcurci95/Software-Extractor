@@ -3,12 +3,11 @@ package com.sotwareextractor.cecs547.Model;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "source_file")
-public class SourceFile {
+public class MSourceFile {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
 
     private String fileName;
     private String fileType;
@@ -16,27 +15,20 @@ public class SourceFile {
     @Lob
     private byte[] data;
 
-    public SourceFile(String fileName, String fileType, byte[] data) {
+    public MSourceFile(String fileName, String fileType, byte[] data) {
         this.fileName = fileName;
         this.fileType = fileType;
         this.data = data;
     }
 
-    public SourceFile() {
+    public MSourceFile() {
     }
 
-    public SourceFile(Integer id, String fileName, String fileType, byte[] data) {
-        this.id = id;
-        this.fileName = fileName;
-        this.fileType = fileType;
-        this.data = data;
-    }
-
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -63,4 +55,5 @@ public class SourceFile {
     public void setData(byte[] data) {
         this.data = data;
     }
+
 }

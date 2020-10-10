@@ -1,6 +1,6 @@
 package com.sotwareextractor.cecs547.Controller;
 
-import com.sotwareextractor.cecs547.Model.SourceFile;
+import com.sotwareextractor.cecs547.Model.MSourceFile;
 import com.sotwareextractor.cecs547.Service.SourceFileStorageService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,7 +33,7 @@ public class SourceFileController {
 
     @GetMapping(value = "/fileNames")
     @ResponseBody
-    public List<SourceFile> getFiles() {
+    public List<MSourceFile> getFiles() {
         logger.info("Grabbing all source files");
         return sourceFileStorageService.getFiles();
 
