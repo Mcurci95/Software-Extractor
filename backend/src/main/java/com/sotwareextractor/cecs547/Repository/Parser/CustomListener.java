@@ -1,11 +1,7 @@
-package com.sotwareextractor.cecs547.Parser;
+package com.sotwareextractor.cecs547.Repository.Parser;
 
 import com.softwareextractor.cecs547.Parser.JavaBaseListener;
 import com.softwareextractor.cecs547.Parser.JavaParser;
-import org.antlr.v4.runtime.tree.ParseTree;
-import org.antlr.v4.runtime.tree.ParseTreeListener;
-
-import java.util.List;
 
 public class CustomListener extends JavaBaseListener {
     @Override

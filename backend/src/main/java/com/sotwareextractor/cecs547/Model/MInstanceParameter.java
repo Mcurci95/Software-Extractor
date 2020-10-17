@@ -9,44 +9,62 @@ public class MInstanceParameter {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long Id;
     private String name;
-    private int order;
-
+    private int mOrder;
     @ManyToOne
-    private MType type;
+    private MType mType;
 
-    @ManyToMany(mappedBy = "parameters")
+    @ManyToMany(mappedBy = "mParameters")
     private Collection<MInstanceMethod> instanceMethods;
 
     public MInstanceParameter(){}
-    public MInstanceParameter(long id, String name, int order, MType type, Collection<MInstanceMethod> instanceMethods) {
+    public MInstanceParameter(long id, String name, int mOrder, MType mType, Collection<MInstanceMethod> instanceMethods) {
         Id = id;
         this.name = name;
-        this.order = order;
-        this.type = type;
+        this.mOrder = mOrder;
+        this.mType = mType;
         this.instanceMethods = instanceMethods;
     }
 
     public String getName() {
         return name;
     }
-
     public void setName(String name) {
         this.name = name;
     }
-
     public MType getType() {
-        return type;
+        return mType;
     }
-
     public void setType(MType type) {
-        this.type = type;
+        this.mType = type;
     }
-
     public int getOrder() {
-        return order;
+        return mOrder;
     }
-
     public void setOrder(int order) {
-        this.order = order;
+        this.mOrder = order;
+    }
+    public long getId() {
+        return Id;
+    }
+    public void setId(long id) {
+        Id = id;
+    }
+    public int getmOrder() {
+        return mOrder;
+    }
+    public void setmOrder(int mOrder) {
+        this.mOrder = mOrder;
+    }
+    public MType getmType() {
+        return mType;
+    }
+    public void setmType(MType mType) {
+        this.mType = mType;
+    }
+    public Collection<MInstanceMethod> getInstanceMethods() {
+        return instanceMethods;
+    }
+    public void setInstanceMethods(Collection<MInstanceMethod> instanceMethods) {
+        this.instanceMethods = instanceMethods;
     }
 }

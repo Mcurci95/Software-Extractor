@@ -1,4 +1,4 @@
-package com.sotwareextractor.cecs547.Parser;
+package com.sotwareextractor.cecs547.Repository.Parser;
 
 import com.softwareextractor.cecs547.Parser.JavaLexer;
 import com.softwareextractor.cecs547.Parser.JavaParser;

@@ -1,17 +1,20 @@
 package com.sotwareextractor.cecs547.Model;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
 @Entity
-public class MType {
-    @javax.persistence.Id
+public class MClassDataMember {
+    @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long Id;
     private String name;
 
-    public MType() {}
-
-    public MType(Long id, String name) {
+    public MClassDataMember() {
+    }
+    public MClassDataMember(Long id, String name) {
         Id = id;
         this.name = name;
     }
