@@ -1,10 +1,12 @@
 package com.sotwareextractor.cecs547.Model;
 
 import javax.persistence.*;
-import java.util.Objects;
 
-@Embeddable
+@Entity
 public class MAccess {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long Id;
     private String accessName;
 
     public MAccess() {}

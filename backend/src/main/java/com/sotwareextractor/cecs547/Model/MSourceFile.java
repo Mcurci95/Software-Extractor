@@ -15,13 +15,11 @@ public class MSourceFile {
     @Lob
     private byte[] data;
 
+    public MSourceFile(){}
     public MSourceFile(String fileName, String fileType, byte[] data) {
         this.fileName = fileName;
         this.fileType = fileType;
         this.data = data;
-    }
-
-    public MSourceFile() {
     }
 
     public Long getId() {

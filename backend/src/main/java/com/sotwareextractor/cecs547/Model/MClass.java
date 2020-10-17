@@ -1,7 +1,6 @@
 package com.sotwareextractor.cecs547.Model;
 
 import javax.persistence.*;
-import java.util.Objects;
 
 @Entity
 public class MClass {
@@ -10,7 +9,7 @@ public class MClass {
     private Long id;
     private String name;
 
-    @Embedded
+    @ManyToOne
     private MAccess mAccess;
 
     @ManyToOne
