@@ -1,4 +1,4 @@
-package com.sotwareextractor.cecs547.OO_PIES1;
+package OO_PIES1;
 
 public class Program {
     public static void main(String[] args) {

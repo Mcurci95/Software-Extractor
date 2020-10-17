@@ -19,6 +19,11 @@ public class MSourceFile {
         this.fileType = fileType;
         this.data = data;
     }
+    public MSourceFile(String fileName, String fileType, byte[] data) {
+        this.fileName = fileName;
+        this.fileType = fileType;
+        this.data = data;
+    }
 
     public Long getId() {
         return id;
