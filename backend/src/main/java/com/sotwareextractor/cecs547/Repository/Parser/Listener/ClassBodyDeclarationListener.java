@@ -82,18 +82,6 @@ public class ClassBodyDeclarationListener extends JavaBaseListener {
                 String name = methodInfo[methodInfo.length - 1];
                 System.out.println(name + ": " + Arrays.toString(methodInfo) + ", params: " + Arrays.toString(methodParams.get(name)));
             }
-    //        methods.forEach(method -> System.out.println(Arrays.toString(method)));
-    //        for (var entry : methodParams.entrySet()) {
-    //            System.out.print(entry.getKey() + " : ");
-    //            if (entry.getValue().size() != 0) {
-    //                for (String[] s : entry.getValue()) {
-    //                    System.out.print(Arrays.toString(s));
-    //                }
-    //            } else {
-    //                System.out.print("[]");
-    //            }
-    //            System.out.println();
-    //        }
             System.out.println("---------");
         }
 
