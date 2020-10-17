@@ -17,6 +17,10 @@ const styles = {
 };
 
 
+const range = {
+
+};
+
 
 const FileUploader = () => {
     // Starting with one file for testing then using multiple
@@ -51,7 +55,7 @@ const FileUploader = () => {
     }
 
     return (
-        <div style={styles}>
+        <div class="range">
         <Form onSubmit={ onSubmit } onChange={ onChange }>
         <Row style={styles}>
                 <Col>
