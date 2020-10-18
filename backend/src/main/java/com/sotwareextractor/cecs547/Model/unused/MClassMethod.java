@@ -1,4 +1,7 @@
-package com.sotwareextractor.cecs547.Model;
+package com.sotwareextractor.cecs547.Model.unused;
+
+import com.sotwareextractor.cecs547.Model.MAccess;
+import com.sotwareextractor.cecs547.Model.MType;
 
 import javax.persistence.*;
 import java.util.List;

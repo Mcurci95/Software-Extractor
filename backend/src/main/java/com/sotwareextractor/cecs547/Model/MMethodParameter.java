@@ -1,27 +1,30 @@
 package com.sotwareextractor.cecs547.Model;
 
+import com.sotwareextractor.cecs547.Model.unused.MClassMethod;
+
 import javax.persistence.*;
 import java.util.Collection;
 
 @Entity
-public class MClassMethodParameter {
-    @Id
+public class MMethodParameter {
+    @javax.persistence.Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long Id;
     private String name;
     private int mOrder;
     @ManyToOne
     private MType mType;
-    @ManyToMany(mappedBy = "mParameters")
-    private Collection<MClassMethod> mClassMethods;
 
-    public MClassMethodParameter() {}
-    public MClassMethodParameter(long id, String name, int mOrder, MType mType, Collection<MClassMethod> mClassMethods) {
-        Id = id;
+    @ManyToMany(mappedBy = "mParameters")
+    private Collection<MMethod> mMethods;
+
+    public MMethodParameter() {
+    }
+    public MMethodParameter(String name, int mOrder, MType mType, Collection<MMethod> mMethods) {
         this.name = name;
         this.mOrder = mOrder;
         this.mType = mType;
-        this.mClassMethods = mClassMethods;
+        this.mMethods = mMethods;
     }
 
     public String getName() {
@@ -60,10 +63,12 @@ public class MClassMethodParameter {
     public void setmType(MType mType) {
         this.mType = mType;
     }
-    public Collection<MClassMethod> getmClassMethods() {
-        return mClassMethods;
+
+    public Collection<MMethod> getmMethods() {
+        return mMethods;
     }
-    public void setmClassMethods(Collection<MClassMethod> mClassMethods) {
-        this.mClassMethods = mClassMethods;
+
+    public void setmMethods(Collection<MMethod> mMethods) {
+        this.mMethods = mMethods;
     }
 }

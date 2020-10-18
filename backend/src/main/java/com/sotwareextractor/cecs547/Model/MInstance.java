@@ -1,5 +1,7 @@
 package com.sotwareextractor.cecs547.Model;
 
+import com.sotwareextractor.cecs547.Model.unused.MInstanceMethod;
+
 import javax.persistence.*;
 import java.util.Set;
 
