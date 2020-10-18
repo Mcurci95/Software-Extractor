@@ -9,9 +9,7 @@ import java.util.List;
 
 @Service
 public class MPackageService {
-
     private MPackageRepository mPackageRepository;
-
     @Autowired
     public void setPackageRepository(MPackageRepository mPackageRepository) {
         this.mPackageRepository = mPackageRepository;
