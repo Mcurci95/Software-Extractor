@@ -21,7 +21,7 @@ public class MPackageService {
             return mPackageRepository.save(new MPackage(name));
         } else {
             System.out.println("Package already exists.");
-            return null;
+            return existing.get(0);
         }
     }
 }
