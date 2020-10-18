@@ -1,8 +1,8 @@
-package com.sotwareextractor.cecs547.Repository.Parser;
+package com.sotwareextractor.cecs547.Parser;
 
 import com.softwareextractor.cecs547.Parser.JavaLexer;
 import com.softwareextractor.cecs547.Parser.JavaParser;
-import com.sotwareextractor.cecs547.Repository.Parser.Listener.FileListener;
+import com.sotwareextractor.cecs547.Parser.Listener.FileListener;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
@@ -20,7 +20,9 @@ public class Gen {
             JavaParser parser = new JavaParser(tokens);
             JavaParser.CompilationUnitContext compilationUnitContext = parser.compilationUnit();
             ParseTreeWalker walker = new ParseTreeWalker();
-            walker.walk(new FileListener(), compilationUnitContext);
+            FileListener fileListener = new FileListener();
+            walker.walk(fileListener, compilationUnitContext);
+
             System.out.println("--------------------------------------------");
         }
     }

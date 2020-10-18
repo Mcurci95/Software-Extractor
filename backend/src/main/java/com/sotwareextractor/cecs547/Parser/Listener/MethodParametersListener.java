@@ -1,10 +1,8 @@
-package com.sotwareextractor.cecs547.Repository.Parser.Listener;
+package com.sotwareextractor.cecs547.Parser.Listener;
+
 
 import com.softwareextractor.cecs547.Parser.JavaBaseListener;
 import com.softwareextractor.cecs547.Parser.JavaParser;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class MethodParametersListener extends JavaBaseListener {
     String[] parameters;

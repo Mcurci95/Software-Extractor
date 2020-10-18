@@ -1,14 +1,13 @@
-package com.sotwareextractor.cecs547.Repository.Parser.Listener;
+package com.sotwareextractor.cecs547.Parser.Listener;
 
 import com.softwareextractor.cecs547.Parser.JavaBaseListener;
 import com.softwareextractor.cecs547.Parser.JavaParser;
-import com.sotwareextractor.cecs547.Repository.Parser.Listener.ClassBodyDeclarationListener;
 
 public class FileListener extends JavaBaseListener {
-    private String packageName;
     private String className;
     private String classModifier;
     private String parentClass;
+    private String packageName;
 
     @Override
     public void enterPackageDeclaration(JavaParser.PackageDeclarationContext ctx) {
@@ -34,5 +33,9 @@ public class FileListener extends JavaBaseListener {
     @Override
     public void enterClassBody(JavaParser.ClassBodyContext ctx) {
         ctx.classBodyDeclaration().forEach(body -> body.enterRule(new ClassBodyDeclarationListener()));
+    }
+
+    public String getPackageName() {
+        return packageName;
     }
 }

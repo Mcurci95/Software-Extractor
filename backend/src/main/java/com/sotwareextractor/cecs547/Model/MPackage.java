@@ -18,6 +18,9 @@ public class MPackage {
         this.name = name;
         this.MClasses = MClasses;
     }
+    public MPackage(String name) {
+        this.name = name;
+    }
 
     public Long getId() {
         return id;
