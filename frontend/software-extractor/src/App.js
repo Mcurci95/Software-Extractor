@@ -1,23 +1,29 @@
-import React from 'react';
+import React, { Component }  from 'react';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
 
-import Header from '../src/components/Header';
+
+import ExtractResult from '../src/components/ExtractResult';
 import FileUploader from '../src/components/FileUploader';
+import Navigation from "../src/components/Navbar";
 
-function App() {
-  return (
+class App extends Component {
 
-    <div className="App">
-        <Header />
-        <div>
-        <FileUploader />
-
-        </div>
-    </div>
-
-  );
+    render() {
+        return (
+            <BrowserRouter>
+                <div>
+                    <Navigation />
+                    <Switch>
+                        <Route path="/" component={FileUploader} exact/>
+                        <Route path="/result" component={ExtractResult}/>
+                    </Switch>
+                </div>
+            </BrowserRouter>
+        );
+    }
 }
 
 export default App;
