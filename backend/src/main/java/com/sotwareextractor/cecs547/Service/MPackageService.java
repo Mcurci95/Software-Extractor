@@ -24,4 +24,13 @@ public class MPackageService {
             return existing.get(0);
         }
     }
+
+    public MPackage findByName(String name) {
+        List<MPackage> existing = mPackageRepository.findByName(name);
+        if (existing.size() == 0) {
+            return null;
+        } else {
+            return existing.get(0);
+        }
+    }
 }

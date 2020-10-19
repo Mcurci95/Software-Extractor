@@ -10,8 +10,7 @@ public class MAccess {
     private String accessName;
 
     public MAccess() {}
-    public MAccess(Long id, String accessName) {
-        Id = id;
+    public MAccess(String accessName) {
         this.accessName = accessName;
     }
 

@@ -30,6 +30,9 @@ public class MClass {
         this.parent = parent;
         this.mInstances = mInstances;
     }
+    public MClass(String name) {
+        this.name = name;
+    }
 
     public Long getId() {
         return id;
