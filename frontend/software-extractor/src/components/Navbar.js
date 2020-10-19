@@ -1,16 +1,20 @@
-import React from 'react';
-import NavBar from 'react-bootstrap/Navbar';
-import Nav from 'react-bootstrap/Nav';
-const Navbar = () => {
-    return (
-        <NavBar bg="dark">
-            <NavBar.Brand>Software-Extractor</NavBar.Brand>
-            <Nav className="mr-auto">
-                <Nav.Link>Projects</Nav.Link>
-                <Nav.Link>Upload</Nav.Link>
-            </Nav>
-        </NavBar>
-    )
-};
 
-export default Navbar;
+import React from 'react';
+
+import { NavLink } from 'react-router-dom';
+
+const Navigation = () => {
+    return (
+        <div id="nav">
+            <ul>
+                <li><a href="#">TEAM DML</a></li>
+                <li><NavLink to="/">File Uploader</NavLink></li>
+                <li><NavLink to="/result">Result</NavLink></li>
+            </ul>
+
+
+        </div>
+    );
+}
+
+export default Navigation;
