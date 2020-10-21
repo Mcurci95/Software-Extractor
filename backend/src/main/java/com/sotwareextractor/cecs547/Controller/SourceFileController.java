@@ -1,6 +1,8 @@
 package com.sotwareextractor.cecs547.Controller;
 
+import com.sotwareextractor.cecs547.Model.MPackage;
 import com.sotwareextractor.cecs547.Model.MSourceFile;
+import com.sotwareextractor.cecs547.Service.MPackageService;
 import com.sotwareextractor.cecs547.Service.SourceFileStorageService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,6 +22,9 @@ public class SourceFileController {
     @Autowired
     private SourceFileStorageService sourceFileStorageService;
 
+    @Autowired
+    private MPackageService mPackageService;
+
     Logger logger = LoggerFactory.getLogger(SourceFileController.class);
 
     @PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
@@ -37,6 +42,11 @@ public class SourceFileController {
     public List<MSourceFile> getFiles() {
         logger.info("Grabbing all source files");
         return sourceFileStorageService.getFiles();
+    }
 
+    @GetMapping(value = "/packages")
+    public List<MPackage> getPackages() {
+        logger.info("Grabbing all packages");
+        return mPackageService.getPackages();
     }
 }
