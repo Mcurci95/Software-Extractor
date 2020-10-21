@@ -23,4 +23,8 @@ public class MPackageService {
             return existing.get(0);
         }
     }
+
+    public List<MPackage> getPackages() {
+        return this.mPackageRepository.findAll();
+    }
 }
