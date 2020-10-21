@@ -25,4 +25,12 @@ public class MClassService {
         else
             return existing.get(0);
     }
+
+    public MClass findByName(String name) {
+        List<MClass> existing = mClassRepository.findByName(name);
+        if (existing.size() == 0)
+            return null;
+        else
+            return existing.get(0);
+    }
 }

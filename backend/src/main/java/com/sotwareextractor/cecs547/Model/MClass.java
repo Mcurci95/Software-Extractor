@@ -1,6 +1,7 @@
 package com.sotwareextractor.cecs547.Model;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -19,6 +20,8 @@ public class MClass {
     private MClass parent;
     @OneToMany(mappedBy = "mClass")
     private Set<MInstance> mInstances;
+    @OneToMany(mappedBy = "mClass")
+    private List<MClassDataMember> mClassDataMembers;
 
     public MClass() {}
     public MClass(Long id, String name, MAccess mAccess, MPackage mPackage, Set<MClass> childClasses, MClass parent, Set<MInstance> mInstances) {

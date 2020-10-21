@@ -17,14 +17,15 @@ public class MMethod {
     private MType mType;
     @ManyToMany
     private List<MClassMethodParameter> mParameters;
+    @ManyToOne
+    private MClass mClass;
 
     public MMethod() {
     }
-    public MMethod(String name, MAccess mAccess, MType mType, List<MClassMethodParameter> mParameters) {
+    public MMethod(String name, MAccess mAccess, MClass mClass) {
         this.name = name;
         this.mAccess = mAccess;
-        this.mType = mType;
-        this.mParameters = mParameters;
+        this.mClass = mClass;
     }
 
     public Long getId() {

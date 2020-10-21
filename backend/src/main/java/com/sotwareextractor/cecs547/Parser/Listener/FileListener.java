@@ -50,7 +50,7 @@ public class FileListener extends JavaBaseListener {
 
     @Override
     public void enterClassDeclaration(JavaParser.ClassDeclarationContext ctx) {
-        String className = ctx.Identifier().getText();
+        className = ctx.Identifier().getText();
 
 
         MClass classInstance = mClassService.add(className);
@@ -67,6 +67,7 @@ public class FileListener extends JavaBaseListener {
 
     @Override
     public void enterClassBody(JavaParser.ClassBodyContext ctx) {
-        ctx.classBodyDeclaration().forEach(body -> body.enterRule(new ClassBodyDeclarationListener()));
+        ctx.classBodyDeclaration().forEach(body -> body.enterRule(
+                new ClassBodyDeclarationListener(mClassService.findByName(className))));
     }
 }
