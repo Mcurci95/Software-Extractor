@@ -12,10 +12,10 @@ public class MInstanceParameter {
     private long Id;
     private String name;
     private int mOrder;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     private MType mType;
 
-    @ManyToMany(mappedBy = "mParameters")
+    @ManyToMany(mappedBy = "mParameters", cascade = CascadeType.ALL)
     private Collection<MInstanceMethod> instanceMethods;
 
     public MInstanceParameter(){}

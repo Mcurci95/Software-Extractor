@@ -11,23 +11,30 @@ public class MMethod {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long Id;
     private String name;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     private MAccess mAccess;
-    @ManyToOne
-    private MType mType;
-    @ManyToMany
+    @ManyToOne(cascade = CascadeType.ALL)
+    private MType mReturnType;
+    @ManyToMany(cascade = CascadeType.ALL)
     private List<MClassMethodParameter> mParameters;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     private MClass mClass;
 
     public MMethod() {
     }
-    public MMethod(String name, MAccess mAccess, MClass mClass) {
+    public MMethod(String name, MAccess mAccess, MType mType, MClass mClass) {
         this.name = name;
         this.mAccess = mAccess;
         this.mClass = mClass;
+        this.mReturnType = mType;
     }
 
+    public MClass getmClass() {
+        return mClass;
+    }
+    public void setmClass(MClass mClass) {
+        this.mClass = mClass;
+    }
     public Long getId() {
         return Id;
     }
@@ -52,11 +59,11 @@ public class MMethod {
     public void setmAccess(MAccess mAccess) {
         this.mAccess = mAccess;
     }
-    public MType getmType() {
-        return mType;
+    public MType getmMReturnType() {
+        return mReturnType;
     }
-    public void setmType(MType mType) {
-        this.mType = mType;
+    public void setmMReturnType(MType mType) {
+        this.mReturnType = mType;
     }
     public List<MClassMethodParameter> getParameters() {
         return mParameters;

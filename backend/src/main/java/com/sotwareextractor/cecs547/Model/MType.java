@@ -11,8 +11,7 @@ public class MType {
 
     public MType() {}
 
-    public MType(Long id, String name) {
-        Id = id;
+    public MType(String name) {
         this.name = name;
     }
 

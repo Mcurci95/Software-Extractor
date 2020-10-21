@@ -9,7 +9,7 @@ public class MPackage {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String name;
-    @OneToMany(mappedBy = "mPackage")
+    @OneToMany(mappedBy = "mPackage", cascade = CascadeType.ALL)
     private Collection<MClass> MClasses;
 
     public MPackage() {}

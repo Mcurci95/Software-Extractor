@@ -8,11 +8,11 @@ public class MClassDataMember {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long Id;
     private String name;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     private MClass mClass;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     private MAccess mAccess;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     private MType mType;
 
     public MClassDataMember() {

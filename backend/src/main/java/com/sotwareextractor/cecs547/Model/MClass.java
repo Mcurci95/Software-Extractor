@@ -10,21 +10,23 @@ public class MClass {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String name;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     private MAccess mAccess;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     private MPackage mPackage; // package is a reserved word
-    @OneToMany(mappedBy = "parent")
+    @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL)
     private Set<MClass> childClasses;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     private MClass parent;
-    @OneToMany(mappedBy = "mClass")
+    @OneToMany(mappedBy = "mClass", cascade = CascadeType.ALL)
     private Set<MInstance> mInstances;
-    @OneToMany(mappedBy = "mClass")
+    @OneToMany(mappedBy = "mClass", cascade = CascadeType.ALL)
     private List<MClassDataMember> mClassDataMembers;
+    @OneToMany(mappedBy = "mClass", cascade = CascadeType.ALL)
+    private List<MMethod> mMethods;
 
     public MClass() {}
-    public MClass(Long id, String name, MAccess mAccess, MPackage mPackage, Set<MClass> childClasses, MClass parent, Set<MInstance> mInstances) {
+    public MClass(String name, MAccess mAccess, MPackage mPackage, Set<MClass> childClasses, MClass parent, Set<MInstance> mInstances) {
         this.id = id;
         this.name = name;
         this.mAccess = mAccess;
@@ -33,10 +35,24 @@ public class MClass {
         this.parent = parent;
         this.mInstances = mInstances;
     }
-    public MClass(String name) {
+    public MClass(String name, MAccess mAccess, MPackage mPackage) {
         this.name = name;
+        this.mAccess = mAccess;
+        this.mPackage = mPackage;
     }
 
+    public List<MMethod> getmMethods() {
+        return mMethods;
+    }
+    public void setmMethods(List<MMethod> mMethods) {
+        this.mMethods = mMethods;
+    }
+    public List<MClassDataMember> getmClassDataMembers() {
+        return mClassDataMembers;
+    }
+    public void setmClassDataMembers(List<MClassDataMember> mClassDataMembers) {
+        this.mClassDataMembers = mClassDataMembers;
+    }
     public Long getId() {
         return id;
     }

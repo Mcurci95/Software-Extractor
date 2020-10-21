@@ -2,72 +2,56 @@ package com.sotwareextractor.cecs547.Parser.Listener;
 
 import com.softwareextractor.cecs547.Parser.JavaBaseListener;
 import com.softwareextractor.cecs547.Parser.JavaParser;
-import com.sotwareextractor.cecs547.Model.MAccess;
-import com.sotwareextractor.cecs547.Model.MClass;
-import com.sotwareextractor.cecs547.Model.MPackage;
+import com.sotwareextractor.cecs547.DAO.DClass;
 import com.sotwareextractor.cecs547.Service.MAccessService;
 import com.sotwareextractor.cecs547.Service.MClassService;
 import com.sotwareextractor.cecs547.Service.MPackageService;
-import com.sotwareextractor.cecs547.Service.MTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class FileListener extends JavaBaseListener {
-    private String packageName;
-    private String className;
-    private String parentClass;
-    private String modifier;
+    private DClass dClass = new DClass();
 
-    private MPackageService mPackageService;
-    private MClassService mClassService;
-    private MAccessService mAccessService;
-
-    @Autowired
-    public void setmPackageService(MPackageService mPackageService) {
-        this.mPackageService = mPackageService;
-    }
-    @Autowired
-    public void setmClassService(MClassService mClassService) {
-        this.mClassService = mClassService;
-    }
-    @Autowired
-    public void setmAccessService(MAccessService mAccessService) {
-        this.mAccessService = mAccessService;
+    public DClass getdClass() {
+        return dClass;
     }
 
     @Override
     public void enterTypeDeclaration(JavaParser.TypeDeclarationContext ctx) {
-        modifier = ctx.classOrInterfaceModifier().get(0).getText();
-        mAccessService.add(modifier);
+        if (ctx.classOrInterfaceModifier() != null) {
+            String modifier = ctx.classOrInterfaceModifier().get(0).getText();
+            dClass.setAccessLevel(modifier);
+        }
     }
 
     @Override
     public void enterPackageDeclaration(JavaParser.PackageDeclarationContext ctx) {
-        packageName = ctx.qualifiedName().Identifier().get(0).getText();
-        mPackageService.addPackage(packageName);
+        if (ctx.qualifiedName() != null) {
+            String packageName = ctx.qualifiedName().Identifier().get(0).getText();
+            dClass.setPackageName(packageName);
+        }
     }
 
     @Override
     public void enterClassDeclaration(JavaParser.ClassDeclarationContext ctx) {
-        className = ctx.Identifier().getText();
-
-
-        MClass classInstance = mClassService.add(className);
-
-        classInstance.setmPackage(mPackageService.findByName(packageName));
-        classInstance.setmAccess(mAccessService.findByName(modifier));
+        dClass.setName(ctx.Identifier().getText());
 
         if (ctx.typeSpec() != null) {
-            parentClass = ctx.typeSpec().getText();
-            MClass parentInstance = mClassService.add(parentClass);
-            classInstance.setParent(parentInstance);
+            String parentClassName = ctx.typeSpec().getText();
+            dClass.setPackageName(parentClassName);
         }
     }
 
     @Override
     public void enterClassBody(JavaParser.ClassBodyContext ctx) {
-        ctx.classBodyDeclaration().forEach(body -> body.enterRule(
-                new ClassBodyDeclarationListener(mClassService.findByName(className))));
+        ClassBodyDeclarationListener classBodyDeclarationListener = new ClassBodyDeclarationListener();
+        ctx.classBodyDeclaration().forEach(body -> body.enterRule(classBodyDeclarationListener));
+        dClass.setdClassFields(classBodyDeclarationListener.getClassFields());
+        dClass.setdClassMethods(classBodyDeclarationListener.getClassMethods());
+    }
+
+    public void display() {
+        System.out.println(dClass);
     }
 }

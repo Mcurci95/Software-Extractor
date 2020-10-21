@@ -24,9 +24,9 @@ public class MAccessService {
             return existing.get(0);
     }
 
-    public MAccess findByName(String name) {
+    public MAccess getOrCreate(String name) {
         List<MAccess> existing = mAccessRepository.findByAccessName(name);
         if (existing.size() > 0) return existing.get(0);
-        else return null;
+        else return add(name);
     }
 }

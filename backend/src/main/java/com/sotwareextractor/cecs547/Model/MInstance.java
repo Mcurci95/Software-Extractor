@@ -11,9 +11,9 @@ public class MInstance {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long Id;
     private String name;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     private MClass mClass;
-    @OneToMany(mappedBy = "mInstance")
+    @OneToMany(mappedBy = "mInstance", cascade = CascadeType.ALL)
     private Set<MInstanceMethod> mInstanceMethods;
 
     public MInstance() {}
