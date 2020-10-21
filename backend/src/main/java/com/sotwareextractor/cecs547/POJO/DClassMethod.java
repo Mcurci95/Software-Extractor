@@ -1,4 +1,4 @@
-package com.sotwareextractor.cecs547.DAO;
+package com.sotwareextractor.cecs547.POJO;
 
 public class DClassMethod {
     private String accessLevel;

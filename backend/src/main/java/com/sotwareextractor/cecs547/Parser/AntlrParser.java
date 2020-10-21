@@ -2,9 +2,8 @@ package com.sotwareextractor.cecs547.Parser;
 
 import com.softwareextractor.cecs547.Parser.JavaLexer;
 import com.softwareextractor.cecs547.Parser.JavaParser;
-import com.sotwareextractor.cecs547.DAO.DClass;
+import com.sotwareextractor.cecs547.POJO.DClass;
 import com.sotwareextractor.cecs547.Parser.Listener.FileListener;
-import com.sotwareextractor.cecs547.Service.MAccessService;
 import com.sotwareextractor.cecs547.Service.MClassService;
 import com.sotwareextractor.cecs547.Service.MPackageService;
 import org.antlr.v4.runtime.CharStreams;

@@ -1,8 +1,8 @@
 package com.sotwareextractor.cecs547.Service;
 
-import com.sotwareextractor.cecs547.DAO.DClass;
-import com.sotwareextractor.cecs547.DAO.DClassField;
-import com.sotwareextractor.cecs547.DAO.DClassMethod;
+import com.sotwareextractor.cecs547.POJO.DClass;
+import com.sotwareextractor.cecs547.POJO.DClassField;
+import com.sotwareextractor.cecs547.POJO.DClassMethod;
 import com.sotwareextractor.cecs547.Model.*;
 import com.sotwareextractor.cecs547.Repository.MClassRepository;
 import org.springframework.beans.factory.annotation.Autowired;

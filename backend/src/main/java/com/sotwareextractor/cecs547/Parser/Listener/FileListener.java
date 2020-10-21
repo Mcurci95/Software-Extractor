@@ -2,7 +2,7 @@ package com.sotwareextractor.cecs547.Parser.Listener;
 
 import com.softwareextractor.cecs547.Parser.JavaBaseListener;
 import com.softwareextractor.cecs547.Parser.JavaParser;
-import com.sotwareextractor.cecs547.DAO.DClass;
+import com.sotwareextractor.cecs547.POJO.DClass;
 import org.springframework.stereotype.Component;
 
 @Component

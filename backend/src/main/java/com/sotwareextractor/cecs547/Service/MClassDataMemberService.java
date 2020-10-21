@@ -1,6 +1,6 @@
 package com.sotwareextractor.cecs547.Service;
 
-import com.sotwareextractor.cecs547.DAO.DClassField;
+import com.sotwareextractor.cecs547.POJO.DClassField;
 import com.sotwareextractor.cecs547.Model.MAccess;
 import com.sotwareextractor.cecs547.Model.MClassDataMember;
 import com.sotwareextractor.cecs547.Model.MType;
