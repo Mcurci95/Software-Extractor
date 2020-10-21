@@ -3,10 +3,6 @@ package com.sotwareextractor.cecs547.Parser.Listener;
 import com.softwareextractor.cecs547.Parser.JavaBaseListener;
 import com.softwareextractor.cecs547.Parser.JavaParser;
 import com.sotwareextractor.cecs547.DAO.DClass;
-import com.sotwareextractor.cecs547.Service.MAccessService;
-import com.sotwareextractor.cecs547.Service.MClassService;
-import com.sotwareextractor.cecs547.Service.MPackageService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -39,7 +35,7 @@ public class FileListener extends JavaBaseListener {
 
         if (ctx.typeSpec() != null) {
             String parentClassName = ctx.typeSpec().getText();
-            dClass.setPackageName(parentClassName);
+            dClass.setParentClass(parentClassName);
         }
     }
 

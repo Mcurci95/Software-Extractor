@@ -15,7 +15,6 @@ public class ClassBodyDeclarationListener extends JavaBaseListener {
     public List<DClassField> getClassFields() {
         return classFields;
     }
-
     public List<DClassMethod> getClassMethods() {
         return classMethods;
     }

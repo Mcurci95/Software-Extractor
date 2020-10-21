@@ -21,7 +21,7 @@ public class MClassMethodService {
         this.mTypeService = mTypeService;
     }
 
-    public MMethod add(DClassMethod method, MClass mClass) {
+    public MMethod getOrCreate(DClassMethod method, MClass mClass) {
         List<MMethod> existing = mMethodRepository.findByName(method.getName());
         for (var instance : existing) {
             if (instance.getmAccess() != null && instance.getmAccess().getAccessName().equals(method.getName())

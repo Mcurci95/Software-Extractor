@@ -16,17 +16,9 @@ public class MAccessService {
         this.mAccessRepository = mAccessRepository;
     }
 
-    public MAccess add(String name) {
-        List<MAccess> existing = mAccessRepository.findByAccessName(name);
-        if (existing.size() == 0)
-            return mAccessRepository.save(new MAccess(name));
-        else
-            return existing.get(0);
-    }
-
     public MAccess getOrCreate(String name) {
         List<MAccess> existing = mAccessRepository.findByAccessName(name);
         if (existing.size() > 0) return existing.get(0);
-        else return add(name);
+        else return mAccessRepository.save(new MAccess(name));
     }
 }

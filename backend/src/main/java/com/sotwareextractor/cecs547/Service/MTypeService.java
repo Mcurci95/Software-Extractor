@@ -1,6 +1,5 @@
 package com.sotwareextractor.cecs547.Service;
 
-import com.sotwareextractor.cecs547.Model.MPackage;
 import com.sotwareextractor.cecs547.Model.MType;
 import com.sotwareextractor.cecs547.Repository.MTypeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,18 +16,9 @@ public class MTypeService {
         this.mTypeRepository = mTypeRepository;
     }
 
-    public MType add(String name) {
-        List<MType> existing = mTypeRepository.findByName(name);
-        if (existing.size() == 0) {
-            return mTypeRepository.save(new MType(name));
-        } else {
-            return existing.get(0);
-        }
-    }
-
     public MType getOrCreate(String name) {
         List<MType> existing = mTypeRepository.findByName(name);
         if (existing.size() > 0) return existing.get(0);
-        else return add(name);
+        else return mTypeRepository.save(new MType(name));
     }
 }

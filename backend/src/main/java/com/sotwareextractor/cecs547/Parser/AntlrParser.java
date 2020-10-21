@@ -7,7 +7,6 @@ import com.sotwareextractor.cecs547.Parser.Listener.FileListener;
 import com.sotwareextractor.cecs547.Service.MAccessService;
 import com.sotwareextractor.cecs547.Service.MClassService;
 import com.sotwareextractor.cecs547.Service.MPackageService;
-import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
@@ -15,29 +14,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 
 @Component
 public class AntlrParser {
     private MPackageService mPackageService;
     private MClassService mClassService;
-    private MAccessService mAccessService;
 
     @Autowired
-    public void setmPackageService(MPackageService mPackageService) {
+    public AntlrParser(MPackageService mPackageService, MClassService mClassService) {
         this.mPackageService = mPackageService;
-    }
-    @Autowired
-    public void setmClassService(MClassService mClassService) {
         this.mClassService = mClassService;
     }
-    @Autowired
-    public void setmAccessService(MAccessService mAccessService) {
-        this.mAccessService = mAccessService;
-    }
-
 
 //    public static void main(String[] args) throws IOException {
 //        String[] files = {"Class1.java", "Class2.java", "Class3.java", "Program.java"};
@@ -71,7 +59,7 @@ public class AntlrParser {
 
     public void saveToDb(FileListener fileListener) {
         DClass classData = fileListener.getdClass();
-        mPackageService.add(classData.getPackageName());
-        mClassService.add(classData);
+        mPackageService.getOrCreate(classData.getPackageName());
+        mClassService.getOrCreate(classData);
     }
 }

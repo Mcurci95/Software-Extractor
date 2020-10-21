@@ -15,20 +15,10 @@ public class MPackageService {
         this.mPackageRepository = mPackageRepository;
     }
 
-    public MPackage add(String name) {
-        List<MPackage> existing = mPackageRepository.findByName(name);
-        if (existing.size() == 0) {
-            return mPackageRepository.save(new MPackage(name));
-        } else {
-            System.out.println("Package already exists.");
-            return existing.get(0);
-        }
-    }
-
     public MPackage getOrCreate(String name) {
         List<MPackage> existing = mPackageRepository.findByName(name);
         if (existing.size() == 0) {
-            return add(name);
+            return mPackageRepository.save(new MPackage(name));
         } else {
             return existing.get(0);
         }

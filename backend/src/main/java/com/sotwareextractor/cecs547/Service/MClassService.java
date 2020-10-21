@@ -31,7 +31,7 @@ public class MClassService {
         this.mClassMethodService = mClassMethodService;
     }
 
-    public MClass add(DClass dClass) {
+    public MClass getOrCreate(DClass dClass) {
         List<MClass> existing = mClassRepository.findByName(dClass.getName());
         if (existing.size() == 0) {
             String className = dClass.getName();
@@ -42,14 +42,14 @@ public class MClassService {
 
             List<MClassDataMember> mClassDataMembers = new ArrayList<>();
             for (DClassField field : dClass.getFields()) {
-                MClassDataMember mClassDataMember = mClassDataMemberService.add(field);
+                MClassDataMember mClassDataMember = mClassDataMemberService.getOrCreate(field);
                 mClassDataMembers.add(mClassDataMember);
             }
             mClass.setmClassDataMembers(mClassDataMembers);
 
             List<MMethod> mMethods = new ArrayList<>();
             for (DClassMethod method : dClass.getdClassMethods()) {
-                MMethod mMethod = mClassMethodService. add(method, mClass);
+                MMethod mMethod = mClassMethodService.getOrCreate(method, mClass);
                 mMethods.add(mMethod);
             }
             mClass.setmMethods(mMethods);

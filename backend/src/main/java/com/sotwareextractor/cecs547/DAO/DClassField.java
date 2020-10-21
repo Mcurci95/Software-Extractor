@@ -1,30 +1,25 @@
 package com.sotwareextractor.cecs547.DAO;
 
 public class DClassField {
-    private String modifier;
+    private String accessLevel;
     private String type;
     private String name;
 
-    public String getModifier() {
-        return modifier;
+    public String getAccessLevel() {
+        return accessLevel;
     }
-
-    public void setModifier(String modifier) {
-        this.modifier = modifier;
+    public void setAccessLevel(String accessLevel) {
+        this.accessLevel = accessLevel;
     }
-
     public String getType() {
         return type;
     }
-
     public void setType(String type) {
         this.type = type;
     }
-
     public String getName() {
         return name;
     }
-
     public void setName(String name) {
         this.name = name;
     }
@@ -32,7 +27,7 @@ public class DClassField {
     @Override
     public String toString() {
         return "DClassField{" +
-                "modifier='" + modifier + '\'' +
+                "modifier='" + accessLevel + '\'' +
                 ", type='" + type + '\'' +
                 ", name='" + name + '\'' +
                 '}';

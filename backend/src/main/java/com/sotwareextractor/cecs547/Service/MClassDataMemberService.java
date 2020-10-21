@@ -3,7 +3,6 @@ package com.sotwareextractor.cecs547.Service;
 import com.sotwareextractor.cecs547.DAO.DClassField;
 import com.sotwareextractor.cecs547.Model.MAccess;
 import com.sotwareextractor.cecs547.Model.MClassDataMember;
-import com.sotwareextractor.cecs547.Model.MPackage;
 import com.sotwareextractor.cecs547.Model.MType;
 import com.sotwareextractor.cecs547.Repository.MClassDataMemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +23,7 @@ public class MClassDataMemberService {
         this.mTypeService = mTypeService;
     }
 
-    public MClassDataMember add(DClassField field) {
+    public MClassDataMember getOrCreate(DClassField field) {
         List<MClassDataMember> existing = mClassDataMemberRepository.findByName(field.getName());
         for (var instance : existing) {
             if (instance.getmAccess() != null &&
@@ -35,7 +34,7 @@ public class MClassDataMemberService {
             }
         }
         String name = field.getName();
-        MAccess mAccess = mAccessService.getOrCreate(field.getModifier());
+        MAccess mAccess = mAccessService.getOrCreate(field.getAccessLevel());
         MType mType = mTypeService.getOrCreate(field.getType());
         return mClassDataMemberRepository.save(new MClassDataMember(name, mAccess, mType));
     }
