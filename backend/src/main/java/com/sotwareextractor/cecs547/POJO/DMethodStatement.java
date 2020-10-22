@@ -39,10 +39,21 @@ public class DMethodStatement {
 
     public void findMethodCalls() {
         for (String identifier : identifiers) {
-            int periodIdx = identifier.indexOf(".");
-            if (periodIdx != -1) {
+            if (identifier.contains(".")) {
                 String[] pair = identifier.split("\\.");
                 objectMethodCall.put(pair[0], pair[1]);
+            }
+        }
+
+        // For: getMyFunc()
+        if (statement.contains("()")) {
+            for (String identifier : identifiers) {
+                int iIndex = statement.indexOf(identifier);
+                if (statement.charAt(iIndex + identifier.length()) == '(' && statement.charAt(iIndex + identifier.length() + 1) == ')' &&
+                !identifier.contains(".")) {
+                    if (iIndex == 0 || (iIndex - 1 > 0 && !Character.isLetter(statement.charAt(iIndex - 1))))
+                        objectMethodCall.put("<current_class>", identifier);
+                }
             }
         }
     }

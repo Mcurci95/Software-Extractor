@@ -19,59 +19,17 @@ public class BlockListener extends JavaBaseListener {
 
             List<String> identifiers = new ArrayList<>();
 
-
-            Queue<JavaParser.ExpressionContext> queue;
-            Set<JavaParser.ExpressionContext> seenExpression;
-
             if (blockStatement.statement() != null && blockStatement.statement().statementExpression() != null
                     && blockStatement.statement().statementExpression().expression() != null) {
-                queue = new LinkedList<>();
-                seenExpression = new HashSet<>();
-                queue.add(blockStatement.statement().statementExpression().expression());
-                queue.addAll(blockStatement.statement().statementExpression().expression().expression());
-                while(queue.size() != 0) {
-                    JavaParser.ExpressionContext eCtx = queue.poll();
-                    if (!seenExpression.contains(eCtx)) {
-                        seenExpression.add(eCtx);
-                        if (eCtx.DOT() != null) {
-                            identifiers.add(eCtx.getText());
-                        }
-                        else if (eCtx.primary() != null && eCtx.primary().Identifier() != null) {
-                            identifiers.add(eCtx.primary().Identifier().getText());
-                        }
-                        if (eCtx.expression().size() != 0) {
-                            for (var expression : eCtx.expression()) {
-                                if (!seenExpression.contains(expression)) {
-                                    queue.add(expression);
-                                }
-                            }
-                        }
-                    }
-                }
+                handleExpression(blockStatement.statement().statementExpression().expression(), identifiers);
             }
+
             if (blockStatement.statement() != null && blockStatement.statement().expression() != null) {
-                queue = new LinkedList<>(blockStatement.statement().expression());
-                seenExpression = new HashSet<>();
-                while(queue.size() != 0) {
-                    JavaParser.ExpressionContext eCtx = queue.poll();
-                    if (!seenExpression.contains(eCtx)) {
-                        seenExpression.add(eCtx);
-                        if (eCtx.DOT() != null) {
-                            identifiers.add(eCtx.getText());
-                        }
-                        else if (eCtx.primary() != null && eCtx.primary().Identifier() != null) {
-                            identifiers.add(eCtx.primary().Identifier().getText());
-                        }
-                        if (eCtx.expression().size() != 0) {
-                            for (var expression : eCtx.expression()) {
-                                if (!seenExpression.contains(expression)) {
-                                    queue.add(expression);
-                                }
-                            }
-                        }
-                    }
+                for (var expression : blockStatement.statement().expression()) {
+                    handleExpression(expression, identifiers);
                 }
             }
+
             if (blockStatement.localVariableDeclarationStatement() != null &&
             blockStatement.localVariableDeclarationStatement().localVariableDeclaration() != null
             && blockStatement.localVariableDeclarationStatement().localVariableDeclaration().variableDeclarators() != null
@@ -82,7 +40,7 @@ public class BlockListener extends JavaBaseListener {
                         identifiers.add(varId.variableDeclaratorId().Identifier().getText());
                     }
                     if (varId.variableInitializer() != null) {
-
+                        handleExpression(varId.variableInitializer().expression(), identifiers);
                     }
                 }
             }
@@ -96,7 +54,30 @@ public class BlockListener extends JavaBaseListener {
         return methodStatements;
     }
 
-    private void handleExpression() {
-        
+    private void handleExpression(JavaParser.ExpressionContext expression, List<String> identifiers) {
+        Queue<JavaParser.ExpressionContext> queue = new LinkedList<>();
+        Set<JavaParser.ExpressionContext> seenExpression;
+        seenExpression = new HashSet<>();
+
+        queue.add(expression);
+        while(queue.size() != 0) {
+            JavaParser.ExpressionContext eCtx = queue.poll();
+            if (!seenExpression.contains(eCtx)) {
+                seenExpression.add(eCtx);
+                if (eCtx.DOT() != null) {
+                    identifiers.add(eCtx.getText());
+                }
+                else if (eCtx.primary() != null && eCtx.primary().Identifier() != null) {
+                    identifiers.add(eCtx.primary().Identifier().getText());
+                }
+                if (eCtx.expression().size() != 0) {
+                    for (var anExpression : eCtx.expression()) {
+                        if (!seenExpression.contains(anExpression)) {
+                            queue.add(anExpression);
+                        }
+                    }
+                }
+            }
+        }
     }
 }
