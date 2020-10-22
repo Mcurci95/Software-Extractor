@@ -7,15 +7,18 @@ import com.sotwareextractor.cecs547.POJO.DMethodStatement;
 import java.util.*;
 
 public class BlockListener extends JavaBaseListener {
+    private int sequence = 0;
     List<DMethodStatement> methodStatements = new ArrayList<>();
 
     @Override
     public void enterBlock(JavaParser.BlockContext ctx) {
         for (var blockStatement : ctx.blockStatement()) {
             DMethodStatement dStatement = new DMethodStatement();
+            dStatement.setStatement(blockStatement.getText());
+            dStatement.setSequence(sequence++);
+
             List<String> identifiers = new ArrayList<>();
 
-            dStatement.setStatement(blockStatement.getText());
 
             Queue<JavaParser.ExpressionContext> queue;
             Set<JavaParser.ExpressionContext> seenExpression;
@@ -69,6 +72,20 @@ public class BlockListener extends JavaBaseListener {
                     }
                 }
             }
+            if (blockStatement.localVariableDeclarationStatement() != null &&
+            blockStatement.localVariableDeclarationStatement().localVariableDeclaration() != null
+            && blockStatement.localVariableDeclarationStatement().localVariableDeclaration().variableDeclarators() != null
+            && blockStatement.localVariableDeclarationStatement().localVariableDeclaration().variableDeclarators().variableDeclarator().size() != 0) {
+                var variableDeclaratior = blockStatement.localVariableDeclarationStatement().localVariableDeclaration().variableDeclarators().variableDeclarator();
+                for (var varId : variableDeclaratior) {
+                    if (varId.variableDeclaratorId() != null && varId.variableDeclaratorId().Identifier() != null) {
+                        identifiers.add(varId.variableDeclaratorId().Identifier().getText());
+                    }
+                    if (varId.variableInitializer() != null) {
+
+                    }
+                }
+            }
 
             dStatement.setIdentifiers(identifiers);
             methodStatements.add(dStatement);
@@ -77,5 +94,9 @@ public class BlockListener extends JavaBaseListener {
 
     public List<DMethodStatement> getMethodStatements() {
         return methodStatements;
+    }
+
+    private void handleExpression() {
+        
     }
 }
