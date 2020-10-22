@@ -50,7 +50,7 @@ public class MClassService {
             List<MMethod> mMethods = new ArrayList<>();
             for (DClassMethod method : dClass.getdClassMethods()) {
                 MMethod mMethod = mClassMethodService.getOrCreate(method, mClass);
-                mMethods.add(mMethod);
+                if (mMethod != null) mMethods.add(mMethod);
             }
             mClass.setmMethods(mMethods);
 

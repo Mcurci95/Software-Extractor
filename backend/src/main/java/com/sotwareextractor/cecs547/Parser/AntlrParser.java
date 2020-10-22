@@ -26,22 +26,23 @@ public class AntlrParser {
         this.mClassService = mClassService;
     }
 
-//    public static void main(String[] args) throws IOException {
-//        String[] files = {"Class1.java", "Class2.java", "Class3.java", "Program.java"};
-//        for (String file : files) {
-//            System.out.println("Parsing file: " + file);
-//            JavaLexer lexer = new JavaLexer(CharStreams.fromFileName("/Users/chinhnguyen/Dropbox/School/CSULB/" +
-//                    "Master/Fall 2020/CECS 547/Software-Extractor/backend/src/main/resources/OO_PIES1/" + file));
-//            CommonTokenStream tokens = new CommonTokenStream(lexer);
-//            JavaParser parser = new JavaParser(tokens);
-//            JavaParser.CompilationUnitContext compilationUnitContext = parser.compilationUnit();
-//            ParseTreeWalker walker = new ParseTreeWalker();
-//            FileListener fileListener = new FileListener();
-//            walker.walk(fileListener, compilationUnitContext);
-//
-//            System.out.println("--------------------------------------------");
-//        }
-//    }
+    public static void main(String[] args) throws IOException {
+        String[] files = {"Class1.java", "Class2.java", "Class3.java", "Program.java"};
+        for (String file : files) {
+            System.out.println("Parsing file: " + file);
+            JavaLexer lexer = new JavaLexer(CharStreams.fromFileName("/Users/chinhnguyen/Dropbox/School/CSULB/" +
+                    "Master/Fall 2020/CECS 547/Software-Extractor/backend/src/main/resources/OO_PIES1/" + file));
+            CommonTokenStream tokens = new CommonTokenStream(lexer);
+            JavaParser parser = new JavaParser(tokens);
+            JavaParser.CompilationUnitContext compilationUnitContext = parser.compilationUnit();
+            ParseTreeWalker walker = new ParseTreeWalker();
+            FileListener fileListener = new FileListener();
+            walker.walk(fileListener, compilationUnitContext);
+            fileListener.display();
+
+            System.out.println("--------------------------------------------");
+        }
+    }
 
     public void parse(MultipartFile file) throws IOException {
         JavaLexer lexer = new JavaLexer(CharStreams.fromStream(file.getInputStream()));

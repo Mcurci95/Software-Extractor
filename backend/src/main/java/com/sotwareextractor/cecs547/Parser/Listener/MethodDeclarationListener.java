@@ -4,11 +4,16 @@ import com.softwareextractor.cecs547.Parser.JavaBaseListener;
 import com.softwareextractor.cecs547.Parser.JavaParser;
 import com.sotwareextractor.cecs547.POJO.DClassMethod;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class MethodDeclarationListener extends JavaBaseListener {
     private String modifier;
     private List<DClassMethod> classMethods;
+    private List<String[]> identifiers = new ArrayList<>();
+    private Map<String, String> functionCalls;
+    private String methodName;
 
     public MethodDeclarationListener(String modifier, List<DClassMethod> classMethods) {
         this.modifier = modifier;
@@ -19,11 +24,15 @@ public class MethodDeclarationListener extends JavaBaseListener {
     public void enterMethodDeclaration(JavaParser.MethodDeclarationContext ctx) {
         if (ctx != null) {
             String returnType = ctx.typeSpec() != null ? ctx.typeSpec().getText() : "void";
-            String methodName = ctx.Identifier().getText();
+            methodName = ctx.Identifier().getText();
             DClassMethod newMethod = new DClassMethod();
             newMethod.setName(methodName);
             newMethod.setReturnType(returnType);
             newMethod.setAccessLevel(modifier);
+
+            BlockListener blockListener = new BlockListener();
+            ctx.methodBody().block().enterRule(blockListener);
+            newMethod.setMethodStatements(blockListener.getMethodStatements());
 
             classMethods.add(newMethod);
 //            MethodParametersListener methodParametersListener = new MethodParametersListener();
@@ -34,5 +43,17 @@ public class MethodDeclarationListener extends JavaBaseListener {
 //            methodParams.put(methodName, methodParametersListener.getParameters());
 //            mMethodService.add(methodName, modifier, className);
         }
+    }
+
+    public List<String[]> getIdentifiers() {
+        return identifiers;
+    }
+
+    public String getMethodName() {
+        return methodName;
+    }
+
+    public Map<String, String> getFunctionCalls() {
+        return functionCalls;
     }
 }

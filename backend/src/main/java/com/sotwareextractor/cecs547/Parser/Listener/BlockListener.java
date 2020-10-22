@@ -2,11 +2,80 @@ package com.sotwareextractor.cecs547.Parser.Listener;
 
 import com.softwareextractor.cecs547.Parser.JavaBaseListener;
 import com.softwareextractor.cecs547.Parser.JavaParser;
+import com.sotwareextractor.cecs547.POJO.DMethodStatement;
+
+import java.util.*;
 
 public class BlockListener extends JavaBaseListener {
+    List<DMethodStatement> methodStatements = new ArrayList<>();
+
     @Override
     public void enterBlock(JavaParser.BlockContext ctx) {
-        ctx.blockStatement().forEach(block ->
-                block.localVariableDeclarationStatement().getText());
+        for (var blockStatement : ctx.blockStatement()) {
+            DMethodStatement dStatement = new DMethodStatement();
+            List<String> identifiers = new ArrayList<>();
+
+            dStatement.setStatement(blockStatement.getText());
+
+            Queue<JavaParser.ExpressionContext> queue;
+            Set<JavaParser.ExpressionContext> seenExpression;
+
+            if (blockStatement.statement() != null && blockStatement.statement().statementExpression() != null
+                    && blockStatement.statement().statementExpression().expression() != null) {
+                queue = new LinkedList<>();
+                seenExpression = new HashSet<>();
+                queue.add(blockStatement.statement().statementExpression().expression());
+                queue.addAll(blockStatement.statement().statementExpression().expression().expression());
+                while(queue.size() != 0) {
+                    JavaParser.ExpressionContext eCtx = queue.poll();
+                    if (!seenExpression.contains(eCtx)) {
+                        seenExpression.add(eCtx);
+                        if (eCtx.DOT() != null) {
+                            identifiers.add(eCtx.getText());
+                        }
+                        else if (eCtx.primary() != null && eCtx.primary().Identifier() != null) {
+                            identifiers.add(eCtx.primary().Identifier().getText());
+                        }
+                        if (eCtx.expression().size() != 0) {
+                            for (var expression : eCtx.expression()) {
+                                if (!seenExpression.contains(expression)) {
+                                    queue.add(expression);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            if (blockStatement.statement() != null && blockStatement.statement().expression() != null) {
+                queue = new LinkedList<>(blockStatement.statement().expression());
+                seenExpression = new HashSet<>();
+                while(queue.size() != 0) {
+                    JavaParser.ExpressionContext eCtx = queue.poll();
+                    if (!seenExpression.contains(eCtx)) {
+                        seenExpression.add(eCtx);
+                        if (eCtx.DOT() != null) {
+                            identifiers.add(eCtx.getText());
+                        }
+                        else if (eCtx.primary() != null && eCtx.primary().Identifier() != null) {
+                            identifiers.add(eCtx.primary().Identifier().getText());
+                        }
+                        if (eCtx.expression().size() != 0) {
+                            for (var expression : eCtx.expression()) {
+                                if (!seenExpression.contains(expression)) {
+                                    queue.add(expression);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            dStatement.setIdentifiers(identifiers);
+            methodStatements.add(dStatement);
+        }
+    }
+
+    public List<DMethodStatement> getMethodStatements() {
+        return methodStatements;
     }
 }
