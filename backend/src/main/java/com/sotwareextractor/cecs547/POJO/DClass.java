@@ -1,4 +1,4 @@
-package com.sotwareextractor.cecs547.DAO;
+package com.sotwareextractor.cecs547.POJO;
 
 import java.util.ArrayList;
 import java.util.List;

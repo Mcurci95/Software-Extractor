@@ -2,8 +2,8 @@ package com.sotwareextractor.cecs547.Parser.Listener;
 
 import com.softwareextractor.cecs547.Parser.JavaBaseListener;
 import com.softwareextractor.cecs547.Parser.JavaParser;
-import com.sotwareextractor.cecs547.DAO.DClassField;
-import com.sotwareextractor.cecs547.DAO.DClassMethod;
+import com.sotwareextractor.cecs547.POJO.DClassField;
+import com.sotwareextractor.cecs547.POJO.DClassMethod;
 
 import java.util.ArrayList;
 import java.util.List;
