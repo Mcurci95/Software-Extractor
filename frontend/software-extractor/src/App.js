@@ -9,7 +9,11 @@ import ExtractResult from '../src/components/ExtractResult';
 import FileUploader from '../src/components/FileUploader';
 import Navigation from "../src/components/Navbar";
 
+
+const PACKAGES_ENDPOINT = 'http://localhost:8080/packages';
+
 class App extends Component {
+
 
     render() {
         return (
