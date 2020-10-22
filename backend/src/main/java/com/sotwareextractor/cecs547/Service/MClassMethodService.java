@@ -32,7 +32,8 @@ public class MClassMethodService {
         }
         String name = method.getName();
         if (name == null) return null;
-        MAccess mAccess = mAccessService.getOrCreate(method.getAccessLevel());
+        // Todo: need fix
+        MAccess mAccess = mAccessService.getOrCreate(method.getModifiers().get(0));
         MType mReturnType = mTypeService.getOrCreate(method.getReturnType());
         return mMethodRepository.save(new MMethod(name, mAccess, mReturnType, mClass));
     }

@@ -34,7 +34,8 @@ public class MClassDataMemberService {
             }
         }
         String name = field.getName();
-        MAccess mAccess = mAccessService.getOrCreate(field.getAccessLevel());
+        // Todo: Fixed
+        MAccess mAccess = mAccessService.getOrCreate(field.getModifiers().get(0));
         MType mType = mTypeService.getOrCreate(field.getType());
         return mClassDataMemberRepository.save(new MClassDataMember(name, mAccess, mType));
     }

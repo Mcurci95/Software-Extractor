@@ -10,6 +10,7 @@ public class DClass {
     private String parentClass;
     private List<DClassField> dClassFields = new ArrayList<>();
     private List<DClassMethod> dClassMethods = new ArrayList<>();
+    private List<String> implementInterfaces = new ArrayList<>();
 
     public List<DClassMethod> getdClassMethods() {
         return dClassMethods;
@@ -59,6 +60,22 @@ public class DClass {
         this.parentClass = parentClass;
     }
 
+    public List<DClassField> getdClassFields() {
+        return dClassFields;
+    }
+
+    public List<String> getImplementInterfaces() {
+        return implementInterfaces;
+    }
+
+    public void setImplementInterfaces(List<String> implementInterfaces) {
+        this.implementInterfaces = implementInterfaces;
+    }
+
+    public void addInterface(String name) {
+        this.implementInterfaces.add(name);
+    }
+
     @Override
     public String toString() {
         return "DClass{" +
@@ -68,6 +85,7 @@ public class DClass {
                 ", parentClass='" + parentClass + '\'' +
                 ", dClassFields=" + dClassFields +
                 ", dClassMethods=" + dClassMethods +
+                ", implementInterfaces=" + implementInterfaces +
                 '}';
     }
 }

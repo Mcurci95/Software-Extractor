@@ -25,17 +25,20 @@ public class ClassBodyDeclarationListener extends JavaBaseListener {
 
     @Override
     public void enterClassBodyDeclaration(JavaParser.ClassBodyDeclarationContext ctx) {
-        String modifier = null;
+        List<String> modifiers = new ArrayList<>();
         if (ctx.modifier().size() != 0) {
-            modifier = ctx.modifier().get(0).getText();
+            for (var m : ctx.modifier()) {
+                modifiers.add(m.getText());
+            }
+//            modifiers = ctx.modifier().get(0).getText();
         }
 
-        ClassFieldListener classFieldListener = new ClassFieldListener(modifier, classFields);
+        ClassFieldListener classFieldListener = new ClassFieldListener(modifiers, classFields);
         if (ctx.memberDeclaration().fieldDeclaration() != null) {
             ctx.memberDeclaration().fieldDeclaration().enterRule(classFieldListener);
         }
 
-        MethodDeclarationListener methodDeclarationListener = new MethodDeclarationListener(modifier, classMethods);
+        MethodDeclarationListener methodDeclarationListener = new MethodDeclarationListener(modifiers, classMethods);
         if (ctx.memberDeclaration().methodDeclaration() != null) {
             ctx.memberDeclaration().methodDeclaration().enterRule(methodDeclarationListener);
         }
@@ -51,7 +54,7 @@ public class ClassBodyDeclarationListener extends JavaBaseListener {
 //            constructorParamList = constructorParams.parameters;
 //        }
 
-        MethodDeclarationListener constructorListener = new MethodDeclarationListener(modifier, classMethods);
+        MethodDeclarationListener constructorListener = new MethodDeclarationListener(modifiers, classMethods);
         if (ctx.memberDeclaration().constructorDeclaration() != null) {
             ctx.memberDeclaration().constructorDeclaration().enterRule(constructorListener);
         }

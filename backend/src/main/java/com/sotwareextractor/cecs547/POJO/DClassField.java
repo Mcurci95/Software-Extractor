@@ -1,15 +1,17 @@
 package com.sotwareextractor.cecs547.POJO;
 
+import java.util.List;
+
 public class DClassField {
-    private String accessLevel;
+    private List<String> modifiers;
     private String type;
     private String name;
 
-    public String getAccessLevel() {
-        return accessLevel;
+    public List<String> getModifiers() {
+        return modifiers;
     }
-    public void setAccessLevel(String accessLevel) {
-        this.accessLevel = accessLevel;
+    public void setModifiers(List<String> modifiers) {
+        this.modifiers = modifiers;
     }
     public String getType() {
         return type;
@@ -27,7 +29,7 @@ public class DClassField {
     @Override
     public String toString() {
         return "DClassField{" +
-                "modifier='" + accessLevel + '\'' +
+                "modifiers=" + modifiers +
                 ", type='" + type + '\'' +
                 ", name='" + name + '\'' +
                 '}';

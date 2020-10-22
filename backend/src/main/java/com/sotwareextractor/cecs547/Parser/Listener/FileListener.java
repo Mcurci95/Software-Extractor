@@ -37,6 +37,12 @@ public class FileListener extends JavaBaseListener {
             String parentClassName = ctx.typeSpec().getText();
             dClass.setParentClass(parentClassName);
         }
+
+        if (ctx.typeList() != null) {
+            for (var typeSpec : ctx.typeList().typeSpec()) {
+                dClass.addInterface(typeSpec.getText());
+            }
+        }
     }
 
     @Override

@@ -7,11 +7,11 @@ import com.sotwareextractor.cecs547.POJO.DClassField;
 import java.util.List;
 
 public class ClassFieldListener  extends JavaBaseListener {
-    private String modifier;
+    private List<String> modifiers;
     private List<DClassField> dClassFields;
 
-    public ClassFieldListener(String modifier, List<DClassField> dClassField) {
-        this.modifier = modifier;
+    public ClassFieldListener(List<String> modifiers, List<DClassField> dClassField) {
+        this.modifiers = modifiers;
         this.dClassFields = dClassField;
     }
 
@@ -23,7 +23,7 @@ public class ClassFieldListener  extends JavaBaseListener {
                 DClassField field = new DClassField();
 
                 field.setType(type);
-                field.setAccessLevel(modifier);
+                field.setModifiers(modifiers);
                 field.setName(variable.getText());
                 dClassFields.add(field);
             }

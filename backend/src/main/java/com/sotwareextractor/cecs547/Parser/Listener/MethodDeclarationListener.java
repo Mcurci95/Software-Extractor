@@ -9,14 +9,14 @@ import java.util.List;
 import java.util.Map;
 
 public class MethodDeclarationListener extends JavaBaseListener {
-    private String modifier;
+    private List<String> modifiers;
     private List<DClassMethod> classMethods;
     private List<String[]> identifiers = new ArrayList<>();
     private Map<String, String> functionCalls;
     private String methodName;
 
-    public MethodDeclarationListener(String modifier, List<DClassMethod> classMethods) {
-        this.modifier = modifier;
+    public MethodDeclarationListener(List<String> modifiers, List<DClassMethod> classMethods) {
+        this.modifiers = modifiers;
         this.classMethods = classMethods;
     }
 
@@ -28,11 +28,15 @@ public class MethodDeclarationListener extends JavaBaseListener {
             DClassMethod newMethod = new DClassMethod();
             newMethod.setName(methodName);
             newMethod.setReturnType(returnType);
-            newMethod.setAccessLevel(modifier);
+            newMethod.setModifiers(modifiers);
 
-            BlockListener blockListener = new BlockListener();
-            ctx.methodBody().block().enterRule(blockListener);
-            newMethod.setMethodStatements(blockListener.getMethodStatements());
+            if (ctx.methodBody() != null) {
+                BlockListener blockListener = new BlockListener();
+                ctx.methodBody().block().enterRule(blockListener);
+                newMethod.setMethodStatements(blockListener.getMethodStatements());
+                newMethod.setVariables(blockListener.getVariables());
+                newMethod.setMethodCalls(blockListener.getMethodCalls());
+            }
 
             classMethods.add(newMethod);
 //            MethodParametersListener methodParametersListener = new MethodParametersListener();
