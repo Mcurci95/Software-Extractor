@@ -5,7 +5,7 @@ import java.util.List;
 
 public class DClass {
     private String name;
-    private String accessLevel;
+    private List<String> accessLevel;
     private String packageName;
     private String parentClass;
     private List<DClassField> dClassFields = new ArrayList<>();
@@ -36,11 +36,11 @@ public class DClass {
         this.name = name;
     }
 
-    public String getAccessLevel() {
+    public List<String> getAccessLevel() {
         return accessLevel;
     }
 
-    public void setAccessLevel(String accessLevel) {
+    public void setAccessLevel(List<String> accessLevel) {
         this.accessLevel = accessLevel;
     }
 

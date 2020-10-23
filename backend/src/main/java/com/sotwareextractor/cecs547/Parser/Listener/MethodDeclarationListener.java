@@ -38,14 +38,13 @@ public class MethodDeclarationListener extends JavaBaseListener {
                 newMethod.setMethodCalls(blockListener.getMethodCalls());
             }
 
-            classMethods.add(newMethod);
-//            MethodParametersListener methodParametersListener = new MethodParametersListener();
-//            if (ctx.formalParameters().formalParameterList() != null)
-//                ctx.formalParameters().formalParameterList().enterRule(methodParametersListener);
+            MethodParametersListener methodParametersListener = new MethodParametersListener();
+            if (ctx.formalParameters().formalParameterList() != null) {
+                ctx.formalParameters().formalParameterList().enterRule(methodParametersListener);
+                newMethod.setParams(methodParametersListener.getParams());
+            }
 
-//            methods.add(new String[] {returnType, methodName});
-//            methodParams.put(methodName, methodParametersListener.getParameters());
-//            mMethodService.add(methodName, modifier, className);
+            classMethods.add(newMethod);
         }
     }
 

@@ -3,10 +3,13 @@ package com.sotwareextractor.cecs547.Parser.Listener;
 
 import com.softwareextractor.cecs547.Parser.JavaBaseListener;
 import com.softwareextractor.cecs547.Parser.JavaParser;
+import com.sotwareextractor.cecs547.POJO.DMethodParam;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MethodParametersListener extends JavaBaseListener {
-    String[] parameters;
-
+    List<DMethodParam> params = new ArrayList<>();
 
     @Override
     public void enterFormalParameterList(JavaParser.FormalParameterListContext ctx) {
@@ -14,11 +17,16 @@ public class MethodParametersListener extends JavaBaseListener {
             JavaParser.FormalParameterContext parameter = ctx.formalParameter(i);
             String type = parameter.typeSpec().getText();
             String name = parameter.variableDeclaratorId().Identifier().getText();
-            parameters = new String[] {String.valueOf(i), type, name};
+
+            DMethodParam param = new DMethodParam();
+            param.setType(type);
+            param.setName(name);
+            param.setOrder(i);
+            params.add(param);
         }
     }
 
-    public String[] getParameters() {
-        return parameters;
+    public List<DMethodParam> getParams() {
+        return params;
     }
 }

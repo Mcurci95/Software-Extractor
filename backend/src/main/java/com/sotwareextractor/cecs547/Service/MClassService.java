@@ -35,7 +35,7 @@ public class MClassService {
         List<MClass> existing = mClassRepository.findByName(dClass.getName());
         if (existing.size() == 0) {
             String className = dClass.getName();
-            MAccess mAccess = mAccessService.getOrCreate(dClass.getAccessLevel());
+            List<MAccess> mAccess = mAccessService.getOrCreate(dClass.getAccessLevel());
             MPackage mPackage = mPackageService.getOrCreate(dClass.getPackageName());
 
             MClass mClass = new MClass(className, mAccess, mPackage);

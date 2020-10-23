@@ -10,8 +10,8 @@ public class MClass {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String name;
-    @ManyToOne(cascade = CascadeType.ALL)
-    private MAccess mAccess;
+    @ManyToMany(cascade = CascadeType.ALL)
+    private List<MAccess> mAccess;
     @ManyToOne(cascade = CascadeType.ALL)
     private MPackage mPackage; // package is a reserved word
     @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL)
@@ -26,8 +26,7 @@ public class MClass {
     private List<MMethod> mMethods;
 
     public MClass() {}
-    public MClass(String name, MAccess mAccess, MPackage mPackage, Set<MClass> childClasses, MClass parent, Set<MInstance> mInstances) {
-        this.id = id;
+    public MClass(String name, List<MAccess> mAccess, MPackage mPackage, Set<MClass> childClasses, MClass parent, Set<MInstance> mInstances) {
         this.name = name;
         this.mAccess = mAccess;
         this.mPackage = mPackage;
@@ -35,7 +34,7 @@ public class MClass {
         this.parent = parent;
         this.mInstances = mInstances;
     }
-    public MClass(String name, MAccess mAccess, MPackage mPackage) {
+    public MClass(String name, List<MAccess> mAccess, MPackage mPackage) {
         this.name = name;
         this.mAccess = mAccess;
         this.mPackage = mPackage;
@@ -71,23 +70,11 @@ public class MClass {
     public void setName(String name) {
         this.name = name;
     }
-    public MAccess getMAccess() {
-        return mAccess;
-    }
-    public void setMAccess(MAccess MAccess) {
-        this.mAccess = MAccess;
-    }
     public MPackage getClassMPackage() {
         return mPackage;
     }
     public void setClassMPackage(MPackage classMPackage) {
         this.mPackage = classMPackage;
-    }
-    public MAccess getmAccess() {
-        return mAccess;
-    }
-    public void setmAccess(MAccess mAccess) {
-        this.mAccess = mAccess;
     }
     public Set<MClass> getChildClasses() {
         return childClasses;
@@ -106,5 +93,11 @@ public class MClass {
     }
     public void setmInstances(Set<MInstance> mInstances) {
         this.mInstances = mInstances;
+    }
+    public List<MAccess> getmAccess() {
+        return mAccess;
+    }
+    public void setmAccess(List<MAccess> mAccess) {
+        this.mAccess = mAccess;
     }
 }

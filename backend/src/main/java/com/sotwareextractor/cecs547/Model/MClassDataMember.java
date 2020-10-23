@@ -1,6 +1,7 @@
 package com.sotwareextractor.cecs547.Model;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 public class MClassDataMember {
@@ -10,23 +11,23 @@ public class MClassDataMember {
     private String name;
     @ManyToOne(cascade = CascadeType.ALL)
     private MClass mClass;
-    @ManyToOne(cascade = CascadeType.ALL)
-    private MAccess mAccess;
+    @ManyToMany(cascade = CascadeType.ALL)
+    private List<MAccess> mAccess;
     @ManyToOne(cascade = CascadeType.ALL)
     private MType mType;
 
     public MClassDataMember() {
     }
-    public MClassDataMember(String name, MAccess mAccess, MType mType) {
+    public MClassDataMember(String name, List<MAccess> mAccess, MType mType) {
         this.name = name;
         this.mAccess = mAccess;
         this.mType = mType;
     }
 
-    public MAccess getmAccess() {
+    public List<MAccess> getmAccess() {
         return mAccess;
     }
-    public void setmAccess(MAccess mAccess) {
+    public void setmAccess(List<MAccess> mAccess) {
         this.mAccess = mAccess;
     }
     public MType getmType() {

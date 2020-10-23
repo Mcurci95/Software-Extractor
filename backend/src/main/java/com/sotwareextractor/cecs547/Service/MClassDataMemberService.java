@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class MClassDataMemberService {
@@ -26,16 +27,17 @@ public class MClassDataMemberService {
     public MClassDataMember getOrCreate(DClassField field) {
         List<MClassDataMember> existing = mClassDataMemberRepository.findByName(field.getName());
         for (var instance : existing) {
+            List<String> accessNames = instance.getmAccess().stream().map(MAccess::getAccessName).collect(Collectors.toList());
+
             if (instance.getmAccess() != null &&
-                    instance.getmAccess().getAccessName().equals(field.getName()) &&
+                    accessNames.contains(field.getName()) &&
                     instance.getmType() != null &&
                     instance.getmType().getName().equals(field.getType())) {
                 return instance;
             }
         }
         String name = field.getName();
-        // Todo: Fixed
-        MAccess mAccess = mAccessService.getOrCreate(field.getModifiers().get(0));
+        List<MAccess> mAccess = mAccessService.getOrCreate(field.getModifiers());
         MType mType = mTypeService.getOrCreate(field.getType());
         return mClassDataMemberRepository.save(new MClassDataMember(name, mAccess, mType));
     }

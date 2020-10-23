@@ -1,9 +1,7 @@
 package com.sotwareextractor.cecs547.Model;
 
-import com.sotwareextractor.cecs547.Model.unused.MClassMethod;
 
 import javax.persistence.*;
-import java.util.Collection;
 
 @Entity
 public class MMethodParameter {
@@ -14,17 +12,15 @@ public class MMethodParameter {
     private int mOrder;
     @ManyToOne(cascade = CascadeType.ALL)
     private MType mType;
-
-    @ManyToMany(mappedBy = "mParameters", cascade = CascadeType.ALL)
-    private Collection<MMethod> mMethods;
+    @ManyToOne(cascade = CascadeType.ALL)
+    private MMethod mMethod;
 
     public MMethodParameter() {
     }
-    public MMethodParameter(String name, int mOrder, MType mType, Collection<MMethod> mMethods) {
+    public MMethodParameter(String name, int mOrder, MType mType) {
         this.name = name;
         this.mOrder = mOrder;
         this.mType = mType;
-        this.mMethods = mMethods;
     }
 
     public String getName() {
@@ -63,12 +59,10 @@ public class MMethodParameter {
     public void setmType(MType mType) {
         this.mType = mType;
     }
-
-    public Collection<MMethod> getmMethods() {
-        return mMethods;
+    public MMethod getmMethod() {
+        return mMethod;
     }
-
-    public void setmMethods(Collection<MMethod> mMethods) {
-        this.mMethods = mMethods;
+    public void setmMethod(MMethod mMethod) {
+        this.mMethod = mMethod;
     }
 }

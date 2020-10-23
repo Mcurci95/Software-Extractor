@@ -11,18 +11,18 @@ public class MMethod {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long Id;
     private String name;
-    @ManyToOne(cascade = CascadeType.ALL)
-    private MAccess mAccess;
+    @ManyToMany(cascade = CascadeType.ALL)
+    private List<MAccess> mAccess;
     @ManyToOne(cascade = CascadeType.ALL)
     private MType mReturnType;
-    @ManyToMany(cascade = CascadeType.ALL)
-    private List<MClassMethodParameter> mParameters;
+    @OneToMany(mappedBy = "mMethod", cascade = CascadeType.ALL)
+    private List<MMethodParameter> mParameters;
     @ManyToOne(cascade = CascadeType.ALL)
     private MClass mClass;
 
     public MMethod() {
     }
-    public MMethod(String name, MAccess mAccess, MType mType, MClass mClass) {
+    public MMethod(String name, List<MAccess> mAccess, MType mType, MClass mClass) {
         this.name = name;
         this.mAccess = mAccess;
         this.mClass = mClass;
@@ -41,10 +41,10 @@ public class MMethod {
     public void setId(Long id) {
         Id = id;
     }
-    public List<MClassMethodParameter> getmParameters() {
+    public List<MMethodParameter> getmParameters() {
         return mParameters;
     }
-    public void setmParameters(List<MClassMethodParameter> mParameters) {
+    public void setmParameters(List<MMethodParameter> mParameters) {
         this.mParameters = mParameters;
     }
     public String getName() {
@@ -53,10 +53,10 @@ public class MMethod {
     public void setName(String name) {
         this.name = name;
     }
-    public MAccess getmAccess() {
+    public List<MAccess> getmAccess() {
         return mAccess;
     }
-    public void setmAccess(MAccess mAccess) {
+    public void setmAccess(List<MAccess> mAccess) {
         this.mAccess = mAccess;
     }
     public MType getmMReturnType() {
@@ -65,10 +65,10 @@ public class MMethod {
     public void setmMReturnType(MType mType) {
         this.mReturnType = mType;
     }
-    public List<MClassMethodParameter> getParameters() {
-        return mParameters;
+    public MType getmReturnType() {
+        return mReturnType;
     }
-    public void setParameters(List<MClassMethodParameter> parameters) {
-        this.mParameters = parameters;
+    public void setmReturnType(MType mReturnType) {
+        this.mReturnType = mReturnType;
     }
 }

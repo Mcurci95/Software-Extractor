@@ -27,8 +27,8 @@ public class AntlrParser {
     }
 
     public static void main(String[] args) throws IOException {
-        parseAdapter();
-        parseIC_TESTER();
+//        parseAdapter();
+//        parseIC_TESTER();
         parseOO_PIES();
     }
 

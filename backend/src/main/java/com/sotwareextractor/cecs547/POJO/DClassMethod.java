@@ -12,6 +12,7 @@ public class DClassMethod {
     private List<DMethodStatement> methodStatements = new ArrayList<>();
     private Map<String, DVariable> variables = new HashMap<>();
     private List<String> methodCalls = new ArrayList<>();
+    private List<DMethodParam> params = new ArrayList<>();
 
     public String getReturnType() {
         return returnType;
@@ -49,6 +50,12 @@ public class DClassMethod {
     public void setMethodCalls(List<String> methodCalls) {
         this.methodCalls = methodCalls;
     }
+    public List<DMethodParam> getParams() {
+        return params;
+    }
+    public void setParams(List<DMethodParam> params) {
+        this.params = params;
+    }
 
     @Override
     public String toString() {
@@ -59,6 +66,7 @@ public class DClassMethod {
                 ", methodStatements=" + methodStatements +
                 ", variables=" + variables +
                 ", methodCalls=" + methodCalls +
+                ", params=" + params +
                 '}';
     }
 }
