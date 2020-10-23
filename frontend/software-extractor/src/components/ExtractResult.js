@@ -20,8 +20,55 @@ class testing extends React.Component{
     render() {
         return(
             <div>
-                {this.state.loading || !this.state.project ? (<div> Loading </div>) :
-                    (<div> {this.state.project.name.first} </div>) }
+                {this.state.loading || !this.state.project ? (<div class = "a"> Loading... </div>) :
+                (<div class="a">
+                    {this.state.project.name.first} {/* program class name*/}
+                    <div className="b">
+                        Ancestors:
+                        <div className="c">
+                            {this.state.project.name.first}
+                        </div>
+                    </div>
+                    <div className="b">
+                        Desendants:
+                        <div className="c">
+                        {!this.state.project.name.first? (<div>No decendants</div>):(this.state.project.name.first)}
+                        </div>
+                    </div>
+                    <div className="b">
+                        Aggreages:
+                        <div className="c">
+                            {!this.state.project.name.first? (<div>NONE</div>):(this.state.project.name.first)}
+                        </div>
+                    </div>
+                    <div className="b">
+                        Data Members:
+                        <div className="c">
+                            {!this.state.project.name.first? (<div>NONE</div>):(this.state.project.name.first)}
+                        </div>
+                    </div>
+                    <div className="b">
+                        Method Members:
+                        <div className="c">
+                            {!this.state.project.name.first? (<div>NONE</div>):
+                                (this.state.project.name.first + " returns " + this.state.project.name.first + " is " + this.state.project.name.first)}
+                            <div>
+                                {!this.state.project.name.first? (<div></div>):
+                                    ("Parameters: " + this.state.project.name.first )}
+                            </div>
+                            <div>
+
+                            {!this.state.project.name.first? (<div></div>):
+                                ("Local Vairables: " + this.state.project.name.first )}
+                            </div>
+                            <div>
+
+                            {!this.state.project.name.first? (<div></div>):
+                                ("Calls Methods " + this.state.project.name.first)}
+                            </div>
+                        </div>
+                    </div>
+                </div>) }
             </div>
         )
     }
