@@ -42,7 +42,7 @@ public class MClassService {
 
             List<MClassDataMember> mClassDataMembers = new ArrayList<>();
             for (DClassField field : dClass.getFields()) {
-                MClassDataMember mClassDataMember = mClassDataMemberService.getOrCreate(field);
+                MClassDataMember mClassDataMember = mClassDataMemberService.getOrCreate(field, mClass);
                 mClassDataMembers.add(mClassDataMember);
             }
             mClass.setmClassDataMembers(mClassDataMembers);

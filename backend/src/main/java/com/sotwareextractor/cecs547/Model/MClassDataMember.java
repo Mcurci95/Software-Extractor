@@ -18,10 +18,11 @@ public class MClassDataMember {
 
     public MClassDataMember() {
     }
-    public MClassDataMember(String name, List<MAccess> mAccess, MType mType) {
+    public MClassDataMember(String name, List<MAccess> mAccess, MType mType, MClass mClass) {
         this.name = name;
         this.mAccess = mAccess;
         this.mType = mType;
+        this.mClass = mClass;
     }
 
     public List<MAccess> getmAccess() {

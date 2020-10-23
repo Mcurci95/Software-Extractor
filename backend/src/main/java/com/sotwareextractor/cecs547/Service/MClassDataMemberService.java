@@ -1,5 +1,6 @@
 package com.sotwareextractor.cecs547.Service;
 
+import com.sotwareextractor.cecs547.Model.MClass;
 import com.sotwareextractor.cecs547.POJO.DClassField;
 import com.sotwareextractor.cecs547.Model.MAccess;
 import com.sotwareextractor.cecs547.Model.MClassDataMember;
@@ -24,7 +25,7 @@ public class MClassDataMemberService {
         this.mTypeService = mTypeService;
     }
 
-    public MClassDataMember getOrCreate(DClassField field) {
+    public MClassDataMember getOrCreate(DClassField field, MClass mClass) {
         List<MClassDataMember> existing = mClassDataMemberRepository.findByName(field.getName());
         for (var instance : existing) {
             List<String> accessNames = instance.getmAccess().stream().map(MAccess::getAccessName).collect(Collectors.toList());
@@ -39,6 +40,6 @@ public class MClassDataMemberService {
         String name = field.getName();
         List<MAccess> mAccess = mAccessService.getOrCreate(field.getModifiers());
         MType mType = mTypeService.getOrCreate(field.getType());
-        return mClassDataMemberRepository.save(new MClassDataMember(name, mAccess, mType));
+        return mClassDataMemberRepository.save(new MClassDataMember(name, mAccess, mType, mClass));
     }
 }
