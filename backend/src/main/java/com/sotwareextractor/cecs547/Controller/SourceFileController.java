@@ -1,7 +1,9 @@
 package com.sotwareextractor.cecs547.Controller;
 
+import com.sotwareextractor.cecs547.Model.MClass;
 import com.sotwareextractor.cecs547.Model.MPackage;
 import com.sotwareextractor.cecs547.Model.MSourceFile;
+import com.sotwareextractor.cecs547.Service.MClassService;
 import com.sotwareextractor.cecs547.Service.MPackageService;
 import com.sotwareextractor.cecs547.Service.SourceFileStorageService;
 import org.slf4j.Logger;
@@ -23,6 +25,9 @@ public class SourceFileController {
     private SourceFileStorageService sourceFileStorageService;
 
     @Autowired
+    private MClassService mClassService;
+
+    @Autowired
     private MPackageService mPackageService;
 
     Logger logger = LoggerFactory.getLogger(SourceFileController.class);
@@ -34,6 +39,12 @@ public class SourceFileController {
             sourceFileStorageService.saveFile(file);
         }
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping(value = "/allClasses")
+    public List<MClass> getClasses() {
+        logger.info("Getting all class information");
+        return mClassService.findAll();
     }
 
 
