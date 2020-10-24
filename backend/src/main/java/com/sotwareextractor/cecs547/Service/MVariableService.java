@@ -22,7 +22,7 @@ public class MVariableService {
         MVariable instance = new MVariable();
         instance.setName(variable.getName());
         instance.setmReturnType(mTypeService.getOrCreate(variable.getType()));
-        instance.setValue(variable.getValue()[1]);
+        if (variable.getValue() != null) instance.setValue(variable.getValue()[1]);
         instance.setmMethodBody(mMethodBody);
 
         return mVariableRepository.save(instance);

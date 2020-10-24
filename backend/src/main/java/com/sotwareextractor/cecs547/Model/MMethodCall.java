@@ -39,12 +39,19 @@ public class MMethodCall {
     }
 
     public void parseCall(String str) {
-        int pos = str.lastIndexOf(".");
-        if (pos == -1) {
-            name = str;
+        int pos = str.indexOf(".");
+
+        if (str.contains("System")) {
+            int secondPeriod = str.indexOf(".", pos + 1);
+            name = str.substring(secondPeriod+1);
+            owner = str.substring(0, secondPeriod);
         } else {
-            owner = str.substring(0, pos);
-            name = str.substring(pos+1);
+            if (pos == -1) {
+                name = str;
+            } else {
+                owner = str.substring(0, pos);
+                name = str.substring(pos + 1);
+            }
         }
     }
 }

@@ -9,7 +9,7 @@ public class Middle extends Base {
     public Derived getD(){}
     public void setD(Derived DDD) {
         int xxxxxxxxxxxxx;
-        Big D = DDD;
+        int BigD = DDD;
         super.SomeOp();
         a.very.lengthy.named.method();
     }
