@@ -1,8 +1,13 @@
 package com.sotwareextractor.cecs547.Controller;
 
+import com.sotwareextractor.cecs547.Model.MAccess;
 import com.sotwareextractor.cecs547.Model.MClass;
 import com.sotwareextractor.cecs547.Model.MPackage;
 import com.sotwareextractor.cecs547.Model.MSourceFile;
+import com.sotwareextractor.cecs547.POJO.DClass;
+import com.sotwareextractor.cecs547.POJO.DClassField;
+import com.sotwareextractor.cecs547.POJO.DClassMethod;
+import com.sotwareextractor.cecs547.POJO.DConstructor;
 import com.sotwareextractor.cecs547.Service.MClassService;
 import com.sotwareextractor.cecs547.Service.MPackageService;
 import com.sotwareextractor.cecs547.Service.SourceFileStorageService;
@@ -15,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @CrossOrigin("*")
@@ -43,10 +49,10 @@ public class SourceFileController {
 
     @GetMapping(value = "/allClasses")
     public List<MClass> getClasses() {
+        List<String> returnString = new ArrayList<>();
         logger.info("Getting all class information");
         return mClassService.findAll();
     }
-
 
     @GetMapping(value = "/fileNames")
     @ResponseBody
