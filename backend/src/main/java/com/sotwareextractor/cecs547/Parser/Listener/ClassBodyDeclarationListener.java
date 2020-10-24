@@ -4,6 +4,7 @@ import com.softwareextractor.cecs547.Parser.JavaBaseListener;
 import com.softwareextractor.cecs547.Parser.JavaParser;
 import com.sotwareextractor.cecs547.POJO.DClassField;
 import com.sotwareextractor.cecs547.POJO.DClassMethod;
+import com.sotwareextractor.cecs547.POJO.DConstructor;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -15,6 +16,7 @@ public class ClassBodyDeclarationListener extends JavaBaseListener {
     private List<DClassMethod> classMethods = new ArrayList<>();
     private Map<String, List<String[]>> cbIdentifiers = new HashMap<>();
     private Map<String, Map<String, String>> cbFunctionCalls = new HashMap<>();
+    private List<DConstructor> constructors = new ArrayList<>();
 
     public List<DClassField> getClassFields() {
         return classFields;
@@ -46,13 +48,13 @@ public class ClassBodyDeclarationListener extends JavaBaseListener {
             cbIdentifiers.put(methodDeclarationListener.getMethodName(), methodDeclarationListener.getIdentifiers());
             cbFunctionCalls.put(methodDeclarationListener.getMethodName(), methodDeclarationListener.getFunctionCalls());
         }
-//        JavaParser.ConstructorDeclarationContext constructorDeclarationContext = ctx.memberDeclaration().constructorDeclaration();
-//        if (constructorDeclarationContext != null) {
-//            MethodParametersListener constructorParams = new MethodParametersListener();
-//            if (constructorDeclarationContext.formalParameters().formalParameterList() != null)
-//                constructorDeclarationContext.formalParameters().formalParameterList().enterRule(constructorParams);
-//            constructorParamList = constructorParams.parameters;
-//        }
+
+        JavaParser.ConstructorDeclarationContext constructorDeclarationContext = ctx.memberDeclaration().constructorDeclaration();
+        if (constructorDeclarationContext != null) {
+            ConstructorListener constructorListener = new ConstructorListener();
+            ctx.memberDeclaration().constructorDeclaration().enterRule(constructorListener);
+            constructors.add(constructorListener.getConstructor());
+        }
 
         MethodDeclarationListener constructorListener = new MethodDeclarationListener(modifiers, classMethods);
         if (ctx.memberDeclaration().constructorDeclaration() != null) {
@@ -63,8 +65,10 @@ public class ClassBodyDeclarationListener extends JavaBaseListener {
     public Map<String, List<String[]>> getCbIdentifiers() {
         return cbIdentifiers;
     }
-
     public Map<String, Map<String, String>> getCbFunctionCalls() {
         return cbFunctionCalls;
+    }
+    public List<DConstructor> getConstructors() {
+        return constructors;
     }
 }

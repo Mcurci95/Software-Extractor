@@ -11,6 +11,15 @@ public class DClass {
     private List<DClassField> dClassFields = new ArrayList<>();
     private List<DClassMethod> dClassMethods = new ArrayList<>();
     private List<String> implementInterfaces = new ArrayList<>();
+    private List<DConstructor> constructors = new ArrayList<>();
+
+    public List<DConstructor> getConstructors() {
+        return constructors;
+    }
+
+    public void setConstructors(List<DConstructor> constructors) {
+        this.constructors = constructors;
+    }
 
     public List<DClassMethod> getdClassMethods() {
         return dClassMethods;
@@ -80,12 +89,13 @@ public class DClass {
     public String toString() {
         return "DClass{" +
                 "name='" + name + '\'' +
-                ", accessLevel='" + accessLevel + '\'' +
+                ", accessLevel=" + accessLevel +
                 ", packageName='" + packageName + '\'' +
                 ", parentClass='" + parentClass + '\'' +
                 ", dClassFields=" + dClassFields +
                 ", dClassMethods=" + dClassMethods +
                 ", implementInterfaces=" + implementInterfaces +
+                ", constructors=" + constructors +
                 '}';
     }
 }

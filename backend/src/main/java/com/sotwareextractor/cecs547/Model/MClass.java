@@ -26,6 +26,8 @@ public class MClass {
     private List<MMethod> mMethods;
     @ManyToMany(cascade = CascadeType.ALL)
     private List<MInterface> implementInterfaces;
+    @OneToMany(mappedBy = "mClass", cascade = CascadeType.ALL)
+    private List<MConstructor> mConstructors;
 
     public MClass() {}
     public MClass(String name, List<MAccess> mAccess, MPackage mPackage) {
@@ -34,6 +36,12 @@ public class MClass {
         this.mPackage = mPackage;
     }
 
+    public List<MConstructor> getmConstructors() {
+        return mConstructors;
+    }
+    public void setmConstructors(List<MConstructor> mConstructors) {
+        this.mConstructors = mConstructors;
+    }
     public List<MMethod> getmMethods() {
         return mMethods;
     }

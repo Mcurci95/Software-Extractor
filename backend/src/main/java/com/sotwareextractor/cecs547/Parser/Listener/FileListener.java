@@ -56,6 +56,7 @@ public class FileListener extends JavaBaseListener {
         ctx.classBodyDeclaration().forEach(body -> body.enterRule(classBodyDeclarationListener));
         dClass.setdClassFields(classBodyDeclarationListener.getClassFields());
         dClass.setdClassMethods(classBodyDeclarationListener.getClassMethods());
+        dClass.setConstructors(classBodyDeclarationListener.getConstructors());
     }
 
     public void display() {

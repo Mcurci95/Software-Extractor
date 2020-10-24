@@ -20,17 +20,20 @@ public class MClassService {
     private MClassDataMemberService mClassDataMemberService;
     private MClassMethodService mClassMethodService;
     private MInterfaceService mInterfaceService;
+    private MConstructorService mConstructorService;
 
     @Autowired
     public MClassService(MClassRepository mClassRepository, MAccessService mAccessService,
                          MPackageService mPackageService, MClassDataMemberService mClassDataMemberService,
-                         MClassMethodService mClassMethodService, MInterfaceService mInterfaceService) {
+                         MClassMethodService mClassMethodService, MInterfaceService mInterfaceService,
+                         MConstructorService mConstructorService) {
         this.mClassRepository = mClassRepository;
         this.mAccessService = mAccessService;
         this.mPackageService = mPackageService;
         this.mClassDataMemberService = mClassDataMemberService;
         this.mClassMethodService = mClassMethodService;
         this.mInterfaceService = mInterfaceService;
+        this.mConstructorService = mConstructorService;
     }
 
     public MClass getOrCreate(String parentClass) {
@@ -53,6 +56,8 @@ public class MClassService {
             // New class instance
             MClass mClass = new MClass(className, mAccess, mPackage);
 
+            mClass.setParent(getOrCreate(dClass.getParentClass()));
+
             // data member
             List<MClassDataMember> dataMembersEntities = storeClassDataMember(dClass.getFields(), mClass);
             mClass.setmClassDataMembers(dataMembersEntities);
@@ -63,7 +68,8 @@ public class MClassService {
             List<MInterface> interfaceEntities = mInterfaceService.getOrCreate(dClass.getImplementInterfaces());
             mClass.setImplementInterfaces(interfaceEntities);
 
-            mClass.setParent(getOrCreate(dClass.getParentClass()));
+            List<MConstructor> constructors = mConstructorService.getOrCreate(dClass.getConstructors(), mClass);
+            mClass.setmConstructors(constructors);
 
             return mClassRepository.save(mClass);
         }
