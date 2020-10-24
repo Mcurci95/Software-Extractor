@@ -1,13 +1,21 @@
 package com.sotwareextractor.cecs547.Model;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import javax.persistence.*;
+
 
 @Entity
 public class MSourceFile {
+
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String fileName;
+
     private String fileType;
     @Lob
     private byte[] data;
@@ -25,6 +33,8 @@ public class MSourceFile {
         this.data = data;
     }
 
+
+    @JsonIgnore
     public Long getId() {
         return id;
     }
@@ -43,6 +53,8 @@ public class MSourceFile {
     public void setFileType(String fileType) {
         this.fileType = fileType;
     }
+
+    @JsonIgnore
     public byte[] getData() {
         return data;
     }

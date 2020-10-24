@@ -1,9 +1,15 @@
 package com.sotwareextractor.cecs547.Model;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import javax.persistence.*;
+
 
 @Entity
 public class MType {
+
     @javax.persistence.Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long Id;
@@ -15,6 +21,8 @@ public class MType {
         this.name = name;
     }
 
+
+    @JsonIgnore
     public Long getId() {
         return Id;
     }

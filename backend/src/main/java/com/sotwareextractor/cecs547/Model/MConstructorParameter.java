@@ -1,16 +1,24 @@
 package com.sotwareextractor.cecs547.Model;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import javax.persistence.*;
+
 
 @Entity
 public class MConstructorParameter {
+
     @javax.persistence.Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long Id;
     private String name;
     private int mOrder;
+
     @ManyToOne(cascade = CascadeType.ALL)
     private MType mType;
+
     @ManyToOne(cascade = CascadeType.ALL)
     private MConstructor mConstructor;
 
@@ -29,6 +37,8 @@ public class MConstructorParameter {
     public void setName(String name) {
         this.name = name;
     }
+
+    @JsonIgnore
     public MType getType() {
         return mType;
     }
@@ -41,6 +51,8 @@ public class MConstructorParameter {
     public void setOrder(int order) {
         this.mOrder = order;
     }
+
+    @JsonIgnore
     public long getId() {
         return Id;
     }
@@ -53,12 +65,16 @@ public class MConstructorParameter {
     public void setmOrder(int mOrder) {
         this.mOrder = mOrder;
     }
+
+    @JsonIgnore
     public MType getmType() {
         return mType;
     }
     public void setmType(MType mType) {
         this.mType = mType;
     }
+
+    @JsonIgnore
     public MConstructor getmConstructor() {
         return mConstructor;
     }

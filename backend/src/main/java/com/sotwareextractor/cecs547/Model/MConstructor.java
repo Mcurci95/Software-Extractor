@@ -1,18 +1,30 @@
 package com.sotwareextractor.cecs547.Model;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import javax.persistence.*;
 import java.util.List;
 
+
 @Entity
 public class MConstructor {
+    @JsonIgnore
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long Id;
+
+
     @ManyToOne(cascade = CascadeType.ALL)
     private MType type;
     private String name;
+
+
     @OneToMany(mappedBy = "mConstructor", cascade = CascadeType.ALL)
     private List<MConstructorParameter> parameters;
+
+    @JsonIgnore
     @ManyToOne(cascade = CascadeType.ALL)
     private MClass mClass;
 

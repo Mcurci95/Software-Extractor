@@ -1,14 +1,20 @@
 package com.sotwareextractor.cecs547.Model;
 
+import com.fasterxml.jackson.annotation.*;
+
 import javax.persistence.*;
 import java.util.Collection;
 
+
 @Entity
 public class MPackage {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String name;
+
+
     @OneToMany(mappedBy = "mPackage", cascade = CascadeType.ALL)
     private Collection<MClass> MClasses;
 
@@ -22,12 +28,15 @@ public class MPackage {
         this.name = name;
     }
 
+    @JsonIgnore
     public Long getId() {
         return id;
     }
     public void setId(Long id) {
         this.id = id;
     }
+
+    @JsonIgnore
     public Collection<MClass> getMClasses() {
         return MClasses;
     }

@@ -1,10 +1,12 @@
 package com.sotwareextractor.cecs547.Model;
 
+import com.fasterxml.jackson.annotation.*;
 import com.sotwareextractor.cecs547.Model.unused._MInstance;
 
 import javax.persistence.*;
 import java.util.List;
 import java.util.Set;
+
 
 @Entity
 public class MClass {
@@ -12,6 +14,7 @@ public class MClass {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String name;
+//    @JsonManagedReference
     @ManyToMany(cascade = CascadeType.ALL)
     private List<MAccess> mAccess;
     @ManyToOne(cascade = CascadeType.ALL)

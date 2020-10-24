@@ -1,17 +1,28 @@
 package com.sotwareextractor.cecs547.Model;
 
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import javax.persistence.*;
+
 
 @Entity
 public class MMethodParameter {
+
+
     @javax.persistence.Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long Id;
     private String name;
+
     private int mOrder;
     @ManyToOne(cascade = CascadeType.ALL)
+
+
     private MType mType;
+
     @ManyToOne(cascade = CascadeType.ALL)
     private MMethod mMethod;
 
@@ -30,36 +41,48 @@ public class MMethodParameter {
     public void setName(String name) {
         this.name = name;
     }
+
+    @JsonIgnore
     public MType getType() {
         return mType;
     }
     public void setType(MType type) {
         this.mType = type;
     }
+
+    @JsonIgnore
     public int getOrder() {
         return mOrder;
     }
     public void setOrder(int order) {
         this.mOrder = order;
     }
+
+    @JsonIgnore
     public long getId() {
         return Id;
     }
     public void setId(long id) {
         Id = id;
     }
+
+    @JsonIgnore
     public int getmOrder() {
         return mOrder;
     }
     public void setmOrder(int mOrder) {
         this.mOrder = mOrder;
     }
+
+    @JsonIgnore
     public MType getmType() {
         return mType;
     }
     public void setmType(MType mType) {
         this.mType = mType;
     }
+
+    @JsonIgnore
     public MMethod getmMethod() {
         return mMethod;
     }
