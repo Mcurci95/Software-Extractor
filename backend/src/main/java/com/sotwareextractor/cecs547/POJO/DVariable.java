@@ -5,6 +5,7 @@ import java.util.Arrays;
 public class DVariable {
     public static final String METHOD_INVOKE = "method_invocation";
     public static final String OBJECT_CREATION = "object";
+    public static final String VALUE = "value";
 
     private String type;
     private String name;

@@ -17,10 +17,11 @@ public class MMethodParameter {
 
     public MMethodParameter() {
     }
-    public MMethodParameter(String name, int mOrder, MType mType) {
+    public MMethodParameter(String name, int mOrder, MType mType, MMethod mMethod) {
         this.name = name;
         this.mOrder = mOrder;
         this.mType = mType;
+        this.mMethod = mMethod;
     }
 
     public String getName() {

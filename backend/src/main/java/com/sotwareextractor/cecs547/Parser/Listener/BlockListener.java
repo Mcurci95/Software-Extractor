@@ -61,6 +61,10 @@ public class BlockListener extends JavaBaseListener {
                         if (expression.NEW() != null) {
                             variable.setValue(new String[]{DVariable.OBJECT_CREATION, expression.creator().getText()});
                         } else if (expression.DOT() != null) {
+                            variable.setValue(new String[]{DVariable.METHOD_INVOKE, expression.getText()});
+                            handleExpression(expression, variable);
+                        } else {
+                            variable.setValue(new String[] {DVariable.VALUE, expression.getText()});
                             handleExpression(expression, variable);
                         }
                     }
@@ -96,13 +100,21 @@ public class BlockListener extends JavaBaseListener {
             JavaParser.ExpressionContext eCtx = queue.poll();
             if (!seenExpression.contains(eCtx)) {
                 seenExpression.add(eCtx);
-                if (eCtx.DOT() != null) {
+                if (eCtx.DOT() != null || (eCtx.LPAREN() != null && eCtx.RPAREN() != null)) {
                     methodCalls.add(eCtx.getText());
+                    // Todo: Ignore all remaining expression if it's a method call to avoid duplicate. Maybe not right???
+                    seenExpression.addAll(eCtx.expression());
                 } else if (eCtx.creator() != null) {
                     identifiers.add(eCtx.creator().getText());
                 }
                 else if (eCtx.primary() != null && eCtx.primary().Identifier() != null) {
                     identifiers.add(eCtx.primary().Identifier().getText());
+                }
+                else if (eCtx.ASSIGN() != null) {
+                    DVariable newVar = new DVariable();
+                    newVar.setName(eCtx.expression().get(0).getText());
+                    newVar.setValue(new String[] {DVariable.VALUE, eCtx.expression().get(1).getText()});
+                    variables.put(newVar.getName(), newVar);
                 }
                 if (eCtx.expression().size() != 0) {
                     for (var anExpression : eCtx.expression()) {
@@ -127,11 +139,28 @@ public class BlockListener extends JavaBaseListener {
                 seenExpression.add(eCtx);
                 if (eCtx.DOT() != null) {
                     variable.setValue(new String[]{DVariable.METHOD_INVOKE, eCtx.getText()});
-                    if (eCtx.expression().size() != 0) {
-                        for (var anExpression : eCtx.expression()) {
-                            if (!seenExpression.contains(anExpression)) {
-                                queue.add(anExpression);
-                            }
+                    methodCalls.add(eCtx.getText());
+
+                    // Todo: Ignore all remaining expression if it's a method call to avoid duplicate. Maybe not right???
+                    seenExpression.addAll(eCtx.expression());
+//                    if (eCtx.expression().size() != 0) {
+//                        for (var anExpression : eCtx.expression()) {
+//                            if (!seenExpression.contains(anExpression)) {
+//                                queue.add(anExpression);
+//                            }
+//                        }
+//                    }
+                } else if (eCtx.LPAREN() != null && eCtx.RPAREN() != null) {
+                    methodCalls.add(eCtx.getText());
+                } else if (eCtx.ASSIGN() != null) {
+                    DVariable newVar = new DVariable();
+                    newVar.setName(eCtx.expression().get(0).getText());
+                    newVar.setValue(new String[] {DVariable.VALUE, eCtx.expression().get(1).getText()});
+                }
+                if (eCtx.expression().size() != 0) {
+                    for (var anExpression : eCtx.expression()) {
+                        if (!seenExpression.contains(anExpression)) {
+                            queue.add(anExpression);
                         }
                     }
                 }

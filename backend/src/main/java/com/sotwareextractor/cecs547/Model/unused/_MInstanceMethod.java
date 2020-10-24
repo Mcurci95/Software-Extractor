@@ -1,15 +1,12 @@
 package com.sotwareextractor.cecs547.Model.unused;
 
 import com.sotwareextractor.cecs547.Model.MAccess;
-import com.sotwareextractor.cecs547.Model.MInstance;
-import com.sotwareextractor.cecs547.Model.MInstanceParameter;
 import com.sotwareextractor.cecs547.Model.MType;
 
 import javax.persistence.*;
 import java.util.List;
 
-@Entity
-public class MInstanceMethod {
+public class _MInstanceMethod {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long Id;
@@ -19,16 +16,16 @@ public class MInstanceMethod {
     @ManyToOne
     private MType returnType;
     @ManyToMany
-    private List<MInstanceParameter> mParameters;
+    private List<_MInstanceParameter> mParameters;
     @ManyToOne
-    private MInstance mInstance;
+    private _MInstance mInstance;
     @OneToMany(mappedBy = "originatedInstanceMethod")
-    private List<MInstanceMethod> otherInstanceMethods;
+    private List<_MInstanceMethod> otherInstanceMethods;
     @ManyToOne
-    private MInstanceMethod originatedInstanceMethod;
+    private _MInstanceMethod originatedInstanceMethod;
 
-    public MInstanceMethod(){}
-    public MInstanceMethod(Long id, String name, MAccess mAccess, MType returnType, List<MInstanceParameter> mParameters, MInstance mInstance, List<MInstanceMethod> otherInstanceMethods, MInstanceMethod originatedInstanceMethod) {
+    public _MInstanceMethod(){}
+    public _MInstanceMethod(Long id, String name, MAccess mAccess, MType returnType, List<_MInstanceParameter> mParameters, _MInstance mInstance, List<_MInstanceMethod> otherInstanceMethods, _MInstanceMethod originatedInstanceMethod) {
         Id = id;
         this.name = name;
         this.mAccess = mAccess;
@@ -39,28 +36,28 @@ public class MInstanceMethod {
         this.originatedInstanceMethod = originatedInstanceMethod;
     }
 
-    public List<MInstanceParameter> getmParameters() {
+    public List<_MInstanceParameter> getmParameters() {
         return mParameters;
     }
-    public void setmParameters(List<MInstanceParameter> mParameters) {
+    public void setmParameters(List<_MInstanceParameter> mParameters) {
         this.mParameters = mParameters;
     }
-    public MInstance getmInstance() {
+    public _MInstance getmInstance() {
         return mInstance;
     }
-    public void setmInstance(MInstance mInstance) {
+    public void setmInstance(_MInstance mInstance) {
         this.mInstance = mInstance;
     }
-    public List<MInstanceMethod> getOtherInstanceMethods() {
+    public List<_MInstanceMethod> getOtherInstanceMethods() {
         return otherInstanceMethods;
     }
-    public void setOtherInstanceMethods(List<MInstanceMethod> otherInstanceMethods) {
+    public void setOtherInstanceMethods(List<_MInstanceMethod> otherInstanceMethods) {
         this.otherInstanceMethods = otherInstanceMethods;
     }
-    public MInstanceMethod getOriginatedInstanceMethod() {
+    public _MInstanceMethod getOriginatedInstanceMethod() {
         return originatedInstanceMethod;
     }
-    public void setOriginatedInstanceMethod(MInstanceMethod originatedInstanceMethod) {
+    public void setOriginatedInstanceMethod(_MInstanceMethod originatedInstanceMethod) {
         this.originatedInstanceMethod = originatedInstanceMethod;
     }
     public Long getId() {
@@ -87,10 +84,10 @@ public class MInstanceMethod {
     public void setReturnType(MType returnType) {
         this.returnType = returnType;
     }
-    public List<MInstanceParameter> getParameters() {
+    public List<_MInstanceParameter> getParameters() {
         return mParameters;
     }
-    public void setParameters(List<MInstanceParameter> parameters) {
+    public void setParameters(List<_MInstanceParameter> parameters) {
         this.mParameters = parameters;
     }
 }

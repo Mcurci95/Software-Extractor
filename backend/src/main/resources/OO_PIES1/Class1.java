@@ -12,7 +12,7 @@ public class Class1 {
     }
 
     public void myFunc1(int A, int B) {
-        myInt = A + B + getmyInt();
+        int myInt = A + B + getmyInt();
     }
 
     public int getmyInt() {

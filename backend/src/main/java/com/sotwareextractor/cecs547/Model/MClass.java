@@ -1,5 +1,7 @@
 package com.sotwareextractor.cecs547.Model;
 
+import com.sotwareextractor.cecs547.Model.unused._MInstance;
+
 import javax.persistence.*;
 import java.util.List;
 import java.util.Set;
@@ -19,21 +21,13 @@ public class MClass {
     @ManyToOne(cascade = CascadeType.ALL)
     private MClass parent;
     @OneToMany(mappedBy = "mClass", cascade = CascadeType.ALL)
-    private Set<MInstance> mInstances;
-    @OneToMany(mappedBy = "mClass", cascade = CascadeType.ALL)
     private List<MClassDataMember> mClassDataMembers;
     @OneToMany(mappedBy = "mClass", cascade = CascadeType.ALL)
     private List<MMethod> mMethods;
+    @ManyToMany(cascade = CascadeType.ALL)
+    private List<MInterface> implementInterfaces;
 
     public MClass() {}
-    public MClass(String name, List<MAccess> mAccess, MPackage mPackage, Set<MClass> childClasses, MClass parent, Set<MInstance> mInstances) {
-        this.name = name;
-        this.mAccess = mAccess;
-        this.mPackage = mPackage;
-        this.childClasses = childClasses;
-        this.parent = parent;
-        this.mInstances = mInstances;
-    }
     public MClass(String name, List<MAccess> mAccess, MPackage mPackage) {
         this.name = name;
         this.mAccess = mAccess;
@@ -88,16 +82,16 @@ public class MClass {
     public void setParent(MClass parent) {
         this.parent = parent;
     }
-    public Set<MInstance> getmInstances() {
-        return mInstances;
-    }
-    public void setmInstances(Set<MInstance> mInstances) {
-        this.mInstances = mInstances;
-    }
     public List<MAccess> getmAccess() {
         return mAccess;
     }
     public void setmAccess(List<MAccess> mAccess) {
         this.mAccess = mAccess;
+    }
+    public List<MInterface> getImplementInterfaces() {
+        return implementInterfaces;
+    }
+    public void setImplementInterfaces(List<MInterface> implementInterfaces) {
+        this.implementInterfaces = implementInterfaces;
     }
 }

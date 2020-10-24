@@ -28,8 +28,8 @@ public class AntlrParser {
 
     public static void main(String[] args) throws IOException {
 //        parseAdapter();
-//        parseIC_TESTER();
-        parseOO_PIES();
+        parseIC_TESTER();
+//        parseOO_PIES();
     }
 
     private static void parseAdapter() throws IOException {

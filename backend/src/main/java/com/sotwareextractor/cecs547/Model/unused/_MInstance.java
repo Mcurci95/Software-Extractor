@@ -1,12 +1,12 @@
-package com.sotwareextractor.cecs547.Model;
+package com.sotwareextractor.cecs547.Model.unused;
 
-import com.sotwareextractor.cecs547.Model.unused.MInstanceMethod;
+import com.sotwareextractor.cecs547.Model.MClass;
+import com.sotwareextractor.cecs547.Model.unused._MInstanceMethod;
 
 import javax.persistence.*;
 import java.util.Set;
 
-@Entity
-public class MInstance {
+public class _MInstance {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long Id;
@@ -14,10 +14,10 @@ public class MInstance {
     @ManyToOne(cascade = CascadeType.ALL)
     private MClass mClass;
     @OneToMany(mappedBy = "mInstance", cascade = CascadeType.ALL)
-    private Set<MInstanceMethod> mInstanceMethods;
+    private Set<_MInstanceMethod> mInstanceMethods;
 
-    public MInstance() {}
-    public MInstance(Long id, String name, MClass mClass, Set<MInstanceMethod> mInstanceMethods) {
+    public _MInstance() {}
+    public _MInstance(Long id, String name, MClass mClass, Set<_MInstanceMethod> mInstanceMethods) {
         Id = id;
         this.name = name;
         this.mClass = mClass;
@@ -42,10 +42,10 @@ public class MInstance {
     public void setmClass(MClass mClass) {
         this.mClass = mClass;
     }
-    public Set<MInstanceMethod> getmInstanceMethods() {
+    public Set<_MInstanceMethod> getmInstanceMethods() {
         return mInstanceMethods;
     }
-    public void setmInstanceMethods(Set<MInstanceMethod> mInstanceMethods) {
+    public void setmInstanceMethods(Set<_MInstanceMethod> mInstanceMethods) {
         this.mInstanceMethods = mInstanceMethods;
     }
 }

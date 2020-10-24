@@ -1,7 +1,5 @@
 package com.sotwareextractor.cecs547.Model;
 
-import com.sotwareextractor.cecs547.Model.unused.MClassMethodParameter;
-
 import javax.persistence.*;
 import java.util.List;
 
@@ -19,6 +17,8 @@ public class MMethod {
     private List<MMethodParameter> mParameters;
     @ManyToOne(cascade = CascadeType.ALL)
     private MClass mClass;
+    @OneToOne(cascade = CascadeType.ALL)
+    private MMethodBody mBody;
 
     public MMethod() {
     }
@@ -70,5 +70,11 @@ public class MMethod {
     }
     public void setmReturnType(MType mReturnType) {
         this.mReturnType = mReturnType;
+    }
+    public MMethodBody getmBody() {
+        return mBody;
+    }
+    public void setmBody(MMethodBody mBody) {
+        this.mBody = mBody;
     }
 }

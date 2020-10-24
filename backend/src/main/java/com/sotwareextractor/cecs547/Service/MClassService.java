@@ -19,16 +19,28 @@ public class MClassService {
     private MPackageService mPackageService;
     private MClassDataMemberService mClassDataMemberService;
     private MClassMethodService mClassMethodService;
+    private MInterfaceService mInterfaceService;
 
     @Autowired
     public MClassService(MClassRepository mClassRepository, MAccessService mAccessService,
                          MPackageService mPackageService, MClassDataMemberService mClassDataMemberService,
-                         MClassMethodService mClassMethodService) {
+                         MClassMethodService mClassMethodService, MInterfaceService mInterfaceService) {
         this.mClassRepository = mClassRepository;
         this.mAccessService = mAccessService;
         this.mPackageService = mPackageService;
         this.mClassDataMemberService = mClassDataMemberService;
         this.mClassMethodService = mClassMethodService;
+        this.mInterfaceService = mInterfaceService;
+    }
+
+    public MClass getOrCreate(String parentClass) {
+        if (parentClass == null) return null;
+        var existing = mClassRepository.findByName(parentClass);
+        if (existing == null) {
+            return null;
+        } else {
+            return existing.get(0);
+        }
     }
 
     public MClass getOrCreate(DClass dClass) {
@@ -38,21 +50,20 @@ public class MClassService {
             List<MAccess> mAccess = mAccessService.getOrCreate(dClass.getAccessLevel());
             MPackage mPackage = mPackageService.getOrCreate(dClass.getPackageName());
 
+            // New class instance
             MClass mClass = new MClass(className, mAccess, mPackage);
 
-            List<MClassDataMember> mClassDataMembers = new ArrayList<>();
-            for (DClassField field : dClass.getFields()) {
-                MClassDataMember mClassDataMember = mClassDataMemberService.getOrCreate(field, mClass);
-                mClassDataMembers.add(mClassDataMember);
-            }
-            mClass.setmClassDataMembers(mClassDataMembers);
+            // data member
+            List<MClassDataMember> dataMembersEntities = storeClassDataMember(dClass.getFields(), mClass);
+            mClass.setmClassDataMembers(dataMembersEntities);
 
-            List<MMethod> mMethods = new ArrayList<>();
-            for (DClassMethod method : dClass.getdClassMethods()) {
-                MMethod mMethod = mClassMethodService.getOrCreate(method, mClass);
-                if (mMethod != null) mMethods.add(mMethod);
-            }
-            mClass.setmMethods(mMethods);
+            List<MMethod> methodEntities = storeClassMethod(dClass.getdClassMethods(), mClass);
+            mClass.setmMethods(methodEntities);
+
+            List<MInterface> interfaceEntities = mInterfaceService.getOrCreate(dClass.getImplementInterfaces());
+            mClass.setImplementInterfaces(interfaceEntities);
+
+            mClass.setParent(getOrCreate(dClass.getParentClass()));
 
             return mClassRepository.save(mClass);
         }
@@ -67,6 +78,24 @@ public class MClassService {
             return null;
         else
             return existing.get(0);
+    }
+
+    private List<MClassDataMember> storeClassDataMember(List<DClassField> fields, MClass mClass) {
+        List<MClassDataMember> mClassDataMembers = new ArrayList<>();
+        for (DClassField field : fields) {
+            MClassDataMember mClassDataMember = mClassDataMemberService.getOrCreate(field, mClass);
+            mClassDataMembers.add(mClassDataMember);
+        }
+        return mClassDataMembers;
+    }
+
+    private List<MMethod> storeClassMethod(List<DClassMethod> methods, MClass mClass) {
+        List<MMethod> mMethods = new ArrayList<>();
+        for (DClassMethod method : methods) {
+            MMethod methodEntity = mClassMethodService.getOrCreate(method, mClass);
+            if (methodEntity != null) mMethods.add(methodEntity);
+        }
+        return mMethods;
     }
 
     public List<MClass> findAll() {

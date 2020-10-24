@@ -16,6 +16,7 @@ public class MPackageService {
     }
 
     public MPackage getOrCreate(String name) {
+        if (name == null) return null;
         List<MPackage> existing = mPackageRepository.findByName(name);
         if (existing.size() == 0) {
             return mPackageRepository.save(new MPackage(name));
