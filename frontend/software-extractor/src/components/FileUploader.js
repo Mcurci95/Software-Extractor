@@ -52,6 +52,7 @@ const FileUploader = () => {
         } catch (err) {
             console.error(err);
         }
+        window.location.replace("/result");
     }
 
     return (
