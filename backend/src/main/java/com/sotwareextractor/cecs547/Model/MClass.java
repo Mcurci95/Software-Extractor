@@ -1,14 +1,13 @@
 package com.sotwareextractor.cecs547.Model;
 
-import com.fasterxml.jackson.annotation.*;
-import com.sotwareextractor.cecs547.Model.unused._MInstance;
+import org.springframework.util.StringUtils;
 
 import javax.persistence.*;
 import java.util.List;
-import java.util.Set;
 
 
 @Entity
+//@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class MClass {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -19,10 +18,20 @@ public class MClass {
     private List<MAccess> mAccess;
     @ManyToOne(cascade = CascadeType.ALL)
     private MPackage mPackage; // package is a reserved word
-    @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL)
-    private Set<MClass> childClasses;
-    @ManyToOne(cascade = CascadeType.ALL)
-    private MClass parent;
+
+
+//    @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL)
+//    private Set<MClass> childClasses;
+    @ElementCollection(targetClass = String.class)
+    private List<String> childClasses;
+
+
+//    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+//    @ManyToOne(cascade = CascadeType.ALL)
+//    private MClass parent;
+    private String parent;
+
+
     @OneToMany(mappedBy = "mClass", cascade = CascadeType.ALL)
     private List<MClassDataMember> mClassDataMembers;
     @OneToMany(mappedBy = "mClass", cascade = CascadeType.ALL)
@@ -81,16 +90,16 @@ public class MClass {
     public void setClassMPackage(MPackage classMPackage) {
         this.mPackage = classMPackage;
     }
-    public Set<MClass> getChildClasses() {
+    public List<String> getChildClasses() {
         return childClasses;
     }
-    public void setChildClasses(Set<MClass> childClasses) {
+    public void setChildClasses(List<String> childClasses) {
         this.childClasses = childClasses;
     }
-    public MClass getParent() {
+    public String getParent() {
         return parent;
     }
-    public void setParent(MClass parent) {
+    public void setParent(String parent) {
         this.parent = parent;
     }
     public List<MAccess> getmAccess() {
@@ -105,4 +114,11 @@ public class MClass {
     public void setImplementInterfaces(List<MInterface> implementInterfaces) {
         this.implementInterfaces = implementInterfaces;
     }
+
+//    @Override
+//    public String toString() {
+//        return "MClass{" +
+//                "name='" + name + '\'' +
+//                '}';
+//    }
 }

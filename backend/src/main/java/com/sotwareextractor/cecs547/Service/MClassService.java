@@ -39,7 +39,7 @@ public class MClassService {
     public MClass getOrCreate(String parentClass) {
         if (parentClass == null) return null;
         var existing = mClassRepository.findByName(parentClass);
-        if (existing == null) {
+        if (existing == null || existing.size() == 0) {
             return null;
         } else {
             return existing.get(0);
@@ -56,7 +56,12 @@ public class MClassService {
             // New class instance
             MClass mClass = new MClass(className, mAccess, mPackage);
 
-            mClass.setParent(getOrCreate(dClass.getParentClass()));
+//            mClass.setParent(getOrCreate(dClass.getParentClass()));
+
+            MClass parent = getOrCreate(dClass.getParentClass());
+            if (parent != null) {
+                mClass.setParent(parent.getName());
+            }
 
             // data member
             List<MClassDataMember> dataMembersEntities = storeClassDataMember(dClass.getFields(), mClass);
@@ -110,5 +115,9 @@ public class MClassService {
 
     public List<String> distinctClassNames() {
         return this.mClassRepository.findDistinctClassNames();
+    }
+
+    public List<MClass> parentNames(String parent) {
+        return this.mClassRepository.findNameByParent(parent);
     }
 }

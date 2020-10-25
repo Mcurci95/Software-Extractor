@@ -72,6 +72,7 @@ public class MConstructorParameter {
         this.mType = mType;
     }
 
+    @JsonIgnore
     public MConstructor getmConstructor() {
         return mConstructor;
     }

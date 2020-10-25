@@ -22,6 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @CrossOrigin("*")
 @RestController
@@ -72,5 +73,11 @@ public class SourceFileController {
     public List<MPackage> getPackages() {
         logger.info("Grabbing all packages");
         return mPackageService.getPackages();
+    }
+
+    @GetMapping(value = "/parents")
+    public List<String> getParents(@RequestParam(name = "name") String parent) {
+        logger.info("Calling parent endpoint with parent name " + parent);
+        return mClassService.parentNames(parent).stream().map(MClass::getName).collect(Collectors.toList());
     }
 }
