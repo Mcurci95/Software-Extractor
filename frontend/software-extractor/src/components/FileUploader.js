@@ -9,6 +9,10 @@ import axios from 'axios';
 
 const UPLOAD_ENDPOINT = 'http://localhost:8080/upload';
 
+
+const SERVER_ENDPOINT = 'http://localhost:8080/distinctClasses';
+
+
 const styles = {
     display: 'flex',
     flexDirection: 'column',
@@ -52,8 +56,11 @@ const FileUploader = () => {
         } catch (err) {
             console.error(err);
         }
-        window.location.replace("/result");
+        // window.location.replace("/result");
     }
+
+
+
 
     return (
         <div class="range">

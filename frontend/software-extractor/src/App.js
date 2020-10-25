@@ -7,10 +7,11 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom';
 
 import ExtractResult from '../src/components/ExtractResult';
 import FileUploader from '../src/components/FileUploader';
+import UploadedList from '../src/components/UploadedList';
 import Navigation from "../src/components/Navbar";
 
-
 const PACKAGES_ENDPOINT = 'http://localhost:8080/packages';
+
 
 class App extends Component {
 
@@ -22,6 +23,7 @@ class App extends Component {
                     <Navigation />
                     <Switch>
                         <Route path="/" component={FileUploader} exact/>
+                        <Route path="/list" component={UploadedList}/>
                         <Route path="/result" component={ExtractResult}/>
                     </Switch>
                 </div>

@@ -2,7 +2,6 @@ import React from 'react';
 
 const SERVER_ENDPOINT = 'http://localhost:8080/allClasses';
 
-
 class testing extends React.Component{
     state = {
         loading : true,
@@ -10,7 +9,6 @@ class testing extends React.Component{
     };
 
     async componentDidMount() {
-        // const url = "https://api.randomuser.me/";
         const response = await fetch(SERVER_ENDPOINT);
         const data = await response.json();
 
