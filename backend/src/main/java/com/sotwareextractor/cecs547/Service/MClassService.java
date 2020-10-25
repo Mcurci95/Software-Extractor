@@ -107,4 +107,8 @@ public class MClassService {
     public List<MClass> findAll() {
         return this.mClassRepository.findAll();
     }
+
+    public List<String> distinctClassNames() {
+        return this.mClassRepository.findDistinctClassNames();
+    }
 }

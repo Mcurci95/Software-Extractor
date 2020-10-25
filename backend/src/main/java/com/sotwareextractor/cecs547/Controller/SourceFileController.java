@@ -61,6 +61,13 @@ public class SourceFileController {
         return sourceFileStorageService.getFiles();
     }
 
+    @GetMapping(value = "/distinctClasses")
+    @ResponseBody
+    public List<String> getDistinctClasses() {
+        logger.info("Grabbing distinct classes");
+        return this.mClassService.distinctClassNames();
+    }
+
     @GetMapping(value = "/packages")
     public List<MPackage> getPackages() {
         logger.info("Grabbing all packages");
