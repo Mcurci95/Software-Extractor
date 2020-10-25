@@ -58,7 +58,6 @@ public class MMethod {
         Id = id;
     }
 
-    @JsonIgnore
     public List<MMethodParameter> getmParameters() {
         return mParameters;
     }
@@ -72,7 +71,6 @@ public class MMethod {
         this.name = name;
     }
 
-    @JsonIgnore
     public List<MAccess> getmAccess() {
         return mAccess;
     }
@@ -80,7 +78,7 @@ public class MMethod {
         this.mAccess = mAccess;
     }
 
-    @JsonIgnore
+
     public MType getmMReturnType() {
         return mReturnType;
     }
@@ -88,7 +86,6 @@ public class MMethod {
         this.mReturnType = mType;
     }
 
-    @JsonIgnore
     public MType getmReturnType() {
         return mReturnType;
     }
@@ -96,7 +93,7 @@ public class MMethod {
         this.mReturnType = mReturnType;
     }
 
-    @JsonIgnore
+
     public MMethodBody getmBody() {
         return mBody;
     }

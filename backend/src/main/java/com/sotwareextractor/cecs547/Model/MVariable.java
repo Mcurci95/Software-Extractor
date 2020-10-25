@@ -55,7 +55,6 @@ public class MVariable {
         this.value = value;
     }
 
-    @JsonIgnore
     public MMethodBody getmMethodBody() {
         return mMethodBody;
     }

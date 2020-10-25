@@ -38,7 +38,6 @@ public class MConstructorParameter {
         this.name = name;
     }
 
-    @JsonIgnore
     public MType getType() {
         return mType;
     }
@@ -66,7 +65,6 @@ public class MConstructorParameter {
         this.mOrder = mOrder;
     }
 
-    @JsonIgnore
     public MType getmType() {
         return mType;
     }
@@ -74,7 +72,6 @@ public class MConstructorParameter {
         this.mType = mType;
     }
 
-    @JsonIgnore
     public MConstructor getmConstructor() {
         return mConstructor;
     }

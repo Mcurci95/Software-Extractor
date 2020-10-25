@@ -42,7 +42,6 @@ public class MMethodParameter {
         this.name = name;
     }
 
-    @JsonIgnore
     public MType getType() {
         return mType;
     }
@@ -50,7 +49,6 @@ public class MMethodParameter {
         this.mType = type;
     }
 
-    @JsonIgnore
     public int getOrder() {
         return mOrder;
     }
@@ -66,7 +64,6 @@ public class MMethodParameter {
         Id = id;
     }
 
-    @JsonIgnore
     public int getmOrder() {
         return mOrder;
     }
@@ -74,7 +71,6 @@ public class MMethodParameter {
         this.mOrder = mOrder;
     }
 
-    @JsonIgnore
     public MType getmType() {
         return mType;
     }

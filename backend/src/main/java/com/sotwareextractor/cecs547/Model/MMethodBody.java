@@ -31,7 +31,6 @@ public class MMethodBody {
         Id = id;
     }
 
-    @JsonIgnore
     public List<MVariable> getVariables() {
         return variables;
     }
@@ -39,7 +38,6 @@ public class MMethodBody {
         this.variables = variables;
     }
 
-    @JsonIgnore
     public List<MMethodCall> getMethodCalls() {
         return methodCalls;
     }

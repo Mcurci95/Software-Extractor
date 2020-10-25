@@ -35,7 +35,6 @@ public class MMethodCall {
         this.name = name;
     }
 
-    @JsonIgnore
     public String getOwner() {
         return owner;
     }

@@ -33,7 +33,6 @@ public class MClassDataMember {
         this.mClass = mClass;
     }
 
-    @JsonIgnore
     public List<MAccess> getmAccess() {
         return mAccess;
     }
@@ -41,7 +40,6 @@ public class MClassDataMember {
         this.mAccess = mAccess;
     }
 
-    @JsonIgnore
     public MType getmType() {
         return mType;
     }
