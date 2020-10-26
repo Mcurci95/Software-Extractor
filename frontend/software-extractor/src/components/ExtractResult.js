@@ -128,12 +128,12 @@ class testing extends React.Component{
                                 <div className="c">
                                     {!meth.mParameters? (<div>NONE</div>):(
                                         meth.mParameters.map((type)=>
-                                            <div>{type.mType.name}<br /></div>
+                                            <span >{type.mType.name} </span>
                                         )
                                     )}
                                     {!meth.mBody.variables? (<div>NONE</div>):(
                                         meth.mBody.variables.map((vairable)=>
-                                            <div>{vairable.value}<br /></div>
+                                            <span>{vairable.value}<br /></span>
                                         )
                                     )}
                                 </div>
