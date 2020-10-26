@@ -10,9 +10,6 @@ import axios from 'axios';
 const UPLOAD_ENDPOINT = 'http://localhost:8080/upload';
 
 
-const SERVER_ENDPOINT = 'http://localhost:8080/distinctClasses';
-
-
 const styles = {
     display: 'flex',
     flexDirection: 'column',
@@ -20,10 +17,6 @@ const styles = {
     justifyContent: 'center'
 };
 
-
-const range = {
-
-};
 
 
 const FileUploader = () => {

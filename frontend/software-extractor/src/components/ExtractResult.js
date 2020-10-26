@@ -2,6 +2,11 @@ import React from 'react';
 
 const SERVER_ENDPOINT = 'http://localhost:8080/allClasses';
 
+async function fetchparent(){
+    const response = await fetch('http://localhost:8080/parents?name=Base' );
+    console.log(response);
+}
+
 class testing extends React.Component{
     state = {
         loading : true,
@@ -12,10 +17,33 @@ class testing extends React.Component{
         const response = await fetch(SERVER_ENDPOINT);
         const data = await response.json();
 
-        this.setState({project: data, loading : false});
+        const newData = [];
+        for (const cls of data) {
+            const parent = cls.parent;
+            let longname = cls.name;
+            if (parent != null) {
+                const res = await fetch('http://localhost:8080/parents?name='+parent);
+                const descendant = await res.json();
+                cls['descendant'] = descendant;
+                longname = longname + ' extends ' + parent;
 
-        // console.log(data);
+            }else{
+                cls['descendant'] = null
+            }
+
+            const implement = cls.implementInterfaces;
+
+            if(implement.length > 0){
+                longname = longname + ' implements ' + implement[0].name
+            }
+            cls['longname'] = longname;
+            newData.push(cls);
+        }
+        console.log(newData)
+        this.setState({project:data, loading : false});
+
     };
+
 
 
 
@@ -25,10 +53,12 @@ class testing extends React.Component{
             <div>
                 {this.state.loading || !this.state.project ? (<div class = "a"> Loading... </div>) :
                 (
+
                     (this.state.project.map((project) =>
 
                     <div class="a">
-                    {project.name} {/* program class name*/}
+                    Class name:
+                    <span> {project.longname} </span>
                     {project.parent == null? (null):(
                         <div className="b">
                             Ancestors:
@@ -41,10 +71,19 @@ class testing extends React.Component{
                     <div className="b">
                         Desendants:
                         <div className="c">
-                        {project.childClasses.length == 0 ? (<div>No decendants</div>):(
+
+                        {project.childClasses.length == 0 ? (<div>No child</div>):(
+
                             project.childClasses.map((child)=>
                                 <div>child.name</div>
                             )
+                        )}
+                        {project.descendant == null ? (<div>No parents</div>):(
+
+                            project.descendant.map((pare)=>
+                                <div>{pare}<br /></div>
+                            )
+
                         )}
 
                         {!project.mAccess? (<div></div>):
@@ -66,10 +105,20 @@ class testing extends React.Component{
                         </div>
                     </div>
                     <div className="b">
-                        Aggreages:
-                        <div className="c">
-                            {!project.name.first? (<div>NONE</div>):(project.name.first)}
-                        </div>
+                        Aggregates:
+                        {!project.mMethods? (<div>NONE</div>):(
+                            project.mMethods.map((meth) =>
+                                <div className="c">
+                                    {/*{!meth.mParameters? (<div>NONE</div>):(*/}
+                                    {/*    meth.mParameters.map((type)=>*/}
+                                    {/*        <div>{type.mType.name}<br /></div>*/}
+                                    {/*    )*/}
+                                    {/*)}*/}
+                                    {meth.mReturnType.name == 'int' || meth.mReturnType.name == 'void' ? (null):(
+                                        <div>{meth.mReturnType.name}<br /></div>
+                                    )}
+                                </div>
+                            ))}
                     </div>
 
                         <div className="b">
@@ -77,9 +126,14 @@ class testing extends React.Component{
                         {!project.mMethods? (<div></div>):(
                             project.mMethods.map((meth) =>
                                 <div className="c">
-                                    {!meth.mBody? (<div>NONE</div>):(
-                                        meth.mBody.variables.map((variable)=>
-                                            <div>{variable.value}<br /></div>
+                                    {!meth.mParameters? (<div>NONE</div>):(
+                                        meth.mParameters.map((type)=>
+                                            <div>{type.mType.name}<br /></div>
+                                        )
+                                    )}
+                                    {!meth.mBody.variables? (<div>NONE</div>):(
+                                        meth.mBody.variables.map((vairable)=>
+                                            <div>{vairable.value}<br /></div>
                                         )
                                     )}
                                 </div>
@@ -141,6 +195,7 @@ class testing extends React.Component{
                         ))}
                     </div>
                 </div>
+
                 )))}
             </div>
         )

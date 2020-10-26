@@ -22,15 +22,18 @@ class testing extends React.Component{
     render() {
         return(
             <div>
-                {this.state.loading || !this.state.project ? (<div class = "a"> Loading... </div>) :
-                    (
-                        (this.state.project.map((project) =>
-
-                            <div class="a">
-                                {project}
-
-                            </div>
-                        )))}
+                <div className="a">
+                    List of files uploaded:
+                    <ul>
+                    {this.state.loading || !this.state.project ? (<div class = "a"> Loading... </div>) :
+                        (
+                            (this.state.project.map((project) =>
+                                <li>{project}</li>
+                            ))
+                        )
+                    }
+                    </ul>
+                </div>
             </div>
         )
     }
