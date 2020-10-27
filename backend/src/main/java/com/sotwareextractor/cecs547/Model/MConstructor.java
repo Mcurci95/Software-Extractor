@@ -1,8 +1,6 @@
 package com.sotwareextractor.cecs547.Model;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.*;
 
 import javax.persistence.*;
 import java.util.List;
@@ -15,16 +13,18 @@ public class MConstructor {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long Id;
 
-
+    @JsonManagedReference
     @ManyToOne(cascade = CascadeType.ALL)
     private MType type;
+
     private String name;
 
-
+    @JsonManagedReference
     @OneToMany(mappedBy = "mConstructor", cascade = CascadeType.ALL)
     private List<MConstructorParameter> parameters;
 
-    @JsonIgnore
+//    @JsonIgnore
+    @JsonBackReference
     @ManyToOne(cascade = CascadeType.ALL)
     private MClass mClass;
 

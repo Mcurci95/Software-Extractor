@@ -1,5 +1,7 @@
 package com.sotwareextractor.cecs547.Model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.springframework.util.StringUtils;
 
 import javax.persistence.*;
@@ -13,12 +15,14 @@ public class MClass {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String name;
-//    @JsonManagedReference
+
+    @JsonManagedReference
     @ManyToMany(cascade = CascadeType.ALL)
     private List<MAccess> mAccess;
+
+    @JsonManagedReference
     @ManyToOne(cascade = CascadeType.ALL)
     private MPackage mPackage; // package is a reserved word
-
 
 //    @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL)
 //    private Set<MClass> childClasses;
@@ -31,13 +35,19 @@ public class MClass {
 //    private MClass parent;
     private String parent;
 
-
+    @JsonManagedReference
     @OneToMany(mappedBy = "mClass", cascade = CascadeType.ALL)
     private List<MClassDataMember> mClassDataMembers;
+
+    @JsonManagedReference
     @OneToMany(mappedBy = "mClass", cascade = CascadeType.ALL)
     private List<MMethod> mMethods;
+
+    @JsonManagedReference
     @ManyToMany(cascade = CascadeType.ALL)
     private List<MInterface> implementInterfaces;
+
+    @JsonManagedReference
     @OneToMany(mappedBy = "mClass", cascade = CascadeType.ALL)
     private List<MConstructor> mConstructors;
 

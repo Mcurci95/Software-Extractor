@@ -1,8 +1,6 @@
 package com.sotwareextractor.cecs547.Model;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.*;
 
 import javax.persistence.*;
 
@@ -17,11 +15,12 @@ public class MMethodCall {
 
     private String owner;
 
+    @JsonBackReference
     @ManyToOne(cascade = CascadeType.ALL)
     private MMethodBody mMethodBody;
 
 
-    @JsonIgnore
+//    @JsonIgnore
     public Long getId() {
         return Id;
     }
@@ -42,7 +41,7 @@ public class MMethodCall {
         this.owner = owner;
     }
 
-    @JsonIgnore
+//    @JsonIgnore
     public MMethodBody getmMethodBody() {
         return mMethodBody;
     }

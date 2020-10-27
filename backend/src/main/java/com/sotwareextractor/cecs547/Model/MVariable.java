@@ -1,8 +1,6 @@
 package com.sotwareextractor.cecs547.Model;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.*;
 
 import javax.persistence.*;
 
@@ -16,18 +14,19 @@ public class MVariable {
     private Long Id;
     private String name;
 
-
+    @JsonManagedReference
     @ManyToOne(cascade = CascadeType.ALL)
     private MType mReturnType;
 
     private String value;
 
-    @JsonIgnore
+//    @JsonIgnore
+    @JsonBackReference
     @ManyToOne(cascade = CascadeType.ALL)
     private MMethodBody mMethodBody;
 
 
-    @JsonIgnore
+//    @JsonIgnore
     public Long getId() {
         return Id;
     }
@@ -41,7 +40,7 @@ public class MVariable {
         this.name = name;
     }
 
-    @JsonIgnore
+//    @JsonIgnore
     public MType getmReturnType() {
         return mReturnType;
     }

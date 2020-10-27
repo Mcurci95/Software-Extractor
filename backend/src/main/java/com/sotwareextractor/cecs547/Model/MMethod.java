@@ -1,8 +1,6 @@
 package com.sotwareextractor.cecs547.Model;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.*;
 
 import javax.persistence.*;
 import java.util.List;
@@ -16,20 +14,23 @@ public class MMethod {
     private Long Id;
     private String name;
 
+    @JsonManagedReference
     @ManyToMany(cascade = CascadeType.ALL)
     private List<MAccess> mAccess;
 
+    @JsonManagedReference
     @ManyToOne(cascade = CascadeType.ALL)
     private MType mReturnType;
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "mMethod", cascade = CascadeType.ALL)
     private List<MMethodParameter> mParameters;
 
-
+    @JsonBackReference
     @ManyToOne(cascade = CascadeType.ALL)
     private MClass mClass;
 
-
+    @JsonManagedReference
     @OneToOne(cascade = CascadeType.ALL)
     private MMethodBody mBody;
 

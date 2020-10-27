@@ -14,7 +14,7 @@ public class MPackage {
     private Long id;
     private String name;
 
-
+    @JsonBackReference
     @OneToMany(mappedBy = "mPackage", cascade = CascadeType.ALL)
     private Collection<MClass> MClasses;
 
