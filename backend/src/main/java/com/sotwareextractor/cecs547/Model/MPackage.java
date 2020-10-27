@@ -28,7 +28,7 @@ public class MPackage {
         this.name = name;
     }
 
-    @JsonIgnore
+//    @JsonIgnore
     public Long getId() {
         return id;
     }
@@ -36,7 +36,7 @@ public class MPackage {
         this.id = id;
     }
 
-    @JsonIgnore
+//    @JsonIgnore
     public Collection<MClass> getMClasses() {
         return MClasses;
     }
