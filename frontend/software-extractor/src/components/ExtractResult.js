@@ -38,8 +38,7 @@ class Testing extends React.Component{
     }
 
     findAggregate(allClasses) {
-        const newData = []
-        for (const cls of allClasses) {
+        return allClasses.reduce((acc, cls) => {
             cls['aggregate'] = []
 
             for (const otherCls of allClasses) {
@@ -50,14 +49,12 @@ class Testing extends React.Component{
                     }
                 }
             }
-            newData.push(cls);
-        }
-        return newData;
+            return acc.concat(cls);
+        }, [])
     }
 
     findAssociate(allClasses) {
-        const newData = []
-        for (const cls of allClasses) {
+        return allClasses.reduce((acc, cls) => {
             cls['associate'] = []
             // Check constructor 
             for (const constructor of cls.mConstructors) {
@@ -82,9 +79,8 @@ class Testing extends React.Component{
                 }
             }
 
-            newData.push(cls);
-        }
-        return newData;
+            return acc.concat(cls);
+        }, [])
     }
     
     _isPrimitive(s) {
