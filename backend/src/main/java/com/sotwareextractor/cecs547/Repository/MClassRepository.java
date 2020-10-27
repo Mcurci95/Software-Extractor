@@ -1,5 +1,6 @@
 package com.sotwareextractor.cecs547.Repository;
 
+import com.sotwareextractor.cecs547.Model.MAccess;
 import com.sotwareextractor.cecs547.Model.MClass;
 import org.hibernate.sql.MckoiCaseFragment;
 import org.springframework.data.jpa.repository.JpaRepository;

@@ -1,10 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
-import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import FormGroup from 'react-bootstrap/esm/FormGroup';
 import axios from 'axios';
 
 const UPLOAD_ENDPOINT = 'http://localhost:8080/upload';
@@ -51,9 +49,6 @@ const FileUploader = () => {
         }
         // window.location.replace("/result");
     }
-
-
-
 
     return (
         <div class="range">

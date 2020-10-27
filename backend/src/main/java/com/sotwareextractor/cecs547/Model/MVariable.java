@@ -41,7 +41,7 @@ public class MVariable {
         this.name = name;
     }
 
-    @JsonIgnore
+//    @JsonIgnore
     public MType getmReturnType() {
         return mReturnType;
     }
