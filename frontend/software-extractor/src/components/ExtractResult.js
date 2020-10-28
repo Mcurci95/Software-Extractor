@@ -10,17 +10,17 @@ class Testing extends React.Component{
         project: null,
     };
 
-    classDict = {};
+    classDict = {}; // This is a dict [className] : [class attributes]
 
     async componentDidMount() {
         const response = await fetch(SERVER_ENDPOINT);
         const rawAllClassesData = await response.json();
-        console.log(rawAllClassesData);
+
         this.classDict = rawAllClassesData.reduce((acc, cls) => {
             acc[cls.name] = cls;
             return acc;
         }, {});
-        console.log(this.classDict)
+
         this.setState({project:this.parseData(rawAllClassesData), loading : false});
     };
 
@@ -38,7 +38,6 @@ class Testing extends React.Component{
             
             let currentParent = cls.parent;
             while (currentParent !== null) {
-                console.log(currentParent);
                 cls['ancestor'].add(currentParent);
                 const parentClsAttr = this.classDict[currentParent];
                 currentParent = parentClsAttr.parent;
