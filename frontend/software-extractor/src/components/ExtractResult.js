@@ -2,7 +2,7 @@ import React from 'react';
 import ClassComponent from './ClassComponent';
 
 const SERVER_ENDPOINT = 'http://localhost:8080/allClasses';
-const PRIMITIVE_TYPES = ['int', 'String', 'double', 'Int', 'Double']
+const PRIMITIVE_TYPES = ['int', 'String', 'double', 'Int', 'Double', 'float']
 
 class Testing extends React.Component{
     state = {
@@ -10,9 +10,17 @@ class Testing extends React.Component{
         project: null,
     };
 
+    classDict = {};
+
     async componentDidMount() {
         const response = await fetch(SERVER_ENDPOINT);
         const rawAllClassesData = await response.json();
+        console.log(rawAllClassesData);
+        this.classDict = rawAllClassesData.reduce((acc, cls) => {
+            acc[cls.name] = cls;
+            return acc;
+        }, {});
+        console.log(this.classDict)
         this.setState({project:this.parseData(rawAllClassesData), loading : false});
     };
 
@@ -20,16 +28,35 @@ class Testing extends React.Component{
         let data = this.findDescendants(rawData);
         data = this.findAggregate(data);
         data = this.findAssociate(data);
+        data = this.findAncestors(data);
         return data;
+    }
+
+    findAncestors(allClasses) {
+        return allClasses.reduce((acc, cls) => {
+            cls['ancestor'] = new Set();
+            
+            let currentParent = cls.parent;
+            while (currentParent !== null) {
+                console.log(currentParent);
+                cls['ancestor'].add(currentParent);
+                const parentClsAttr = this.classDict[currentParent];
+                currentParent = parentClsAttr.parent;
+            }
+            cls['ancestor'] = [...cls['ancestor']];
+
+            return acc.concat(cls);
+        }, [])
     }
 
     findDescendants(allClasses) {
         return allClasses.reduce((acc, cls) => {
-            for (const childCls of allClasses) {
-                if (childCls.name === cls.name) continue;
-                if (childCls.parent === cls.name) {
-                    if (!cls.childClasses.includes(childCls.name)) {
-                        cls.childClasses.push(childCls.name);
+            for (const otherCls of allClasses) {
+                if (otherCls.name === cls.name) continue;
+                if (otherCls.parent === cls.name) {
+                    if (!cls.childClasses.includes(otherCls.name) 
+                    && otherCls.name !== null) {
+                        cls.childClasses.push(otherCls.name);
                     }
                 }
             }
@@ -39,28 +66,32 @@ class Testing extends React.Component{
 
     findAggregate(allClasses) {
         return allClasses.reduce((acc, cls) => {
-            cls['aggregate'] = []
+            cls['aggregate'] = new Set();
 
             for (const otherCls of allClasses) {
                 if (cls.name === otherCls.name) continue; 
                 for (const dataMember of cls.mClassDataMembers) {
-                    if (dataMember.mType.name === otherCls.name || !this._isPrimitive(dataMember.mType.name)) {
-                        cls.aggregate.push(dataMember.mType.name);
+                    if (dataMember.mType.name === otherCls.name || 
+                        !this._isPrimitive(dataMember.mType.name)) {
+                        if (dataMember.mType.name !== null) 
+                            cls.aggregate.add(dataMember.mType.name);
                     }
                 }
             }
+
+            cls['aggregate'] = [...cls['aggregate']];
             return acc.concat(cls);
         }, [])
     }
 
     findAssociate(allClasses) {
         return allClasses.reduce((acc, cls) => {
-            cls['associate'] = []
+            cls['associate'] = new Set();
             // Check constructor 
             for (const constructor of cls.mConstructors) {
                 for (const param of constructor.parameters) {
-                    if (!this._isPrimitive(param.mType.name)) {
-                        cls.associate.push(param.mType.name);
+                    if (!this._isPrimitive(param.mType.name) && param.mType.name !== null) {
+                        cls.associate.add(param.mType.name);
                     }
                 }
             }
@@ -68,16 +99,19 @@ class Testing extends React.Component{
             // Check method param and method body
             for (const method of cls.mMethods) {
                 for (const param of method.mParameters) {
-                    if (!this._isPrimitive(param.mType.name)) {
-                        cls.associate.push(param.mType.name);
+                    if (!this._isPrimitive(param.mType.name) && param.mType.name !== null) {
+                        cls.associate.add(param.mType.name);
                     }
                 }
                 for (const variable of method.mBody.variables) {
-                    if (!this._isPrimitive(variable.mReturnType.name)) {
-                        cls.associate.push(variable.mReturnType.name);
+                    if (!this._isPrimitive(variable.mReturnType.name) 
+                    && variable.mReturnType.name !== null) {
+                        cls.associate.add(variable.mReturnType.name);
                     }
                 }
             }
+
+            cls['associate'] = [...cls['associate']];
 
             return acc.concat(cls);
         }, [])

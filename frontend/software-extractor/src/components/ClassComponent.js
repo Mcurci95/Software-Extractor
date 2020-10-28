@@ -1,13 +1,13 @@
 import React from 'react'
 
 export default function ClassComponent(props) {
-  const ancestorBlock = () => props.parent === null 
+  const ancestorBlock = () => props.ancestor.length === 0 
                                 ? (null)
                                 :( <div className="b">
                                             Ancestors:
-                                            <div className="c">
-                                                {props.parent}
-                                            </div>
+                                            {props.ancestor.map(
+                                                each => <div className="c">{each}</div>)
+                                            }
                                   </div>)
 
   const descendantBlock = () => 
@@ -57,16 +57,37 @@ export default function ClassComponent(props) {
                           {!props.mClassDataMembers? (<div></div>):(
                               props.mClassDataMembers.map((datamember, i) =>
                           <div key={i} className="c">
-                              {datamember.length = 0 ? (<div>NONE</div>):(
-                                  datamember.mAccess.map((accessname)=>
+                              {datamember.length = 0 
+                              ? (<div>NONE</div>)
+                              : (datamember.mAccess.map(accessname =>
                                       <span key={accessname.name}>{accessname.name} </span>
                                   )
                               )}
+                              <span>{!('value' in datamember) 
+                                        ? "null" 
+                                        : datamember.value}</span>
                               <span> {datamember.mType.name} </span>
                               <span> {datamember.name} </span>
                           </div>
                               ))}
                       </div>
+
+  const constructorBlock = () => <div className="b">
+      Constructors: 
+      {
+          props.mConstructors.length != 0 ? props.mConstructors.map(constructor => 
+              <div key={constructor.name} className="c">
+                  {constructor.name} returns constructor is {constructor.type.name === null ? "public" : constructor.type.name}
+                  {constructor.parameters.map(param => 
+                      <div key={param.name} className="d">
+                          Parameter: {param.mType.name} {param.name}
+                      </div>
+                  )} 
+              </div>
+          )
+           : "NONE"
+      }
+  </div>
 
   const methodBlock = () => <div className="b">
           Method Members:
@@ -111,6 +132,7 @@ export default function ClassComponent(props) {
           {aggregateBlock()}
           {associateBlock()}
           {dataMemberBlock()}
+          {constructorBlock()}
           {methodBlock()}
       </div>
 }
