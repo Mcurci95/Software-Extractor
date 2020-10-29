@@ -15,7 +15,7 @@ class Testing extends React.Component{
     async componentDidMount() {
         const response = await fetch(SERVER_ENDPOINT);
         const rawAllClassesData = await response.json();
-
+        console.log(rawAllClassesData);
         this.classDict = rawAllClassesData.reduce((acc, cls) => {
             acc[cls.name] = cls;
             return acc;

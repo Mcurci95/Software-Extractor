@@ -1,6 +1,13 @@
 import React from 'react'
 
 export default function ClassComponent(props) {
+  const implementInterfaceBlock = () => props.implementInterfaces.length === 0 ? null : 
+    <div className="b"> Implement interface:
+        {
+            props.implementInterfaces.map(inter => <div className="c" key={inter.name}>{inter.name}</div>)
+        }
+    </div>
+
   const ancestorBlock = () => props.ancestor.length === 0 
                                 ? (null)
                                 :( <div className="b">
@@ -126,6 +133,7 @@ export default function ClassComponent(props) {
           </div>
 
   return <div className="a"> Class name: <span> {props.name} </span>
+          {implementInterfaceBlock()}
           {ancestorBlock()}
           {descendantBlock()}
           {accessBlock()}
