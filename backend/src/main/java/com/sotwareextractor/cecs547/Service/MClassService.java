@@ -14,13 +14,13 @@ import com.sotwareextractor.cecs547.POJO.DClass;
 
 @Service
 public class MClassService {
-    private MClassRepository mClassRepository;
-    private MAccessService mAccessService;
-    private MPackageService mPackageService;
-    private MClassDataMemberService mClassDataMemberService;
-    private MClassMethodService mClassMethodService;
-    private MInterfaceService mInterfaceService;
-    private MConstructorService mConstructorService;
+    private final MClassRepository mClassRepository;
+    private final MAccessService mAccessService;
+    private final MPackageService mPackageService;
+    private final MClassDataMemberService mClassDataMemberService;
+    private final MClassMethodService mClassMethodService;
+    private final MInterfaceService mInterfaceService;
+    private final MConstructorService mConstructorService;
 
     @Autowired
     public MClassService(MClassRepository mClassRepository, MAccessService mAccessService,
@@ -48,39 +48,39 @@ public class MClassService {
 
     public MClass getOrCreate(DClass dClass) {
         List<MClass> existing = mClassRepository.findByName(dClass.getName());
-        if (existing.size() == 0) {
-            String className = dClass.getName();
-            List<MAccess> mAccess = mAccessService.getOrCreate(dClass.getAccessLevel());
-            MPackage mPackage = mPackageService.getOrCreate(dClass.getPackageName());
 
-            // New class instance
-            MClass mClass = new MClass(className, mAccess, mPackage);
-
-//            mClass.setParent(getOrCreate(dClass.getParentClass()));
-
-            MClass parent = getOrCreate(dClass.getParentClass());
-            if (parent != null) {
-                mClass.setParent(parent.getName());
+        // Check existing, return the instance if instance has the same package name
+        for (MClass instance : existing) {
+            if (instance.getmPackage().getName().equals(dClass.getPackageName()) &&
+            instance.getName().equals(dClass.getName())) {
+                return instance;
             }
-
-            // data member
-            List<MClassDataMember> dataMembersEntities = storeClassDataMember(dClass.getFields(), mClass);
-            mClass.setmClassDataMembers(dataMembersEntities);
-
-            List<MMethod> methodEntities = storeClassMethod(dClass.getdClassMethods(), mClass);
-            mClass.setmMethods(methodEntities);
-
-            List<MInterface> interfaceEntities = mInterfaceService.getOrCreate(dClass.getImplementInterfaces());
-            mClass.setImplementInterfaces(interfaceEntities);
-
-            List<MConstructor> constructors = mConstructorService.getOrCreate(dClass.getConstructors(), mClass);
-            mClass.setmConstructors(constructors);
-
-            return mClassRepository.save(mClass);
         }
 
-        else
-            return existing.get(0);
+        // If not, create a new record
+        String className = dClass.getName();
+        List<MAccess> mAccess = mAccessService.getOrCreate(dClass.getAccessLevel());
+        MPackage mPackage = mPackageService.getOrCreate(dClass.getPackageName());
+        MClass mClass = new MClass(className, mAccess, mPackage);
+        MClass parent = getOrCreate(dClass.getParentClass());
+        if (parent != null) {
+            mClass.setParent(parent.getName());
+        }
+
+        // data member
+        List<MClassDataMember> dataMembersEntities = storeClassDataMember(dClass.getFields(), mClass);
+        mClass.setmClassDataMembers(dataMembersEntities);
+
+        List<MMethod> methodEntities = storeClassMethod(dClass.getdClassMethods(), mClass);
+        mClass.setmMethods(methodEntities);
+
+        List<MInterface> interfaceEntities = mInterfaceService.getOrCreate(dClass.getImplementInterfaces());
+        mClass.setImplementInterfaces(interfaceEntities);
+
+        List<MConstructor> constructors = mConstructorService.getOrCreate(dClass.getConstructors(), mClass);
+        mClass.setmConstructors(constructors);
+
+        return mClassRepository.save(mClass);
     }
 
     public MClass findByName(String name) {

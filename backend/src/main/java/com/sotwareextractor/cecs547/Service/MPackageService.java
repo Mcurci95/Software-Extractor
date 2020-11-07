@@ -28,4 +28,5 @@ public class MPackageService {
     public List<MPackage> getPackages() {
         return this.mPackageRepository.findAll();
     }
+    public List<MPackage> findByName(String name) {return this.mPackageRepository.findByName(name);}
 }
