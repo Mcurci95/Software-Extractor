@@ -13,11 +13,11 @@ import java.util.stream.Collectors;
 
 @Service
 public class MClassMethodService {
-    private MAccessService mAccessService;
-    private MMethodRepository mMethodRepository;
-    private MTypeService mTypeService;
-    private MMethodParameterService mClassMethodParameterService;
-    private MMethodBodyService mMethodBodyService;
+    private final MAccessService mAccessService;
+    private final MMethodRepository mMethodRepository;
+    private final MTypeService mTypeService;
+    private final MMethodParameterService mClassMethodParameterService;
+    private final MMethodBodyService mMethodBodyService;
 
     @Autowired
     public MClassMethodService(MAccessService mAccessService,

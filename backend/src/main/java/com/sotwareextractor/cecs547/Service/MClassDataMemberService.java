@@ -14,9 +14,9 @@ import java.util.stream.Collectors;
 
 @Service
 public class MClassDataMemberService {
-    private MAccessService mAccessService;
-    private MClassDataMemberRepository mClassDataMemberRepository;
-    private MTypeService mTypeService;
+    private final MAccessService mAccessService;
+    private final MClassDataMemberRepository mClassDataMemberRepository;
+    private final MTypeService mTypeService;
 
     @Autowired
     public MClassDataMemberService(MAccessService mAccessService, MClassDataMemberRepository mClassDataMemberRepository, MTypeService mTypeService) {

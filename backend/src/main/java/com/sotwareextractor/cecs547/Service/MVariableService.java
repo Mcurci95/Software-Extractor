@@ -9,8 +9,8 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class MVariableService {
-    private MVariableRepository mVariableRepository;
-    private MTypeService mTypeService;
+    private final MVariableRepository mVariableRepository;
+    private final MTypeService mTypeService;
 
     @Autowired
     public MVariableService(MVariableRepository mVariableRepository, MTypeService mTypeService) {

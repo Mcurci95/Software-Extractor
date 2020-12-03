@@ -10,6 +10,7 @@ import com.sotwareextractor.cecs547.POJO.DClass;
 
         import java.util.ArrayList;
         import java.util.List;
+import java.util.Objects;
 
 
 @Service
@@ -48,12 +49,19 @@ public class MClassService {
 
     public MClass getOrCreate(DClass dClass) {
         List<MClass> existing = mClassRepository.findByName(dClass.getName());
+        Integer version = null;
 
         // Check existing, return the instance if instance has the same package name
         for (MClass instance : existing) {
-            if (instance.getmPackage().getName().equals(dClass.getPackageName()) &&
-            instance.getName().equals(dClass.getName())) {
-                return instance;
+            if (instance.getName().equals(dClass.getName())) {
+                if (instance.getmPackage() != null) {
+                    if (instance.getmPackage().getName().equals(dClass.getPackageName())) {
+                        version = instance.getVersion();
+                    }
+                }
+                else {
+                    version = instance.getVersion();
+                }
             }
         }
 
@@ -66,6 +74,7 @@ public class MClassService {
         if (parent != null) {
             mClass.setParent(parent.getName());
         }
+        mClass.setVersion(Objects.requireNonNullElse(version, 0) + 1);
 
         // data member
         List<MClassDataMember> dataMembersEntities = storeClassDataMember(dClass.getFields(), mClass);

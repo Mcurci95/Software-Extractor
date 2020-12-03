@@ -10,7 +10,7 @@ import java.util.List;
 
 @Service
 public class MInterfaceService {
-    private MInterfaceRepository mInterfaceRepository;
+    private final MInterfaceRepository mInterfaceRepository;
 
     @Autowired
     public MInterfaceService(MInterfaceRepository mInterfaceRepository) {

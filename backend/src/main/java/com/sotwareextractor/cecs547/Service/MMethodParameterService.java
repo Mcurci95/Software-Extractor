@@ -13,8 +13,8 @@ import java.util.List;
 
 @Service
 public class MMethodParameterService {
-    private MMethodParamRepository repository;
-    private MTypeService mTypeService;
+    private final MMethodParamRepository repository;
+    private final MTypeService mTypeService;
 
     @Autowired
     public MMethodParameterService(MMethodParamRepository repository, MTypeService mTypeService) {

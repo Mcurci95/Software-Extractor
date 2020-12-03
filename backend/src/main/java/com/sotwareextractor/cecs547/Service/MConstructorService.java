@@ -13,9 +13,9 @@ import java.util.List;
 
 @Service
 public class MConstructorService {
-    private MConstructorRepository mConstructorRepository;
-    private MConstructorParamService mConstructorParamService;
-    private MTypeService mTypeService;
+    private final MConstructorRepository mConstructorRepository;
+    private final MConstructorParamService mConstructorParamService;
+    private final MTypeService mTypeService;
 
     @Autowired
     public MConstructorService(MConstructorRepository mConstructorRepository,

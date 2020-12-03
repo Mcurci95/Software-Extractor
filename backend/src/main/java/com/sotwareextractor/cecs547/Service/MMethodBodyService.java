@@ -14,10 +14,10 @@ import java.util.List;
 
 @Service
 public class MMethodBodyService {
-    private MMethodBodyRespository mMethodBodyRespository;
-    private MVariableService mVariableService;
-    private MMethodCallService mMethodCallService;
-    private MTypeService mTypeService;
+    private final MMethodBodyRespository mMethodBodyRespository;
+    private final MVariableService mVariableService;
+    private final MMethodCallService mMethodCallService;
+    private final MTypeService mTypeService;
 
     @Autowired
     public MMethodBodyService(MMethodBodyRespository mMethodBodyRespository, MVariableService mVariableService,

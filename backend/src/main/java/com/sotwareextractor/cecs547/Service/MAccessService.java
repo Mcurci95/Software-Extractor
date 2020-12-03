@@ -17,6 +17,16 @@ public class MAccessService {
         this.mAccessRepository = mAccessRepository;
     }
 
+    public MAccess getOrCreate(String name) {
+        List<MAccess> existing = mAccessRepository.findByAccessName(name);
+        for (MAccess each : existing) {
+            if (each.getAccessName().equals(name)) {
+                return each;
+            }
+        }
+        return mAccessRepository.save(new MAccess(name));
+    }
+
     public List<MAccess> getOrCreate(List<String> name) {
         List<MAccess> access = new ArrayList<>();
         for (String each : name) {

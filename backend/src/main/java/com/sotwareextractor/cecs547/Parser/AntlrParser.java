@@ -86,7 +86,7 @@ public class AntlrParser {
         }
     }
 
-    public void parse(MultipartFile file) throws IOException {
+    public DClass parse(MultipartFile file) throws IOException {
         JavaLexer lexer = new JavaLexer(CharStreams.fromStream(file.getInputStream()));
         CommonTokenStream tokens = new CommonTokenStream(lexer);
         JavaParser parser = new JavaParser(tokens);
@@ -96,12 +96,6 @@ public class AntlrParser {
         walker.walk(fileListener, compilationUnitContext);
 
         fileListener.display();
-        saveToDb(fileListener);
-    }
-
-    public void saveToDb(FileListener fileListener) {
-        DClass classData = fileListener.getdClass();
-        mPackageService.getOrCreate(classData.getPackageName());
-        mClassService.getOrCreate(classData);
+        return fileListener.getdClass();
     }
 }

@@ -1,7 +1,5 @@
 package com.sotwareextractor.cecs547.Model;
 
-import org.springframework.util.StringUtils;
-
 import javax.persistence.*;
 import java.util.List;
 
@@ -30,7 +28,7 @@ public class MClass {
 //    @ManyToOne(cascade = CascadeType.ALL)
 //    private MClass parent;
     private String parent;
-
+    private boolean isPost;
 
     @OneToMany(mappedBy = "mClass", cascade = CascadeType.ALL)
     private List<MClassDataMember> mClassDataMembers;
@@ -40,6 +38,7 @@ public class MClass {
     private List<MInterface> implementInterfaces;
     @OneToMany(mappedBy = "mClass", cascade = CascadeType.ALL)
     private List<MConstructor> mConstructors;
+    private int version;
 
     public MClass() {}
     public MClass(String name, List<MAccess> mAccess, MPackage mPackage) {
@@ -114,11 +113,18 @@ public class MClass {
     public void setImplementInterfaces(List<MInterface> implementInterfaces) {
         this.implementInterfaces = implementInterfaces;
     }
+    public boolean isPost() {
+        return isPost;
+    }
+    public void setPost(boolean post) {
+        isPost = post;
+    }
 
-//    @Override
-//    public String toString() {
-//        return "MClass{" +
-//                "name='" + name + '\'' +
-//                '}';
-//    }
+    public int getVersion() {
+        return version;
+    }
+
+    public void setVersion(int version) {
+        this.version = version;
+    }
 }

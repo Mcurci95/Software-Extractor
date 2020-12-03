@@ -48,6 +48,15 @@ public class SourceFileController {
         return ResponseEntity.ok().build();
     }
 
+    @PostMapping(value = "/postMaintenanceUpload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity postMaintenanceUpload(@RequestParam("files") MultipartFile[] files) throws IOException {
+        for (MultipartFile file : files) {
+            logger.info("Saving file: {}",  file.getOriginalFilename());
+            sourceFileStorageService.saveFile(file);
+        }
+        return ResponseEntity.ok().build();
+    }
+
     @GetMapping(value = "/allClasses")
     public List<MClass> getClasses() {
         List<String> returnString = new ArrayList<>();

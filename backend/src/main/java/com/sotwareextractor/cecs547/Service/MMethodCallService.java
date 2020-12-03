@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class MMethodCallService {
-    private MMethodCallRepository mMethodCallRepository;
+    private final MMethodCallRepository mMethodCallRepository;
     @Autowired
     public MMethodCallService(MMethodCallRepository mMethodCallRepository) {
         this.mMethodCallRepository = mMethodCallRepository;
