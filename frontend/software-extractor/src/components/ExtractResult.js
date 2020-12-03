@@ -20,8 +20,10 @@ class Testing extends React.Component{
             acc[cls.name] = cls;
             return acc;
         }, {});
-
-        this.setState({project:this.parseData(rawAllClassesData), loading : false});
+        
+        const parsedData = this.parseData(rawAllClassesData);
+        console.log(parsedData);
+        this.setState({project:parsedData, loading : false});
     };
 
     parseData(rawData) {
