@@ -11,6 +11,7 @@ const Navigation = () => {
                 <li><NavLink to="/">File Uploader</NavLink></li>
                 <li><NavLink to="/List">File List</NavLink></li>
                 <li><NavLink to="/result">Result</NavLink></li>
+                <li><NavLink to="/compare">Compare</NavLink></li>
             </ul>
 
 
