@@ -1,8 +1,46 @@
 import React from 'react';
-import ClassComponent from './ClassComponent';
+import CompareComponent from './CompareComponent';
+
 
 const SERVER_ENDPOINT = 'http://localhost:8080/allClasses';
-const PRIMITIVE_TYPES = ['int', 'String', 'double', 'Int', 'Double', 'float']
+const PRIMITIVE_TYPES = ['int', 'String', 'double', 'Int', 'Double', 'float'];
+
+
+function compareTwoJson (elm, target){
+    for (const j in target) {
+
+        // if the element not in target then added
+        if (!elm.hasOwnProperty(j)){
+            console.log(j+' was added');
+        }
+        if (target.hasOwnProperty(elm[j])){
+            console.log(j+' was deleted');
+        }
+        // if the target not in element then delete
+        if (typeof (target[j]) == "object") {
+            compareTwoJson(elm[j], target[j]);
+        }
+        else if (elm[j] !== target[j] && j !== 'id' && j !== 'createdDateTime' && j !== 'version') {
+            console.log(elm[j] + ' changed to ' + target[j]);
+        }
+    }
+}
+
+
+const ObjectValues = function (obj, tar) {
+    const isArray = obj instanceof Array;
+    for (const j in obj) {
+        if (obj.hasOwnProperty(j)) {
+            if (typeof (obj[j]) == "object") {
+                ObjectValues(obj[j], tar[j]);
+            } else if (!isArray) {
+                if(obj[j] !== tar[j] && j !=='id' && j !=='createdDateTime' && j !== 'version'){
+                    console.log(obj[j] +' changed to ' + tar[j] );
+                }
+            }
+        }
+    }
+};
 
 class Testing extends React.Component{
     state = {
@@ -15,14 +53,65 @@ class Testing extends React.Component{
     async componentDidMount() {
         const response = await fetch(SERVER_ENDPOINT);
         const rawAllClassesData = await response.json();
-        console.log(rawAllClassesData);
+        rawAllClassesData.sort( function (a,b) {
+            return a.name.localeCompare(b.name);
+        });
         this.classDict = rawAllClassesData.reduce((acc, cls) => {
             acc[cls.name] = cls;
             return acc;
         }, {});
+        const comparedata = rawAllClassesData;
 
-        const parsedData = this.parseData(rawAllClassesData);
-        console.log(parsedData);
+        let targetelm = "";
+        const versionone = [];
+        const versiontwo = [];
+        for(let elm of comparedata){
+            if (targetelm !== elm.name){
+            //    add to list and set targetelm = the new one
+                targetelm = elm.name;
+                versionone.push(elm);
+            }
+            else {
+                versiontwo.push(elm);
+            }
+        }
+
+
+        for(const elm of versionone) {
+            const targetcompare = versiontwo.filter(function(i) {
+                return i.name === elm.name;
+            });
+            if (targetcompare.length> 0){
+                const target = targetcompare[0];
+                console.log('Comparing class '+target.name);
+                console.log('Version 2 uploaded on ' + target.createdDateTime);
+                const compareone = target;
+                delete compareone.id;
+                delete compareone.createdDateTime;
+                delete compareone.version;
+
+                const comparetwo = elm;
+                delete comparetwo.id;
+                delete comparetwo.createdDateTime;
+                delete comparetwo.version;
+
+                // console.log(JSON.stringify(compareone));
+                // console.log(JSON.stringify(comparetwo));
+
+                if (JSON.stringify(compareone) !== JSON.stringify(comparetwo)){
+                    compareTwoJson(elm, target);
+                }
+                else {
+                    console.log('Nothing was changed')
+                }
+            }
+
+        }
+
+
+        //run the whole thing output from here
+        const parsedData = this.parseData(comparedata);
+        // console.log(parsedData);
         this.setState({project:parsedData, loading : false});
     };
 
@@ -31,6 +120,7 @@ class Testing extends React.Component{
         data = this.findAggregate(data);
         data = this.findAssociate(data);
         data = this.findAncestors(data);
+        console.log(data);
         return data;
     }
 
@@ -128,9 +218,9 @@ class Testing extends React.Component{
     render() {
         return <>
             {this.state.loading || !this.state.project
-                ? (<div className = "a"> Loading... </div>)
+                ? (<div className = "container"> Loading... </div>)
                 : this.state.project.map(attr =>
-                    <ClassComponent key={attr.name} {...attr} />)
+                    <CompareComponent key={attr.name} {...attr} />)
             }
         </>
     }

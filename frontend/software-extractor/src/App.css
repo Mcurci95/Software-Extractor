@@ -73,15 +73,30 @@
     margin-right: auto;
 }
 
-div.a {
+/*div.a {*/
+/*    text-indent: 50px;*/
+/*}*/
+div.b {
     text-indent: 50px;
 }
-div.b {
+div.c {
     text-indent: 100px;
 }
-div.c {
+div.d {
     text-indent: 150px;
 }
-div.d {
-    text-indent: 200px;
+div.container{
+    display: block;
+}
+
+/* Control the left side */
+div.left {
+    left: 0;
+    background-color: #111;
+}
+
+/* Control the right side */
+div.right {
+    right: 0;
+    background-color: red;
 }

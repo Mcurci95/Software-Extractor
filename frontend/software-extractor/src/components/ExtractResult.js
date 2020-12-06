@@ -27,6 +27,7 @@ class Testing extends React.Component{
     };
 
     parseData(rawData) {
+        console.log(rawData)
         let data = this.findDescendants(rawData);
         data = this.findAggregate(data);
         data = this.findAssociate(data);
@@ -128,7 +129,7 @@ class Testing extends React.Component{
     render() {
         return <>
                 {this.state.loading || !this.state.project 
-                ? (<div className = "a"> Loading... </div>) 
+                ? (<div className = "container"> Loading... </div>)
                 : this.state.project.map(attr =>
                     <ClassComponent key={attr.name} {...attr} />)
                 }

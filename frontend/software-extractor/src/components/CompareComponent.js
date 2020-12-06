@@ -1,6 +1,6 @@
 import React from 'react'
 
-export default function ClassComponent(props) {
+export default function CompareComponent(props) {
   const implementInterfaceBlock = () => props.implementInterfaces.length === 0 ? null : 
     <div className="b"> Implement interface:
         {
@@ -29,17 +29,21 @@ export default function ClassComponent(props) {
       
     </div>
 
-    const accessBlock = () => !props.mAccess 
-                            ? (<div className="b"></div>):
-                              <>
-                              { props.mAccess.map(access =>
-                                <div key={access.name} className="b">{`is ${access.name}`}</div>)
-                              }
-                              </>
-              
-          
+    const versionBlock = () => !props.version
+        ? (<div className="b"></div>):
+          (<div className="b">{`Version ${props.version}`}</div>)
 
-  const aggregateBlock = () => <div className="b">
+
+    const accessBlock = () => !props.mAccess
+        ? (<div className="b"></div>):
+        <>
+            { props.mAccess.map(access =>
+                <div key={access.name} className="b">{`is ${access.name}`}</div>)
+            }
+        </>
+
+
+    const aggregateBlock = () => <div className="b">
                               Aggregates:
                               {props.aggregate.length === 0 ? (<div className="c"> NONE</div>):(
                                   props.aggregate.map(type =>
@@ -133,6 +137,8 @@ export default function ClassComponent(props) {
           </div>
 
   return <div className="container"> Class name: <span> {props.name} </span>
+
+          {versionBlock()}
           {implementInterfaceBlock()}
           {ancestorBlock()}
           {descendantBlock()}
