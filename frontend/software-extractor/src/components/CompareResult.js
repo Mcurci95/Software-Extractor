@@ -8,7 +8,7 @@ export default function CompareResult() {
     const dispatch = useDispatch();
     const allEntities = useSelector(selectEntity); // Get from redux store
 
-    let entityBuckets = allEntities.reduce((acc, cls) => {
+    const entityBuckets = allEntities.reduce((acc, cls) => {
             let fullQualifiedName = "";
             if ('classMPackage' in cls) {
                 fullQualifiedName = cls['classMPackage'].name + "." + cls['name'];
@@ -29,22 +29,21 @@ export default function CompareResult() {
     }
 
     const getDiff = data => {
-        const diff = {};
-
         let modelClass = data.filter(cls => cls.version === 1);
         // If model version 1 is not found, stop
         if (modelClass.length === 0) return {};
         modelClass = modelClass[0];
         
-        const otherClasses = data.filter(cls => cls.version !== 1); 
-        for (const cls of otherClasses) {
+        const otherClasses = data.filter(cls => cls.version !== 1);
+
+        // For each class, compare it to v1 and gather method and datamember diff
+        return otherClasses.reduce((diff, cls) => {
             diff[cls.version] = {
                 method: _getMethodDiff(modelClass.mMethods, cls.mMethods),
                 datamember: _getDataMemberDiff(modelClass.mClassDataMembers, cls.mClassDataMembers),
-            }
-        }
-
-        return diff;
+            };
+            return diff;
+        }, {})
     }
 
     const _getMethodDiff = (modelMethods, otherMethods) => {
@@ -76,7 +75,7 @@ export default function CompareResult() {
             }
         };
 
-        // Find deleted
+        // Get deleted
         const otherMethodsName = otherMethods.map(m => m.name);
         for (const method of modelMethods) {
             if (!(method.name in otherMethodsName)) {
@@ -121,7 +120,7 @@ export default function CompareResult() {
             }
         };
 
-        // Find deleted
+        // Get deleted
         const otherDMName = otherDM.map(m => m.name);
         for (const dm of modelDM) {
             if (!(dm.name in otherDMName)) {
@@ -138,12 +137,10 @@ export default function CompareResult() {
     }
 
     // Gather all diffs of different classes
-    let allDiffs = {}
-    for (const namespace of Object.keys(entityBuckets)) {
-        allDiffs = {...allDiffs, ...{
-            [namespace]: getDiff(entityBuckets[namespace])
-        }};
-    }
+    const allDiffs = Object.keys(entityBuckets).reduce((acc, namespace) => {
+        acc[namespace] = getDiff(entityBuckets[namespace]);
+        return acc;
+    }, {})
 
     dispatch(addAllDiffs(allDiffs)) // Send data to redux store
 
