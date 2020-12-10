@@ -6,7 +6,7 @@ import {addAllEntities} from '../reducers/entityReducer'
 const SERVER_ENDPOINT = 'http://localhost:8080/allClasses';
 const PRIMITIVE_TYPES = ['int', 'String', 'double', 'Int', 'Double', 'float']
 
-export function Testing() {
+export default function ExtractResult() {
     const [loading, setLoading] = useState(true);
     const [project, setProject] = useState(null);
     const [count, setCount] = useState(0);
@@ -154,5 +154,3 @@ export function Testing() {
         </>
     )
 }
-
-export default Testing;
