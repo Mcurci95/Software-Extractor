@@ -23,7 +23,7 @@ class App extends Component {
                         <Route path="/" component={FileUploader} exact/>
                         <Route path="/list" component={UploadedList}/>
                         <Route path="/result" component={ExtractResult}/>
-                        <Route path="/compare" component={CompareResult}/>
+                        {/* <Route path="/compare" component={CompareResult}/> */}
                     </Switch>
                 </div>
             </BrowserRouter>

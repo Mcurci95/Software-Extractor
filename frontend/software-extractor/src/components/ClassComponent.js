@@ -64,7 +64,7 @@ export default function ClassComponent(props) {
                           {!props.mClassDataMembers? (<div></div>):(
                               props.mClassDataMembers.map((datamember, i) =>
                           <div key={i} className="c">
-                              {datamember.length = 0 
+                              {Object.keys(datamember).length == 0 
                               ? (<div>NONE</div>)
                               : (datamember.mAccess.map(accessname =>
                                       <span key={accessname.name}>{accessname.name} </span>

@@ -57,62 +57,73 @@ class Testing extends React.Component{
             return a.name.localeCompare(b.name);
         });
         this.classDict = rawAllClassesData.reduce((acc, cls) => {
-            acc[cls.name] = cls;
+            let fullQualifiedName = "";
+            if ('classMPackage' in cls) {
+                fullQualifiedName = cls['classMPackage'].name + "." + cls['name'];
+            } else {
+                fullQualifiedName = cls['name'];
+            }
+            if (!(fullQualifiedName in acc)) {
+                acc[fullQualifiedName] = [];
+            }
+
+            acc[fullQualifiedName].push(cls);
+            // acc[cls.name] = cls;
             return acc;
         }, {});
-        const comparedata = rawAllClassesData;
+        // const comparedata = rawAllClassesData;
 
-        let targetelm = "";
-        const versionone = [];
-        const versiontwo = [];
-        for(let elm of comparedata){
-            if (targetelm !== elm.name){
-            //    add to list and set targetelm = the new one
-                targetelm = elm.name;
-                versionone.push(elm);
-            }
-            else {
-                versiontwo.push(elm);
-            }
-        }
-
-
-        for(const elm of versionone) {
-            const targetcompare = versiontwo.filter(function(i) {
-                return i.name === elm.name;
-            });
-            if (targetcompare.length> 0){
-                const target = targetcompare[0];
-                console.log('Comparing class '+target.name);
-                console.log('Version 2 uploaded on ' + target.createdDateTime);
-                const compareone = target;
-                delete compareone.id;
-                delete compareone.createdDateTime;
-                delete compareone.version;
-
-                const comparetwo = elm;
-                delete comparetwo.id;
-                delete comparetwo.createdDateTime;
-                delete comparetwo.version;
-
-                // console.log(JSON.stringify(compareone));
-                // console.log(JSON.stringify(comparetwo));
-
-                if (JSON.stringify(compareone) !== JSON.stringify(comparetwo)){
-                    compareTwoJson(elm, target);
-                }
-                else {
-                    console.log('Nothing was changed')
-                }
-            }
-
-        }
+        // let targetelm = "";
+        // const versionone = [];
+        // const versiontwo = [];
+        // for(let elm of comparedata){
+        //     if (targetelm !== elm.name){
+        //     //    add to list and set targetelm = the new one
+        //         targetelm = elm.name;
+        //         versionone.push(elm);
+        //     }
+        //     else {
+        //         versiontwo.push(elm);
+        //     }
+        // }
 
 
-        //run the whole thing output from here
-        const parsedData = this.parseData(comparedata);
-        // console.log(parsedData);
-        this.setState({project:parsedData, loading : false});
+        // for(const elm of versionone) {
+        //     const targetcompare = versiontwo.filter(function(i) {
+        //         return i.name === elm.name;
+        //     });
+        //     if (targetcompare.length> 0){
+        //         const target = targetcompare[0];
+        //         console.log('Comparing class '+target.name);
+        //         console.log('Version 2 uploaded on ' + target.createdDateTime);
+        //         const compareone = target;
+        //         delete compareone.id;
+        //         delete compareone.createdDateTime;
+        //         delete compareone.version;
+
+        //         const comparetwo = elm;
+        //         delete comparetwo.id;
+        //         delete comparetwo.createdDateTime;
+        //         delete comparetwo.version;
+
+        //         // console.log(JSON.stringify(compareone));
+        //         // console.log(JSON.stringify(comparetwo));
+
+        //         if (JSON.stringify(compareone) !== JSON.stringify(comparetwo)){
+        //             compareTwoJson(elm, target);
+        //         }
+        //         else {
+        //             console.log('Nothing was changed')
+        //         }
+        //     }
+
+        // }
+
+
+    //     //run the whole thing output from here
+    //     const parsedData = this.parseData(comparedata);
+    //     // console.log(parsedData);
+    //     this.setState({project:parsedData, loading : false});
     };
 
     parseData(rawData) {
