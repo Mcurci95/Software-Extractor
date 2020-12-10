@@ -9,7 +9,8 @@ const PRIMITIVE_TYPES = ['int', 'String', 'double', 'Int', 'Double', 'float']
 export function Testing() {
     const [loading, setLoading] = useState(true);
     const [project, setProject] = useState(null);
-    
+    const [count, setCount] = useState(0);
+
     const dispatch = useDispatch()
 
     let classDict = null;
@@ -32,7 +33,7 @@ export function Testing() {
             dispatch(addAllEntities(parsedData))
         }
         fetchData();
-    }, [])
+    }, [count])
 
     const parseData = rawData => {
         console.log(rawData)
@@ -136,11 +137,20 @@ export function Testing() {
 
     return (
         <>
-            {loading || !project 
-            ? (<div className = "container"> Loading... </div>)
-            : project.map(attr =>
-                <ClassComponent key={attr.name} {...attr} />)
-            }
+            <div className="container">
+                <div className="row">
+                    <div className="col-2">
+                        <button className="btn btn-dark btn-sm" onClick={() => setCount(count + 1)}>Refresh content</button>
+                    </div>
+                    <div className="col-10">
+                        {loading || !project 
+                        ? (<div className = "container"> Loading... </div>)
+                        : project.map(attr =>
+                            <ClassComponent key={attr.name} {...attr} />)
+                        }
+                    </div>
+                </div>
+            </div>
         </>
     )
 }

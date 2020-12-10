@@ -17,8 +17,6 @@ class testing extends React.Component{
         // console.log(data);
     };
 
-
-
     render() {
         return(
             <div>
