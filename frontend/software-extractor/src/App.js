@@ -9,7 +9,7 @@ import ExtractResult from '../src/components/ExtractResult';
 import FileUploader from '../src/components/FileUploader';
 import UploadedList from '../src/components/UploadedList';
 import Navigation from "../src/components/Navbar";
-
+import CompareTwoResults from "../src/components/CompareTwoResults";
 // const PACKAGES_ENDPOINT = 'http://localhost:8080/packages';
 
 
@@ -24,6 +24,7 @@ class App extends Component {
                         <Route path="/list" component={UploadedList}/>
                         <Route path="/result" component={ExtractResult}/>
                         <Route path="/compare" component={CompareResult}/>
+                        <Route path="/comparetwo" component={CompareTwoResults}/>
                     </Switch>
                 </div>
             </BrowserRouter>
