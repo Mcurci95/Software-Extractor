@@ -1,229 +1,162 @@
 import React from 'react';
 import CompareComponent from './CompareComponent';
+import {useSelector, useDispatch} from 'react-redux'
+import {selectEntity, addAllDiffs} from '../reducers/entityReducer'
 
 
-const SERVER_ENDPOINT = 'http://localhost:8080/allClasses';
-const PRIMITIVE_TYPES = ['int', 'String', 'double', 'Int', 'Double', 'float'];
+export default function CompareResult() {
+    const dispatch = useDispatch();
+    const allEntities = useSelector(selectEntity); // Get from redux store
 
-
-function compareTwoJson (elm, target){
-    for (const j in target) {
-
-        // if the element not in target then added
-        if (!elm.hasOwnProperty(j)){
-            console.log(j+' was added');
-        }
-        if (target.hasOwnProperty(elm[j])){
-            console.log(j+' was deleted');
-        }
-        // if the target not in element then delete
-        if (typeof (target[j]) == "object") {
-            compareTwoJson(elm[j], target[j]);
-        }
-        else if (elm[j] !== target[j] && j !== 'id' && j !== 'createdDateTime' && j !== 'version') {
-            console.log(elm[j] + ' changed to ' + target[j]);
-        }
-    }
-}
-
-
-const ObjectValues = function (obj, tar) {
-    const isArray = obj instanceof Array;
-    for (const j in obj) {
-        if (obj.hasOwnProperty(j)) {
-            if (typeof (obj[j]) == "object") {
-                ObjectValues(obj[j], tar[j]);
-            } else if (!isArray) {
-                if(obj[j] !== tar[j] && j !=='id' && j !=='createdDateTime' && j !== 'version'){
-                    console.log(obj[j] +' changed to ' + tar[j] );
-                }
+    const entityBuckets = allEntities.reduce((acc, cls) => {
+            let fullQualifiedName = "";
+            if ('classMPackage' in cls) {
+                fullQualifiedName = cls['classMPackage'].name + "." + cls['name'];
+            } else {
+                fullQualifiedName = cls['name'];
             }
-        }
-    }
-};
+            if (!(fullQualifiedName in acc)) {
+                acc[fullQualifiedName] = [];
+            }
 
-class Testing extends React.Component{
-    state = {
-        loading : true,
-        project: null,
-    };
-
-    classDict = {}; // This is a dict [className] : [class attributes]
-
-    async componentDidMount() {
-        const response = await fetch(SERVER_ENDPOINT);
-        const rawAllClassesData = await response.json();
-        rawAllClassesData.sort( function (a,b) {
-            return a.name.localeCompare(b.name);
-        });
-        this.classDict = rawAllClassesData.reduce((acc, cls) => {
-            acc[cls.name] = cls;
+            acc[fullQualifiedName].push(cls);
             return acc;
         }, {});
-        const comparedata = rawAllClassesData;
 
-        let targetelm = "";
-        const versionone = [];
-        const versiontwo = [];
-        for(let elm of comparedata){
-            if (targetelm !== elm.name){
-            //    add to list and set targetelm = the new one
-                targetelm = elm.name;
-                versionone.push(elm);
+    // Sort all buckets
+    for (const entity of Object.keys(entityBuckets)) {
+        entityBuckets[entity].sort((x, y) => x.version - y.version)
+    }
+
+    const getDiff = data => {
+        let modelClass = data.filter(cls => cls.version === 1);
+        // If model version 1 is not found, stop
+        if (modelClass.length === 0) return {};
+        modelClass = modelClass[0];
+        
+        const otherClasses = data.filter(cls => cls.version !== 1);
+
+        // For each class, compare it to v1 and gather method and datamember diff
+        return otherClasses.reduce((diff, cls) => {
+            diff[cls.version] = {
+                method: _getMethodDiff(modelClass.mMethods, cls.mMethods),
+                datamember: _getDataMemberDiff(modelClass.mClassDataMembers, cls.mClassDataMembers),
+            };
+            return diff;
+        }, {})
+    }
+
+    const _getMethodDiff = (modelMethods, otherMethods) => {
+        // Build a dict of model method's props for ease of access 
+        const modelDict = modelMethods.reduce((acc, m) => {
+            acc[m.name] = m;
+            return acc;
+        }, {})
+
+        const added = [];
+        const changeAccess = []; 
+        const changeTypes = [];
+        const deleted = []; 
+
+        const modelMethodsNames = modelMethods.map(m => m.name);
+        for (const method of otherMethods) {
+            if (!(method.name in modelMethodsNames)) {
+                added.push(method);
+            } else {
+                const v1 = modelDict[method.name];
+                for (const access of method.mAccess) {
+                    if (!(access in v1.mAccess)) {
+                        changeAccess.push(method);
+                    }
+                    if (method.mReturnType.name !== v1.mReturnType.name) {
+                        changeTypes.push(method);
+                    }
+                }
             }
-            else {
-                versiontwo.push(elm);
+        };
+
+        // Get deleted
+        const otherMethodsName = otherMethods.map(m => m.name);
+        for (const method of modelMethods) {
+            if (!(method.name in otherMethodsName)) {
+                deleted.push(method);
             }
         }
-
-
-        for(const elm of versionone) {
-            const targetcompare = versiontwo.filter(function(i) {
-                return i.name === elm.name;
-            });
-            if (targetcompare.length> 0){
-                const target = targetcompare[0];
-                console.log('Comparing class '+target.name);
-                console.log('Version 2 uploaded on ' + target.createdDateTime);
-                const compareone = target;
-                delete compareone.id;
-                delete compareone.createdDateTime;
-                delete compareone.version;
-
-                const comparetwo = elm;
-                delete comparetwo.id;
-                delete comparetwo.createdDateTime;
-                delete comparetwo.version;
-
-                // console.log(JSON.stringify(compareone));
-                // console.log(JSON.stringify(comparetwo));
-
-                if (JSON.stringify(compareone) !== JSON.stringify(comparetwo)){
-                    compareTwoJson(elm, target);
-                }
-                else {
-                    console.log('Nothing was changed')
-                }
-            }
-
+        
+        return {
+            added,
+            changeAccess,
+            changeTypes,
+            deleted
         }
-
-
-        //run the whole thing output from here
-        const parsedData = this.parseData(comparedata);
-        // console.log(parsedData);
-        this.setState({project:parsedData, loading : false});
-    };
-
-    parseData(rawData) {
-        let data = this.findDescendants(rawData);
-        data = this.findAggregate(data);
-        data = this.findAssociate(data);
-        data = this.findAncestors(data);
-        console.log(data);
-        return data;
     }
 
-    findAncestors(allClasses) {
-        return allClasses.reduce((acc, cls) => {
-            cls['ancestor'] = new Set();
+    const _getDataMemberDiff = (modelDM, otherDM) => {
+        // Build a dict of model method's props for ease of access 
+        const modelDict = modelDM.reduce((acc, m) => {
+            acc[m.name] = m;
+            return acc;
+        }, {});
 
-            let currentParent = cls.parent;
-            while (currentParent !== null) {
-                cls['ancestor'].add(currentParent);
-                const parentClsAttr = this.classDict[currentParent];
-                currentParent = parentClsAttr.parent;
-            }
-            cls['ancestor'] = [...cls['ancestor']];
+        const added = [];
+        const changeAccess = []; 
+        const changeTypes = [];
+        const deleted = []; 
 
-            return acc.concat(cls);
-        }, [])
-    }
-
-    findDescendants(allClasses) {
-        return allClasses.reduce((acc, cls) => {
-            for (const otherCls of allClasses) {
-                if (otherCls.name === cls.name) continue;
-                if (otherCls.parent === cls.name) {
-                    if (!cls.childClasses.includes(otherCls.name)
-                        && otherCls.name !== null) {
-                        cls.childClasses.push(otherCls.name);
+        const modelDMNames = modelDM.map(m => m.name);
+        for (const dm of otherDM) {
+            if (!(dm.name in modelDMNames)) {
+                added.push(dm);
+            } else {
+                const v1 = modelDict[dm.name];
+                for (const access of dm.mAccess) {
+                    if (!(access in v1.mAccess)) {
+                        changeAccess.push(dm);
+                    }
+                    if (dm.mType.name !== v1.mType.name) {
+                        changeTypes.push(dm);
                     }
                 }
             }
-            return acc.concat(cls);
-        }, [])
-    }
+        };
 
-    findAggregate(allClasses) {
-        return allClasses.reduce((acc, cls) => {
-            cls['aggregate'] = new Set();
-
-            for (const otherCls of allClasses) {
-                if (cls.name === otherCls.name) continue;
-                for (const dataMember of cls.mClassDataMembers) {
-                    if (dataMember.mType.name === otherCls.name ||
-                        !this._isPrimitive(dataMember.mType.name)) {
-                        if (dataMember.mType.name !== null)
-                            cls.aggregate.add(dataMember.mType.name);
-                    }
-                }
+        // Get deleted
+        const otherDMName = otherDM.map(m => m.name);
+        for (const dm of modelDM) {
+            if (!(dm.name in otherDMName)) {
+                deleted.push(dm);
             }
-
-            cls['aggregate'] = [...cls['aggregate']];
-            return acc.concat(cls);
-        }, [])
-    }
-
-    findAssociate(allClasses) {
-        return allClasses.reduce((acc, cls) => {
-            cls['associate'] = new Set();
-            // Check constructor
-            for (const constructor of cls.mConstructors) {
-                for (const param of constructor.parameters) {
-                    if (!this._isPrimitive(param.mType.name) && param.mType.name !== null) {
-                        cls.associate.add(param.mType.name);
-                    }
-                }
-            }
-
-            // Check method param and method body
-            for (const method of cls.mMethods) {
-                for (const param of method.mParameters) {
-                    if (!this._isPrimitive(param.mType.name) && param.mType.name !== null) {
-                        cls.associate.add(param.mType.name);
-                    }
-                }
-                for (const variable of method.mBody.variables) {
-                    if (!this._isPrimitive(variable.mReturnType.name)
-                        && variable.mReturnType.name !== null) {
-                        cls.associate.add(variable.mReturnType.name);
-                    }
-                }
-            }
-
-            cls['associate'] = [...cls['associate']];
-
-            return acc.concat(cls);
-        }, [])
-    }
-
-    _isPrimitive(s) {
-        if (s && s.includes("[")) {
-            s = s.substring(0, s.length - 2);
         }
-        return PRIMITIVE_TYPES.includes(s);
+        
+        return {
+            added,
+            changeAccess,
+            changeTypes,
+            deleted
+        }
     }
 
-    render() {
-        return <>
-            {this.state.loading || !this.state.project
-                ? (<div className = "container"> Loading... </div>)
-                : this.state.project.map(attr =>
-                    <CompareComponent key={attr.name} {...attr} />)
+    // Gather all diffs of different classes
+    const allDiffs = Object.keys(entityBuckets).reduce((acc, namespace) => {
+        acc[namespace] = getDiff(entityBuckets[namespace]);
+        return acc;
+    }, {})
+
+    dispatch(addAllDiffs(allDiffs)) // Send data to redux store
+
+    return (
+        <>
+            {allEntities.length === 0
+                ? (<div className = "container"> No Entity Loaded. 
+                Please click on Result to grab content from database </div>)
+                : <div>
+                    <p>
+                        {JSON.stringify(allDiffs)}
+                    </p>
+                </div>
+                // : this.state.project.map(attr =>
+                //     <CompareComponent key={attr.name} {...attr} />)
             }
         </>
-    }
+    )
 }
-
-export default Testing;

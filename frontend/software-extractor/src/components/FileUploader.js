@@ -51,7 +51,7 @@ const FileUploader = () => {
     }
 
     return (
-        <div class="range">
+        <div className="range">
         <Form onSubmit={ onSubmit } onChange={ onChange }>
         <Row style={styles}>
                 <Col>

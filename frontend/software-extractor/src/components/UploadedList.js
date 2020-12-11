@@ -56,8 +56,6 @@ class testing extends React.Component{
         // console.log([...sortedProjectMap]);
     };
 
-
-
     render() {
         return (
             <div>

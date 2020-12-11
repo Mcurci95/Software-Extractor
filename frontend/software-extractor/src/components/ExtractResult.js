@@ -1,48 +1,57 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import ClassComponent from './ClassComponent';
+import {useDispatch} from 'react-redux'
+import {addAllEntities} from '../reducers/entityReducer'
 
 const SERVER_ENDPOINT = 'http://localhost:8080/allClasses';
 const PRIMITIVE_TYPES = ['int', 'String', 'double', 'Int', 'Double', 'float']
 
-class Testing extends React.Component{
-    state = {
-        loading : true,
-        project: null,
-    };
+export default function ExtractResult() {
+    const [loading, setLoading] = useState(true);
+    const [project, setProject] = useState(null);
+    const [count, setCount] = useState(0);
 
-    classDict = {}; // This is a dict [className] : [class attributes]
+    const dispatch = useDispatch()
 
-    async componentDidMount() {
-        const response = await fetch(SERVER_ENDPOINT);
-        const rawAllClassesData = await response.json();
-        console.log(rawAllClassesData);
-        this.classDict = rawAllClassesData.reduce((acc, cls) => {
-            acc[cls.name] = cls;
-            return acc;
-        }, {});
-        
-        const parsedData = this.parseData(rawAllClassesData);
-        console.log(parsedData);
-        this.setState({project:parsedData, loading : false});
-    };
+    let classDict = null;
 
-    parseData(rawData) {
+    useEffect(() => {
+        async function fetchData() {
+            const response = await fetch(SERVER_ENDPOINT);
+            const rawAllClassesData = await response.json();
+            // console.log(rawAllClassesData);
+            classDict = rawAllClassesData.reduce((acc, cls) => {
+                acc[cls.name] = cls;
+                return acc;
+            }, {});
+            
+            const parsedData = parseData(rawAllClassesData);
+            // console.log(parsedData);
+            // this.setState({project:parsedData, loading : false});
+            setLoading(false);
+            setProject(parsedData);
+            dispatch(addAllEntities(parsedData))
+        }
+        fetchData();
+    }, [count])
+
+    const parseData = rawData => {
         console.log(rawData)
-        let data = this.findDescendants(rawData);
-        data = this.findAggregate(data);
-        data = this.findAssociate(data);
-        data = this.findAncestors(data);
+        let data = findDescendants(rawData);
+        data = findAggregate(data);
+        data = findAssociate(data);
+        data = findAncestors(data);
         return data;
     }
 
-    findAncestors(allClasses) {
+    const findAncestors = allClasses => {
         return allClasses.reduce((acc, cls) => {
             cls['ancestor'] = new Set();
             
             let currentParent = cls.parent;
             while (currentParent !== null) {
                 cls['ancestor'].add(currentParent);
-                const parentClsAttr = this.classDict[currentParent];
+                const parentClsAttr = classDict[currentParent];
                 currentParent = parentClsAttr.parent;
             }
             cls['ancestor'] = [...cls['ancestor']];
@@ -51,7 +60,7 @@ class Testing extends React.Component{
         }, [])
     }
 
-    findDescendants(allClasses) {
+    const findDescendants = allClasses => {
         return allClasses.reduce((acc, cls) => {
             for (const otherCls of allClasses) {
                 if (otherCls.name === cls.name) continue;
@@ -66,7 +75,7 @@ class Testing extends React.Component{
         }, [])
     }
 
-    findAggregate(allClasses) {
+    const findAggregate = allClasses => {
         return allClasses.reduce((acc, cls) => {
             cls['aggregate'] = new Set();
 
@@ -74,7 +83,7 @@ class Testing extends React.Component{
                 if (cls.name === otherCls.name) continue; 
                 for (const dataMember of cls.mClassDataMembers) {
                     if (dataMember.mType.name === otherCls.name || 
-                        !this._isPrimitive(dataMember.mType.name)) {
+                        !_isPrimitive(dataMember.mType.name)) {
                         if (dataMember.mType.name !== null) 
                             cls.aggregate.add(dataMember.mType.name);
                     }
@@ -86,13 +95,13 @@ class Testing extends React.Component{
         }, [])
     }
 
-    findAssociate(allClasses) {
+    const findAssociate = allClasses => {
         return allClasses.reduce((acc, cls) => {
             cls['associate'] = new Set();
             // Check constructor 
             for (const constructor of cls.mConstructors) {
                 for (const param of constructor.parameters) {
-                    if (!this._isPrimitive(param.mType.name) && param.mType.name !== null) {
+                    if (!_isPrimitive(param.mType.name) && param.mType.name !== null) {
                         cls.associate.add(param.mType.name);
                     }
                 }
@@ -101,12 +110,12 @@ class Testing extends React.Component{
             // Check method param and method body
             for (const method of cls.mMethods) {
                 for (const param of method.mParameters) {
-                    if (!this._isPrimitive(param.mType.name) && param.mType.name !== null) {
+                    if (!_isPrimitive(param.mType.name) && param.mType.name !== null) {
                         cls.associate.add(param.mType.name);
                     }
                 }
                 for (const variable of method.mBody.variables) {
-                    if (!this._isPrimitive(variable.mReturnType.name) 
+                    if (!_isPrimitive(variable.mReturnType.name) 
                     && variable.mReturnType.name !== null) {
                         cls.associate.add(variable.mReturnType.name);
                     }
@@ -119,22 +128,29 @@ class Testing extends React.Component{
         }, [])
     }
     
-    _isPrimitive(s) {
+    const _isPrimitive = s => {
         if (s && s.includes("[")) {
             s = s.substring(0, s.length - 2);
         }
         return PRIMITIVE_TYPES.includes(s);
     }
 
-    render() {
-        return <>
-                {this.state.loading || !this.state.project 
-                ? (<div className = "container"> Loading... </div>)
-                : this.state.project.map(attr =>
-                    <ClassComponent key={attr.name} {...attr} />)
-                }
-            </>
-    }
+    return (
+        <>
+            <div className="container">
+                <div className="row">
+                    <div className="col-2">
+                        <button className="btn btn-dark btn-sm" onClick={() => setCount(count + 1)}>Refresh content</button>
+                    </div>
+                    <div className="col-10">
+                        {loading || !project 
+                        ? (<div className = "container"> Loading... </div>)
+                        : project.map(attr =>
+                            <ClassComponent key={attr.name} {...attr} />)
+                        }
+                    </div>
+                </div>
+            </div>
+        </>
+    )
 }
-
-export default Testing;
