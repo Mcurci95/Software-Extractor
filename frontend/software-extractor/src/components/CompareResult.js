@@ -7,17 +7,28 @@ const PRIMITIVE_TYPES = ['int', 'String', 'double', 'Int', 'Double', 'float'];
 
 let output = "";
 
+const out = [];
+
 function compareTwoJson (elm, target){
     for (const j in target) {
         try{
             // if the element not in target then added
             if (!elm.hasOwnProperty(j)){
-
-                output = output.concat(j+' was added' + '<br />');
+                const outstring = j + ' was added' + '<br />';
+                if (!out.includes(outstring)) {
+                    output = output.concat(outstring);
+                    out.push(outstring);
+                }
                 // console.log(j+' was added');
             }
             if (target.hasOwnProperty(elm[j])){
-                output = output.concat(j+' was deleted' + '<br />');
+
+                const outstring = j + ' was deleted' + '<br />';
+                if (!out.includes(outstring)) {
+                    output = output.concat(outstring);
+                    out.push(outstring);
+                }
+                // output = output.concat(j+' was deleted' + '<br />');
                 // console.log(j+' was deleted');
             }
             // if the target not in element then delete
@@ -25,8 +36,12 @@ function compareTwoJson (elm, target){
                 compareTwoJson(elm[j], target[j]);
             }
             else if (elm[j] !== target[j] && j !== 'id' && j !== 'createdDateTime' && j !== 'version') {
-
-                output = output.concat(elm[j]+' changed to ' + target[j] + '<br />');
+                const outstring = elm[j]+' changed to ' + target[j] + '<br />';
+                if (!out.includes(outstring)) {
+                    output = output.concat(outstring);
+                    out.push(outstring);
+                }
+                // output = output.concat(elm[j]+' changed to ' + target[j] + '<br />');
                 // console.log(elm[j] + ' changed to ' + target[j]);
             }
         }
