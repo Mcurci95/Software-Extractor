@@ -5,12 +5,10 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import CompareTwoResults from './CompareTwoResults';
 import CompareComponent from './CompareComponent';
-import ClassComponent from './ClassComponent';
 
 const SERVER_ENDPOINT = 'http://localhost:8080/allClasses';
 
 class testing extends React.Component{
-
     constructor(props) {
         super(props);
         this.handleClick = this.handleClick.bind(this);
@@ -56,12 +54,20 @@ class testing extends React.Component{
         // console.log([...sortedProjectMap]);
     };
 
+    createCompareComponent() {
+        let selectedClass = this.state.project.filter(p => p.name === this.state.project1);
+        if (selectedClass.length === 0) return null;
+        selectedClass = selectedClass[0];
+
+        return <CompareComponent key={selectedClass.id} {...selectedClass} />
+    }
+
     render() {
         return (
             <div>
                 <h1>Classes: </h1>
                 <Form>
-                {this.state.loading || !this.state.project ? (<div class = "a"> Loading... </div>) :
+                {this.state.loading || !this.state.project ? (<div className = "a"> Loading... </div>) :
                         this.state.project.map( (p) => 
                         <Accordion>
                         <Card>
@@ -83,7 +89,7 @@ class testing extends React.Component{
             
             <CompareTwoResults version1="" version2="" />
             {this.state.project1 ? 
-            <CompareComponent key={this.state.project1} /> : <p>Loading...</p>    
+            this.createCompareComponent(): <p>Loading...</p>    
         
         }
             </Form>

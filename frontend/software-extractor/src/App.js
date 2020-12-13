@@ -5,12 +5,12 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 
 import CompareResult from '../src/components/CompareResult';
-import ExtractResult from '../src/components/ExtractResult';
 import FileUploader from '../src/components/FileUploader';
 import UploadedList from '../src/components/UploadedList';
 import Navigation from "../src/components/Navbar";
 import CompareTwoResults from "../src/components/CompareTwoResults";
-// const PACKAGES_ENDPOINT = 'http://localhost:8080/packages';
+import ClassComponentContainer from '../src/components/ClassComponentContainer';
+import HomePage from '../src/components/HomePage';
 
 
 class App extends Component {
@@ -20,11 +20,12 @@ class App extends Component {
                 <div>
                     <Navigation />
                     <Switch>
-                        <Route path="/" component={FileUploader} exact/>
+                        <Route path="/upload" component={FileUploader} exact/>
                         <Route path="/list" component={UploadedList}/>
-                        <Route path="/result" component={ExtractResult}/>
+                        <Route path="/result" component={ClassComponentContainer}/>
                         <Route path="/compare" component={CompareResult}/>
                         <Route path="/comparetwo" component={CompareTwoResults}/>
+                        <Route path="/" component={HomePage} />
                     </Switch>
                 </div>
             </BrowserRouter>

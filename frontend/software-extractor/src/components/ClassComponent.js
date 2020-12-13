@@ -64,7 +64,7 @@ export default function ClassComponent(props) {
                           {!props.mClassDataMembers? (<div></div>):(
                               props.mClassDataMembers.map((datamember, i) =>
                           <div key={i} className="c">
-                              {Object.keys(datamember).length == 0 
+                              {Object.keys(datamember).length === 0 
                               ? (<div>NONE</div>)
                               : (datamember.mAccess.map(accessname =>
                                       <span key={accessname.name}>{accessname.name} </span>
@@ -82,7 +82,7 @@ export default function ClassComponent(props) {
   const constructorBlock = () => <div className="b">
       Constructors: 
       {
-          props.mConstructors.length != 0 ? props.mConstructors.map(constructor => 
+          props.mConstructors.length !== 0 ? props.mConstructors.map(constructor => 
               <div key={constructor.name} className="c">
                   {constructor.name} returns constructor is {constructor.type.name === null ? "public" : constructor.type.name}
                   {constructor.parameters.map(param => 
