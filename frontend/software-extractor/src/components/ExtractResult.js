@@ -1,5 +1,4 @@
 import React, {useState, useEffect} from 'react';
-import ClassComponent from './ClassComponent';
 import {useDispatch} from 'react-redux'
 import {addAllEntities} from '../reducers/entityReducer'
 
@@ -139,15 +138,16 @@ export default function ExtractResult() {
         <>
             <div className="container">
                 <div className="row">
-                    <div className="col-2">
-                        <button className="btn btn-dark btn-sm" onClick={() => setCount(count + 1)}>Refresh content</button>
-                    </div>
-                    <div className="col-10">
+                    <div className="col-3">
                         {loading || !project 
                         ? (<div className = "container"> Loading... </div>)
-                        : project.map(attr =>
-                            <ClassComponent key={attr.name} {...attr} />)
-                        }
+                        // : project.map(attr =>
+                        //     <ClassComponent key={attr.name} {...attr} />)
+                        // }
+                        : <p>Loaded All Class Data</p>}
+                    </div>
+                    <div className="col">
+                        <button className="btn btn-dark btn-sm" onClick={() => setCount(count + 1)}>Reload data from database</button>
                     </div>
                 </div>
             </div>

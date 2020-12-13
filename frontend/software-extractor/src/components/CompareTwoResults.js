@@ -4,9 +4,6 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 // import SplitPane from "react-split-pane";
 
-const SERVER_ENDPOINT = 'http://localhost:8080/allClasses';
-
-
 class CompareTwoResults extends React.Component {
 
 

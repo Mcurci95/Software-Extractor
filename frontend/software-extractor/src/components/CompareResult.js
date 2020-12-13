@@ -1,9 +1,7 @@
 import React from 'react';
-import CompareComponent from './CompareComponent';
 
 
 const SERVER_ENDPOINT = 'http://localhost:8080/allClasses';
-const PRIMITIVE_TYPES = ['int', 'String', 'double', 'Int', 'Double', 'float'];
 
 let output = "";
 

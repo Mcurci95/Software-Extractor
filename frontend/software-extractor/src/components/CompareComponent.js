@@ -86,7 +86,7 @@ export default function CompareComponent(props) {
   const constructorBlock = () => <div className="b">
       Constructors: 
       {
-          props.mConstructors.length != 0 ? props.mConstructors.map(constructor => 
+          props.mConstructors.length !== 0 ? props.mConstructors.map(constructor => 
               <div key={constructor.name} className="c">
                   {constructor.name} returns constructor is {constructor.type.name === null ? "public" : constructor.type.name}
                   {constructor.parameters.map(param => 
