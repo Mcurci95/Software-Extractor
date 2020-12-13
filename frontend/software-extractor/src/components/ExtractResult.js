@@ -147,7 +147,7 @@ export default function ExtractResult() {
                         : <p>Loaded All Class Data</p>}
                     </div>
                     <div className="col">
-                        <button className="btn btn-dark btn-sm" onClick={() => setCount(count + 1)}>Refresh content</button>
+                        <button className="btn btn-dark btn-sm" onClick={() => setCount(count + 1)}>Reload data from database</button>
                     </div>
                 </div>
             </div>
