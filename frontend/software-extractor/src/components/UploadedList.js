@@ -8,7 +8,7 @@ import CompareComponent from './CompareComponent';
 import ClassComponent from './ClassComponent';
 import {selectDiff, addAllDiffs, addAllEntities} from '../reducers/entityReducer';
 import {useSelector} from 'react-redux';
-
+import CompareResult from './CompareResult';
 const SERVER_ENDPOINT = 'http://localhost:8080/allClasses';
 
 // export default function ExtractResult()
@@ -17,7 +17,9 @@ export default function UploadList() {
     const [loading, setLoading] = useState(true);
     const [project, setProject] = useState(null);
     const [project1, setProject1] = useState(null);
+    const [pID, setPID] = useState(null);
     const [sortedProjectMap, setSortedProjectMap] = useState(null);
+    const [original, setOriginal] = useState(null);
     const diffs = useSelector(selectDiff);
     const allDiffs = useSelector(addAllDiffs);
     const allEntities = useSelector(addAllEntities);
@@ -75,7 +77,6 @@ export default function UploadList() {
                 </Accordion>)
         }
         
-        console.log(accordionArray);
         return accordionArray;
 
     }
@@ -104,17 +105,28 @@ export default function UploadList() {
         console.log(diffs);
         console.log(allDiffs);
         console.log(allEntities);
-        setProject1(event.target.value);
+        let selectedClass = allEntities.payload.entity.data.filter( p => p.id == event.target.value);
+        console.log(selectedClass);
+        if (selectedClass.lenth === 0) return null;
+        selectedClass = selectedClass[0];
+        setPID(event.target.value);
+        setProject1(selectedClass);
+        console.log(selectedClass);
+        let original = allEntities.payload.entity.data.filter(p => p.name == selectedClass.name && p.version == 1);
+        original = original[0];
+        setOriginal(original);
+        
     }
 
     const createCompareComponent = () => {
         
-        console.log(diffs);
-        let selectedClass = project.filter( p => p.id == project1);
-        if (selectedClass.lenth === 0) return null;
-        selectedClass = selectedClass[0];
+        
 
-        // return <CompareComponent key={selectedClass.id} {...selectedClass} />
+        return (
+        <div>
+            <CompareTwoResults version1={original} version2={project1} />
+            <CompareResult />
+        </div>)
     }
 
     return (
@@ -125,9 +137,10 @@ export default function UploadList() {
                 
                 }
         
-        <CompareTwoResults version1="" version2="" />
+        
         {project1 ? 
-        createCompareComponent(): <p>Loading...</p>    
+       createCompareComponent(): <p>Pick a Version</p>    
+        // createCompareComponent()
     
     }
         </div>
