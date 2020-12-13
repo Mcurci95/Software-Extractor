@@ -6,8 +6,11 @@ import Form from 'react-bootstrap/Form';
 import CompareTwoResults from './CompareTwoResults';
 import CompareComponent from './CompareComponent';
 import ClassComponent from './ClassComponent';
+import PRIMITIVE_TYPES from './ExtractResult';
+import _isPrimitive from './ExtractResult';
 
 const SERVER_ENDPOINT = 'http://localhost:8080/allClasses';
+
 
 class testing extends React.Component{
 
@@ -22,21 +25,80 @@ class testing extends React.Component{
         };
     }
     
+    
+    buildAccordian(classDict) {
 
-    _handleInputChange(event) {
-        const target = event.target;
-        const value = target.type === 'checkbox' ? target.checked : target.value;
-        const name = target.name;
-        this.setState({
-            [name] : value
-        });
+        let accordionArray = [];
+        console.log(classDict);
+        for (const cls of Object.keys(classDict)) {
+            let p = classDict[cls];
+            console.log(p);
+            accordionArray.push(<Accordion key={p[0].id}>
+                <Card>
+                    <Card.Header>
+                        <Accordion.Toggle as={Button} variant="link" eventKey="0">
+                            {p[0].name}
+                        </Accordion.Toggle>
+                    </Card.Header>
+                    {this.buildInner(classDict[cls])}
+
+                </Card>
+                </Accordion>)
+        }
+        
+        console.log(accordionArray);
+        return accordionArray;
+
+        // classDict.map(p => {
+        //     return  (
+        //         <Accordion key={p.id}>
+        //         <Card>
+        //             <Card.Header>
+        //                 <Accordion.Toggle as={Button} variant="link" eventKey="0">
+        //                     {p.name}
+        //                 </Accordion.Toggle>
+        //             </Card.Header>
+        //             {p.map(c => this.buildInner(c))}
+
+        //         </Card>
+        //         </Accordion>
+        //     )
+        // })
     }
+
+    buildInner(c) {
+        let innerAccordion = [];
+        console.log(c);
+        for (let _cls of Object.keys(c))
+        {
+            let cls = c[_cls];
+            console.log(cls);
+            innerAccordion.push(<Accordion.Collapse eventKey="0">
+                        <Card.Body>
+                            <Button variant="outline-primary" onClick = {this.handleClick} value={cls.id}>Compare Snapshots</Button>
+                             <strong>Version: </strong> {cls.version} <strong>Snapshot:</strong> {cls.createdDateTime}
+                        </Card.Body>
+                    </Accordion.Collapse>);
+        }
+
+        return innerAccordion;
+
+    }
+
 
     handleClick(event) {
         console.log(event.target.value);
         this.setState({project1: event.target.value});
     }
 
+
+    createCompareComponent() {
+        let selectedClass = this.state.project.filter( p => p.id == this.state.project1);
+        if (selectedClass.lenth === 0) return null;
+        selectedClass = selectedClass[0];
+
+        return <CompareComponent key={selectedClass.id} {...selectedClass} />
+    }
 
     async componentDidMount() {
         const response = await fetch(SERVER_ENDPOINT);
@@ -50,7 +112,8 @@ class testing extends React.Component{
                 sortedProjectMap[data[i].name] = [data[i]];
             }
         }
-        this.setState({project: data, loading : false, testMap: [sortedProjectMap]});
+        console.log(sortedProjectMap);
+        this.setState({project: data, loading : false, sortedProjectMap: sortedProjectMap});
         console.log(data);
         
         // console.log([...sortedProjectMap]);
@@ -60,33 +123,16 @@ class testing extends React.Component{
         return (
             <div>
                 <h1>Classes: </h1>
-                <Form>
-                {this.state.loading || !this.state.project ? (<div class = "a"> Loading... </div>) :
-                        this.state.project.map( (p) => 
-                        <Accordion>
-                        <Card>
-                            <Card.Header>
-                                <Accordion.Toggle as={Button} variant="link" eventKey="0">
-                                    {p.name}
-                                </Accordion.Toggle>
-                            </Card.Header>
-                            <Accordion.Collapse eventKey="0">
-                                <Card.Body>
-                                    <Button variant="outline-primary" onClick = {this.handleClick} value={p.name}>Compare Snapshots</Button>
-                                     <strong>Version: </strong> {p.version} <strong>Snapshot:</strong> {p.createdDateTime}
-                                </Card.Body>
-                            </Accordion.Collapse>
-                        </Card>
-                        </Accordion>
-                    )
+                {this.state.loading || !this.state.sortedProjectMap ? (<div class = "a"> Loading... </div>) :
+                    this.buildAccordian(this.state.sortedProjectMap)
+                    
                     }
             
             <CompareTwoResults version1="" version2="" />
             {this.state.project1 ? 
-            <CompareComponent key={this.state.project1} /> : <p>Loading...</p>    
+            this.createCompareComponent(): <p>Loading...</p>    
         
         }
-            </Form>
             </div>
         );
     }
@@ -115,3 +161,21 @@ class testing extends React.Component{
 // }
 
 export default testing;
+
+
+// this.state.project.map( (p) => 
+// <Accordion key={p.id}>
+// <Card>
+//     <Card.Header>
+//         <Accordion.Toggle as={Button} variant="link" eventKey="0">
+//             {p.name}
+//         </Accordion.Toggle>
+//     </Card.Header>
+//     <Accordion.Collapse eventKey="0">
+//         <Card.Body>
+//             <Button variant="outline-primary" onClick = {this.handleClick} value={p.id}>Compare Snapshots</Button>
+//              <strong>Version: </strong> {p.version} <strong>Snapshot:</strong> {p.createdDateTime}
+//         </Card.Body>
+//     </Accordion.Collapse>
+// </Card>
+// </Accordion>
