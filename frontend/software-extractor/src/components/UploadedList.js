@@ -18,6 +18,8 @@ export default function UploadList() {
     const [project, setProject] = useState(null);
     const [project1, setProject1] = useState(null);
     const [sortedProjectMap, setSortedProjectMap] = useState(null);
+    const data = useSelector(selectDiff);
+    
 
 
     useEffect(() => {
@@ -42,6 +44,7 @@ export default function UploadList() {
             setLoading(false);
             setProject(data);
             setSortedProjectMap(sortedProjectMap);
+            
 
             // this.setState({project: data, loading : false, sortedProjectMap: sortedProjectMap});
             console.log(data);
@@ -96,16 +99,18 @@ export default function UploadList() {
 
     const handleClick = event => {
         console.log(event.target.value);
-        this.setState({project1: event.target.value});
+        
         setProject1(event.target.value);
     }
 
     const createCompareComponent = () => {
-        let selectedClass = this.state.project.filter( p => p.id == this.state.project1);
+        
+        console.log(data);
+        let selectedClass = project.filter( p => p.id == project1);
         if (selectedClass.lenth === 0) return null;
         selectedClass = selectedClass[0];
 
-        return <CompareComponent key={selectedClass.id} {...selectedClass} />
+        // return <CompareComponent key={selectedClass.id} {...selectedClass} />
     }
 
     return (
