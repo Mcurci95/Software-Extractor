@@ -20,6 +20,10 @@ public class MSourceFile {
     @Lob
     private byte[] data;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    private MClass mClass;
+
+
     public MSourceFile(){}
     public MSourceFile(Long id, String fileName, String fileType, byte[] data) {
         this.id = id;

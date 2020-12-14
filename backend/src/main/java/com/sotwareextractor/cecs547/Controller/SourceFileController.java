@@ -14,14 +14,19 @@ import com.sotwareextractor.cecs547.Service.SourceFileStorageService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @CrossOrigin("*")
@@ -88,5 +93,25 @@ public class SourceFileController {
     public List<String> getParents(@RequestParam(name = "name") String parent) {
         logger.info("Calling parent endpoint with parent name " + parent);
         return mClassService.parentNames(parent).stream().map(MClass::getName).collect(Collectors.toList());
+    }
+
+    @GetMapping(value = "/downloadFile")
+    public ResponseEntity<byte[]> getSourceFile(@RequestParam Long classId,  @RequestParam String comment) throws IOException {
+
+        Optional<MClass> mClassOpt = mClassService.findById(classId);
+        if (mClassOpt.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.MULTIPART_FORM_DATA);
+        MClass mClass = mClassOpt.get();
+        byte[] data = mClass.getData();
+
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        byte[] commentBytes = comment.getBytes();
+        out.write(commentBytes);
+        out.write(data);
+        byte[] fileWithComments = out.toByteArray();
+        return new ResponseEntity<>(fileWithComments, headers, HttpStatus.OK);
     }
 }

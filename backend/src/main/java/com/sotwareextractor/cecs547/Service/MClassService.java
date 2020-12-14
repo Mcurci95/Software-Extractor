@@ -7,10 +7,13 @@ import com.sotwareextractor.cecs547.POJO.DClass;
         import com.sotwareextractor.cecs547.Repository.MClassRepository;
         import org.springframework.beans.factory.annotation.Autowired;
         import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
-        import java.util.ArrayList;
+import java.io.IOException;
+import java.util.ArrayList;
         import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 
 @Service
@@ -37,6 +40,10 @@ public class MClassService {
         this.mConstructorService = mConstructorService;
     }
 
+    public Optional<MClass> findById(Long id) {
+        return mClassRepository.findById(id);
+    }
+
     public MClass getOrCreate(String parentClass) {
         if (parentClass == null) return null;
         var existing = mClassRepository.findByName(parentClass);
@@ -47,7 +54,7 @@ public class MClassService {
         }
     }
 
-    public MClass getOrCreate(DClass dClass) {
+    public MClass getOrCreate(DClass dClass, MultipartFile file) throws IOException {
         List<MClass> existing = mClassRepository.findByName(dClass.getName());
         Integer version = null;
 
@@ -75,7 +82,7 @@ public class MClassService {
             mClass.setParent(parent.getName());
         }
         mClass.setVersion(Objects.requireNonNullElse(version, 0) + 1);
-
+        mClass.setData(file);
         // data member
         List<MClassDataMember> dataMembersEntities = storeClassDataMember(dClass.getFields(), mClass);
         mClass.setmClassDataMembers(dataMembersEntities);

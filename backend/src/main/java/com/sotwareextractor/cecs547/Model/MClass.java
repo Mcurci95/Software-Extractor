@@ -1,8 +1,10 @@
 package com.sotwareextractor.cecs547.Model;
 
 import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -44,6 +46,9 @@ public class MClass {
     @CreationTimestamp
     private LocalDateTime createdDateTime;
 
+    @Lob
+    private byte[] data;
+
     public MClass() {}
     public MClass(String name, List<MAccess> mAccess, MPackage mPackage) {
         this.name = name;
@@ -51,7 +56,16 @@ public class MClass {
         this.mPackage = mPackage;
     }
 
-    public List<MConstructor> getmConstructors() {
+    public void setData(MultipartFile file) throws IOException {
+        this.data = file.getBytes();
+    }
+
+    public byte[] getData() {
+        return this.data;
+    }
+
+
+   public List<MConstructor> getmConstructors() {
         return mConstructors;
     }
     public void setmConstructors(List<MConstructor> mConstructors) {

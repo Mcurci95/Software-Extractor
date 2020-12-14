@@ -17,4 +17,7 @@ public interface MClassRepository extends JpaRepository<MClass, Long> {
 
 //    @Query(value = "SELECT id, NAME FROM MCLASS WHERE parent = ")
     List<MClass> findNameByParent(String parent);
+
+
+
 }

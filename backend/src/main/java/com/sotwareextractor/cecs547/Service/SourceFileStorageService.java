@@ -38,7 +38,7 @@ public class SourceFileStorageService {
         MSourceFile sourceFile = new MSourceFile(fileName, file.getContentType(), file.getBytes());
 
         DClass data = antlrParser.parse(file);
-        saveToDb(data);
+        saveToDb(data, file);
         return sourceFileRepository.save(sourceFile);
     }
 
@@ -49,8 +49,8 @@ public class SourceFileStorageService {
         return sourceFileRepository.findAll();
     }
 
-    public void saveToDb(DClass data) {
+    public void saveToDb(DClass data, MultipartFile file) throws IOException {
         mPackageService.getOrCreate(data.getPackageName());
-        mClassService.getOrCreate(data);
+        mClassService.getOrCreate(data, file);
     }
 }
