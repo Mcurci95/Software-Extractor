@@ -1,4 +1,5 @@
 import React from 'react';
+import CompareTwoResults from './CompareTwoResults';
 
 
 const SERVER_ENDPOINT = 'http://localhost:8080/allClasses';
@@ -33,7 +34,7 @@ function compareTwoJson (elm, target){
             if (typeof (target[j]) == "object") {
                 compareTwoJson(elm[j], target[j]);
             }
-            else if (elm[j] !== target[j] && j !== 'id' && j !== 'createdDateTime' && j !== 'version') {
+            else if (elm[j] !== target[j] && j !== 'id' && j !== 'createdDateTime' && j !== 'version' && j != 'data') {
                 const outstring = elm[j]+' changed to ' + target[j] + '<br />';
                 if (!out.includes(outstring)) {
                     output = output.concat(outstring);

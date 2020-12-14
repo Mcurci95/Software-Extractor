@@ -9,9 +9,62 @@ import ClassComponent from './ClassComponent';
 import {selectDiff, addAllDiffs, addAllEntities} from '../reducers/entityReducer';
 import {useSelector} from 'react-redux';
 import CompareResult from './CompareResult';
+
 const SERVER_ENDPOINT = 'http://localhost:8080/allClasses';
 
 // export default function ExtractResult()
+let output = "";
+
+const out = [];
+
+
+function compareTwoJson (elm, target){
+    for (const j in target) {
+        if (j !== 'data') {
+            try{
+                // if the element not in target then added
+                if (!elm.hasOwnProperty(j)){
+                    const outstring = j + ' was added' + '<br />';
+                    if (!out.includes(outstring)) {
+                        output = output.concat(outstring);
+                        out.push(outstring);
+                    }
+                    // console.log(j+' was added');
+                }
+                if (target.hasOwnProperty(elm[j])){
+    
+                    const outstring = j + ' was deleted' + '<br />';
+                    if (!out.includes(outstring)) {
+                        output = output.concat(outstring);
+                        out.push(outstring);
+                    }
+                    // output = output.concat(j+' was deleted' + '<br />');
+                    // console.log(j+' was deleted');
+                }
+                // if the target not in element then delete
+                if (typeof (target[j]) == "object") {
+                    compareTwoJson(elm[j], target[j]);
+                }
+                else if (elm[j] !== target[j] && j !== 'id' && j !== 'createdDateTime' && j !== 'version' && j !== 'data') {
+                    const outstring = elm[j]+' changed to ' + target[j] + '<br />';
+                    if (!out.includes(outstring)) {
+                        output = output.concat(outstring);
+                        out.push(outstring);
+                    }
+                    // output = output.concat(elm[j]+' changed to ' + target[j] + '<br />');
+                    // console.log(elm[j] + ' changed to ' + target[j]);
+                }
+            }
+            catch (e) {
+                // console.log(e);
+            }
+        }
+        
+    }
+
+    return out;
+}
+
 
 export default function UploadList() {
     const [loading, setLoading] = useState(true);
@@ -119,13 +172,17 @@ export default function UploadList() {
     }
 
     const createCompareComponent = () => {
-        
-        
+        let localOriginal = {...original};
+        let localProject1 = {...project1};
+        delete localOriginal.data;
+        delete localProject1.data;
 
+        console.log(localOriginal);
+        console.log(localProject1);
         return (
         <div>
             <CompareTwoResults version1={original} version2={project1} />
-            <CompareResult />
+            {compareTwoJson(JSON.stringify(localOriginal), JSON.stringify(localProject1))}
         </div>)
     }
 
@@ -140,7 +197,6 @@ export default function UploadList() {
         
         {project1 ? 
        createCompareComponent(): <p>Pick a Version</p>    
-        // createCompareComponent()
     
     }
         </div>
