@@ -96,9 +96,11 @@ public class SourceFileController {
     }
 
     @GetMapping(value = "/downloadFile")
-    public ResponseEntity<byte[]> getSourceFile(@RequestParam Long classId,  @RequestParam String comment) throws IOException {
+    public ResponseEntity<byte[]> getSourceFile(@RequestParam String classId,  @RequestParam String comment) throws IOException {
 
-        Optional<MClass> mClassOpt = mClassService.findById(classId);
+        logger.info("CALLING download with id " + classId +  " and comment: " + comment);
+        Long classIdLong = Long.parseLong(classId);
+        Optional<MClass> mClassOpt = mClassService.findById(classIdLong);
         if (mClassOpt.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
