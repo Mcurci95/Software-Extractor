@@ -14,61 +14,12 @@ import {
 import { useSelector } from 'react-redux';
 import CompareResult from './CompareResult';
 
+import {compareTwoEntities} from '../helpers/compareTwoEntities';
+
 const SERVER_ENDPOINT = 'http://localhost:8080/allClasses';
+const DOWNLOAD_ENDPOINT = 'http://localhost:8080/downloadFile'
 
-// export default function ExtractResult()
-let output = '';
 
-const out = [];
-
-function compareTwoJson(elm, target) {
-  for (const j in target) {
-    if (j !== 'data') {
-      try {
-        // if the element not in target then added
-        if (!elm.hasOwnProperty(j)) {
-          const outstring = j + ' was added' + '<br />';
-          if (!out.includes(outstring)) {
-            output = output.concat(outstring);
-            out.push(outstring);
-          }
-          // console.log(j+' was added');
-        }
-        if (target.hasOwnProperty(elm[j])) {
-          const outstring = j + ' was deleted' + '<br />';
-          if (!out.includes(outstring)) {
-            output = output.concat(outstring);
-            out.push(outstring);
-          }
-          // output = output.concat(j+' was deleted' + '<br />');
-          // console.log(j+' was deleted');
-        }
-        // if the target not in element then delete
-        if (typeof target[j] == 'object') {
-          compareTwoJson(elm[j], target[j]);
-        } else if (
-          elm[j] !== target[j] &&
-          j !== 'id' &&
-          j !== 'createdDateTime' &&
-          j !== 'version' &&
-          j !== 'data'
-        ) {
-          const outstring = elm[j] + ' changed to ' + target[j] + '<br />';
-          if (!out.includes(outstring)) {
-            output = output.concat(outstring);
-            out.push(outstring);
-          }
-          // output = output.concat(elm[j]+' changed to ' + target[j] + '<br />');
-          // console.log(elm[j] + ' changed to ' + target[j]);
-        }
-      } catch (e) {
-        // console.log(e);
-      }
-    }
-  }
-
-  return out;
-}
 
 export default function UploadList() {
   const [loading, setLoading] = useState(true);
@@ -80,6 +31,10 @@ export default function UploadList() {
   const diffs = useSelector(selectDiff);
   const allDiffs = useSelector(addAllDiffs);
   const allEntities = useSelector(addAllEntities);
+
+  const  bin2String = array => {
+    return String.fromCharCode.apply(String, array);
+  }
 
   useEffect(() => {
     async function fetchData() {
@@ -97,13 +52,12 @@ export default function UploadList() {
 
       // const selectedDataTest = useSelector(selectDiff);
       // console(selectedDataTest);
-      console.log(sortedProjectMap);
       setLoading(false);
       setProject(data);
       setSortedProjectMap(sortedProjectMap);
 
       // this.setState({project: data, loading : false, sortedProjectMap: sortedProjectMap});
-      console.log(data);
+      
     }
     fetchData();
   }, []);
@@ -155,19 +109,13 @@ export default function UploadList() {
   };
 
   const handleClick = event => {
-    console.log(event.target.value);
-    console.log(diffs);
-    console.log(allDiffs);
-    console.log(allEntities);
     let selectedClass = allEntities.payload.entity.data.filter(
       p => p.id == event.target.value,
     );
-    console.log(selectedClass);
     if (selectedClass.lenth === 0) return null;
     selectedClass = selectedClass[0];
     setPID(event.target.value);
     setProject1(selectedClass);
-    console.log(selectedClass);
     let original = allEntities.payload.entity.data.filter(
       p => p.name == selectedClass.name && p.version == 1,
     );
@@ -175,24 +123,197 @@ export default function UploadList() {
     setOriginal(original);
   };
 
-  const createCompareComponent = () => {
+
+async function downloadFile(obj, output) {
+
+//     fetch('https://example.com?' + new URLSearchParams({
+//     foo: 'value',
+//     bar: 2,
+// }))
+    const res = await fetch(DOWNLOAD_ENDPOINT + '?' + new URLSearchParams({
+        classId: obj.id.toString(),
+        comment: output
+    }), {
+        method: 'GET',
+        headers : { 
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+           }
+    });
+
+    const blob = await res.blob();
+    const newBlob = new Blob([blob]);
+
+    const blobUrl = window.URL.createObjectURL(newBlob);
+
+    const link = document.createElement('a');
+    link.href = blobUrl;
+    link.setAttribute('download', `${obj.name}.java`);
+    document.body.appendChild(link);
+    link.click();
+    link.parentNode.removeChild(link);
+
+    window.URL.revokeObjectURL(blob);
+
+    console.log(res);
+
+
+
+    
+}
+const createCompareComponent = () => {
     let localOriginal = { ...original };
     let localProject1 = { ...project1 };
+
+    let f = localProject1.data;
     delete localOriginal.data;
     delete localProject1.data;
+    console.log(f);
 
-    console.log(localOriginal);
-    console.log(localProject1);
+    let output = buildComparisonString(localOriginal, localProject1);
+    console.log(localProject1.id);
+    downloadFile(localProject1, '/* ' + output + '*/    \n');
+
+
+        
     return (
       <div>
         <CompareTwoResults version1={original} version2={project1} />
-        {compareTwoJson(
-          JSON.stringify(localOriginal),
-          JSON.stringify(localProject1),
-        )}
+        {output.map(c => <p>{c}</p>)}
       </div>
     );
   };
+
+
+  const buildComparisonString = (entity, comparedEntity) => {
+        let comparison = compareTwoEntities(entity, comparedEntity);
+        const changes = comparison[comparedEntity.version];
+        const changedMethods = changes['method'];
+        const changedDataMembers = changes['datamember'];
+        const changedConstructors = changes['constructor'];
+        let output = [];
+        console.log(changes);
+
+        // Scan Date
+        // Method Comparisons
+        // Added 
+        const methodsAdded = changedMethods['added'];
+        for (let addedMethod of methodsAdded) {
+            output.push(_methodDetailExtractor(addedMethod, 'added'));
+        }
+        // Deleted
+        const methodsDeleted = changedMethods['deleted'];
+        for (let deletedMethod of methodsDeleted) {
+            output.push(_methodDetailExtractor(deletedMethod, 'deleted'));
+        }
+        // Changed
+        const methodsChanged = changedMethods['changeAccess'];
+        for (let changedMethod of methodsChanged) {
+            output.push(_methodModifier(changedMethod));
+        }
+
+        // Constructors
+        const consAdded = changedConstructors['added'];
+        for (let addedCons of consAdded) {
+            output.push(_constructorDetailExtractor(addedCons, 'added'));
+        }
+
+        const consDeleted = changedConstructors['deleted'];
+        for (let deletedCons of consDeleted) {
+            output.push(_constructorDetailExtractor(deletedCons, 'deleted'));
+        }
+        // Data Members comparisons
+        // Added
+        const membersAdded = changedDataMembers['added'];
+        for (let addedMember of membersAdded) {
+            output.push(_datamemberDetailExtractor(addedMember, 'added'));
+        }
+        // Deleted
+        const membersDeleted = changedDataMembers['deleted'];
+        for (let deletedMember of membersDeleted) {
+            output.push(_datamemberDetailExtractor(deletedMember, 'deleted'));
+        }
+        // Changed
+        const membersChanged = changedDataMembers['changeAccess'];
+        for (let changedMember of membersChanged) {
+            output.push(_datamemberModifier(changedMember, 'access'));
+        }
+
+        const membersTypedChanged = changedDataMembers['changeTypes'];
+        for (let changedDM of membersTypedChanged) {
+            output.push(_datamemberModifier(changedDM, 'type'));
+        }
+        // comparison[entity.id];
+        console.log(output);
+        return output;
+  }
+
+  const _methodDetailExtractor = (modifiedMethod, delta) => {
+    let name = modifiedMethod['name'];
+    let access = modifiedMethod['mAccess'][0]['accessName'];
+    let returnType = modifiedMethod['mReturnType']['name'];
+    let params = modifiedMethod['mParameters'];
+    let paramsArr  = [];
+    for (let param of params) {
+        console.log(param);
+        paramsArr.push(`${param.mType.name} ${param.name}`);
+    }
+
+    return `Method ${access} ${returnType} ${name}(${paramsArr.join()}) was ${delta} since previous scan`;
+  }
+
+  const _methodModifier = (modifiedMethod) => {
+    let name = modifiedMethod['from']['name'];
+    let startAccess = modifiedMethod['from']['mAccess'][0]['accessName'];
+    let endAccess = modifiedMethod['to']['mAccess'][0]['accessName'];
+    let returnType = modifiedMethod['from']['mReturnType']['name'];
+    let params = modifiedMethod['from']['mParameters'];
+    let paramsArr  = [];
+    for (let param of params) {
+        console.log(param);
+        paramsArr.push(`${param.mType.name} ${param.name}`);
+    }
+    return  startAccess === endAccess ? ' ': `Method ${startAccess} ${returnType} ${name}(${paramsArr.join()}) was changed from ${startAccess} to ${endAccess} since previous scan`;
+  }
+
+  const _datamemberDetailExtractor = (modifiedMember, delta) => {
+        let name = modifiedMember['name'];
+        let type = modifiedMember['mType']['name'];
+
+        return `Data Member ${type} ${name} was ${delta} since previous scan`;
+  }
+
+
+  const _datamemberModifier = (modifiedMember, typeOfChange) => {
+    let name = modifiedMember['from']['name'];
+    if (typeOfChange === 'access') {
+        let startAccess = modifiedMember['from']['mAccess'][0]['accessName'];
+        let endAccess = modifiedMember['to']['mAccess'][0]['accessName'];
+        let type = modifiedMember['from']['mType']['name'];
+        return startAccess === endAccess ? ' ': `Data Member ${startAccess} ${type} ${name} changed from ${startAccess} to ${endAccess} since previous scan`;
+    }
+    else {
+        let startType = modifiedMember['from']['mType']['name'];
+        let endType = modifiedMember['to']['mType']['name'];
+        return `Data Member ${name} changed from ${startType} to ${endType} since previous scan`;
+    }
+
+    
+}
+
+
+const _constructorDetailExtractor = (modifiedConstructor, delta) => {
+    let name = modifiedConstructor['name'];
+    let params = modifiedConstructor['parameters'];
+    let paramsArr  = [];
+    for (let param of params) {
+        console.log(param);
+        paramsArr.push(`${param.mType.name} ${param.name}`);
+    }
+
+    return  `Method  ${name}(${paramsArr.join()}) was ${delta} since previous scan`;
+}
+
 
   return (
     <div>

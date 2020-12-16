@@ -10,7 +10,6 @@ class CompareTwoResults extends React.Component {
 
     render() {
 
-        console.log(this.props);
         return (
 
 
@@ -19,12 +18,12 @@ class CompareTwoResults extends React.Component {
                 <Row>
                     
                     <Col style= {{border: '2px solid #000000'}}>
-                    <h1>Pre-Maintenance</h1>
+                        <h1>Pre-Maintenance ID: {this.props.version1.id}</h1>
                         <ClassComponent key={this.props.version1.name} {...this.props.version1} />
                     </Col>
 
                     <Col style={{border: '2px solid #000000'}}>
-                    <h1>Post-Maintenance</h1>
+                    <h1>Post-Maintenance ID: {this.props.version2.id}</h1>
                     <ClassComponent key={this.props.version2.name} {...this.props.version2} />
                     </Col>
                 </Row>

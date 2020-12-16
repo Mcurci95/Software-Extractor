@@ -6,8 +6,54 @@ const compareTwoEntities = (entity, comparedEntity) => ({
       entity.mClassDataMembers,
       comparedEntity.mClassDataMembers,
     ),
+    constructor: _getConstructorDiff(entity.mConstructors, comparedEntity.mConstructors),
   },
 });
+
+const _getConstructorDiff = (modelCons, otherCons) => {
+  const modelDict = modelCons.reduce((acc, m) => {
+    acc[m.name] = m;
+    return acc;
+  }, {});
+
+  const added = [];
+  const changeAccess = [];
+  const changeTypes = [];
+  const deleted = [];
+
+
+  for (let constructor of otherCons) {
+    console.log("FIRST CONSTUCTOR", constructor);
+    let found = false;
+    for (let constructorB of modelCons) {
+      if (deepEqual(constructor.parameters, constructorB.parameters)) { found = true;}
+    }
+    if (!found) {
+      added.push(constructor);
+    }
+  }
+
+  for (let constructor of modelCons) {
+    console.log("SECOND CONSTRUCTOR");
+    let found = false;
+    for (let constructorB of otherCons) {
+      if (deepEqual(constructor.parameters, constructorB.parameters)) { found = true;}
+    }
+
+    if (!found) {
+      deleted.push(constructor);
+    }
+  }
+
+  return {
+    added,
+    changeAccess,
+    changeTypes,
+    deleted,
+  };
+
+}
+
 
 const _getMethodDiff = (modelMethods, otherMethods) => {
   // Build a dict of model method's props for ease of access
@@ -35,6 +81,7 @@ const _getMethodDiff = (modelMethods, otherMethods) => {
           changeTypes.push(_createDiffObject(v1Method, method));
         }
       }
+
     }
   }
 
@@ -70,15 +117,17 @@ const _getDataMemberDiff = (modelDM, otherDM) => {
   for (const dm of otherDM) {
     if (!modelDMNames.includes(dm.name)) {
       added.push(dm);
-    } else {
+    }
+     else {
       const v1Dm = modelDict[dm.name];
       for (const access of dm.mAccess) {
         if (!v1Dm.mAccess.includes(access)) {
           changeAccess.push(_createDiffObject(v1Dm, dm));
         }
-        if (dm.mType.name !== v1Dm.mType.name) {
-          changeTypes.push(_createDiffObject(v1Dm, dm));
-        }
+      }
+
+      if (dm.mType.name !== v1Dm.mType.name) {
+        changeTypes.push(_createDiffObject(v1Dm, dm));
       }
     }
   }
@@ -89,6 +138,7 @@ const _getDataMemberDiff = (modelDM, otherDM) => {
     if (!otherDMName.includes(dm.name)) {
       deleted.push(dm);
     }
+
   }
 
   return {
@@ -98,6 +148,33 @@ const _getDataMemberDiff = (modelDM, otherDM) => {
     deleted,
   };
 };
+
+const deepEqual = (object1, object2) => {
+  const keys1 = Object.keys(object1);
+  const keys2 = Object.keys(object2);
+
+  if (keys1.length !== keys2.length) {
+    return false;
+  }
+
+  for (const key of keys1) {
+    const val1 = object1[key];
+    const val2 = object2[key];
+    const areObjects = isObject(val1) && isObject(val2);
+    if (
+      areObjects && !deepEqual(val1, val2) ||
+      !areObjects && val1 !== val2
+    ) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
+function isObject(object) {
+  return object != null && typeof object === 'object';
+}
 
 const _createDiffObject = (from, to) => ({ from, to });
 
